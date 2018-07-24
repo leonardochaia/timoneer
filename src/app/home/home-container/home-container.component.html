@@ -59,26 +59,32 @@
 
     <ng-container *ngIf="registries">
       <div *ngFor="let registry of registries">
-        <h2>{{registry.name}}
+        <h2>
+          {{registry.name}}
+          <small>
+            <a [routerLink]="['/registry', registry.name]"
+               style="float:right">
+              View all
+            </a>
+          </small>
         </h2>
         <tim-registry-list [registryUrl]="registry.url"
                            [amount]="2"></tim-registry-list>
-        <a [routerLink]="['/registry', registry.name]"
-           style="float:right">
-          View all
-        </a>
       </div>
     </ng-container>
 
   </div>
 
   <div fxFlex.gt-sm="50">
-    <h1>
+    <h2>
       Quick Templates
-    </h1>
+      <small>
+        <a routerLink="/applications"
+           style="float:right">
+          View all
+        </a>
+      </small>
+    </h2>
     <tim-application-list></tim-application-list>
-    <a routerLink="/applications">
-      View all
-    </a>
   </div>
 </div>
