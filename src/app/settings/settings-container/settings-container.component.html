@@ -30,8 +30,7 @@
 
       <mat-card fxFlex.gt-xs="50">
 
-        <h2 class="mat-text-primary"
-            style="margin:0">
+        <h2 class="mat-text-primary">
           <mat-icon>iso</mat-icon>
           Registries
 
@@ -84,8 +83,7 @@
                 [ngClass]="{'bg-invalid': daemonGroup.invalid}"
                 [formGroup]="daemonGroup">
 
-        <h2 class="mat-text-primary"
-            style="margin:0">
+        <h2 class="mat-text-primary">
           <mat-icon>computer</mat-icon>
           Docker Daemon
         </h2>
@@ -94,12 +92,12 @@
           <input type="url"
                  matInput
                  formControlName="url"
+                 placeholder="Docker Daemon URL"
                  name="daemon-url">
         </mat-form-field>
 
         <p>
-          Use
-          <code>docker-machine ip</code> to get it.
+          Note that you must expose your Daemon's API through HTTP/S for Timoneer to work. Unix Sockets will not work.
         </p>
 
       </mat-card>
