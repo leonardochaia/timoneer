@@ -159,7 +159,7 @@ export class ContainerCreateComponent implements OnInit {
     this.imageData = image;
     if (image) {
 
-      const exposedPorts = Object.keys(this.imageData.Config.ExposedPorts)
+      const exposedPorts = Object.keys(this.imageData.Config.ExposedPorts || {})
         .map(k => parseInt(k.split('/')[0], 10));
 
       const out = this.suggestedPorts || [];
