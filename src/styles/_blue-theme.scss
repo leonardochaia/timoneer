@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+$blue-theme-primary: mat-palette($mat-blue);
+$blue-theme-accent: mat-palette($mat-blue);
+$blue-theme-warn: mat-palette($mat-blue);
+$blue-theme: mat-light-theme($blue-theme-primary, $blue-theme-accent, $blue-theme-warn);
+$blue-dark-theme: mat-dark-theme($blue-theme-primary, $blue-theme-accent, $blue-theme-warn);
+.mat-bg-blue {
+    background-color: mat-color($blue-theme-primary);
+}

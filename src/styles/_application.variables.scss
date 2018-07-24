@@ -1,0 +1,13 @@
+$media-query-xs:'(min-width: 0px) and (max-width: 599px)';
+$media-query-gt-xs: '(min-width: 600px)';
+$media-query-lt-sm: '(max-width: 599px)';
+$media-query-sm: '(min-width: 600px) and (max-width: 959px)';
+$media-query-gt-sm: '(min-width: 960px)';
+$media-query-lt-md: '(max-width: 959px)';
+$media-query-md: '(min-width: 960px) and (max-width: 1279px)';
+$media-query-gt-md: '(min-width: 1280px)';
+$media-query-lt-lg: '(max-width: 1279px)';
+$media-query-lg: '(min-width: 1280px) and (max-width: 1919px)';
+$media-query-gt-lg: '(min-width: 1920px)';
+$media-query-lt-xl: '(max-width: 1920px)';
+$media-query-xl: '(min-width: 1920px) and (max-width: 5000px)';

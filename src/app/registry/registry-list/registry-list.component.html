@@ -1,0 +1,35 @@
+<ng-template #loadingTemplate>
+  <tim-loading></tim-loading>
+</ng-template>
+<mat-card *ngIf="error"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px">
+  <mat-icon class="mat-text-warn mat-icon-48">highlight_off</mat-icon>
+  <div fxFlex="fill">
+    <h2>
+      {{error}}
+    </h2>
+  </div>
+</mat-card>
+<ng-container *ngIf="!loading; else loadingTemplate">
+
+  <mat-card *ngFor="let repo of repositories"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px">
+    <mat-icon class="mat-text-primary mat-icon-48">iso</mat-icon>
+    <div fxFlex="fill">
+      <h2>
+        {{repo}}
+      </h2>
+    </div>
+
+    <a fxFlex
+       mat-raised-button
+       color="primary">
+      Run
+    </a>
+  </mat-card>
+
+</ng-container>

@@ -1,0 +1,14 @@
+<form (ngSubmit)="exec()">
+  <p>Command wil be run using sh. Output will be shown. Non interactive session.</p>
+  <mat-form-field style="width: 100%">
+    <span matPrefix
+          style="padding-right:8px">#</span>
+    <input type="text"
+           matInput
+           name="command"
+           [(ngModel)]="command"
+           placeholder="Command">
+  </mat-form-field>
+</form>
+
+<div #terminalContainer></div>

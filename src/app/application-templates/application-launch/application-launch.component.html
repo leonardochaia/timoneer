@@ -1,0 +1,26 @@
+<form fxLayout="column"
+      (ngSubmit)="launch()">
+
+  <!-- Application data -->
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;">
+    <mat-icon class="mat-icon-48 mat-text-primary">developer_mode</mat-icon>
+    <div>
+      <h1 class="mat-text-primary"
+          style="margin:0">
+        {{application.title}}
+      </h1>
+      <p style="margin:0">
+        {{application.description}}
+      </p>
+    </div>
+  </mat-card>
+
+  <tim-container-create [initialImage]="application.image"
+                        [disableImage]="true"
+                        [suggestedPorts]="application.ports"
+                        [suggestedVolumes]="application.volumes"
+                        (created)="containerCreated($event)"></tim-container-create>
+</form>

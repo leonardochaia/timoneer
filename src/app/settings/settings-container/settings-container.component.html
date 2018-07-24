@@ -1,0 +1,144 @@
+<div fxLayout="row"
+     fxLayoutAlign="center start"
+     style="margin-top: 16px">
+  <form [formGroup]="form"
+        (ngSubmit)="save()"
+        fxLayout="column"
+        fxFlex="90"
+        fxFlex.gt-md="60">
+
+    <mat-card fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="8px"
+              style="margin-bottom: 16px;">
+      <mat-icon class="mat-icon-48 mat-text-primary">settings</mat-icon>
+      <div>
+        <h1 class="mat-text-primary"
+            style="margin:0">
+          Application settings
+        </h1>
+        <p style="margin:0">
+          These configuration is stored in your browser only!
+        </p>
+      </div>
+    </mat-card>
+
+    <div fxLayout="column"
+         fxLayout.gt-xs="row"
+         fxLayoutGap="16px"
+         style="margin-bottom: 16px;">
+
+      <mat-card fxFlex.gt-xs="50">
+
+        <h2 class="mat-text-primary"
+            style="margin:0">
+          <mat-icon>iso</mat-icon>
+          Registries
+
+          <button type="button"
+                  style="float:right"
+                  [disabled]="!canAddRegistry()"
+                  (click)="addRegistry()"
+                  mat-raised-button>
+            Add Registry
+          </button>
+        </h2>
+
+        <div style="margin-top: 16px; max-height: 400px; overflow:auto;">
+          <mat-card *ngFor="let registry of registriesArray.controls"
+                    [formGroup]="registry"
+                    [ngClass]="{'bg-invalid': registry.invalid}"
+                    style="margin: 8px;">
+            <mat-form-field>
+              <input type="url"
+                     matInput
+                     formControlName="url"
+                     placeholder="Url">
+            </mat-form-field>
+
+            <mat-form-field>
+              <input type="text"
+                     matInput
+                     formControlName="username"
+                     placeholder="Username">
+            </mat-form-field>
+
+            <mat-form-field>
+              <input type="password"
+                     matInput
+                     formControlName="password"
+                     placeholder="Password">
+            </mat-form-field>
+
+            <mat-checkbox formControlName="allowsCatalog">
+              Allows Catalog
+            </mat-checkbox>
+
+
+            <div style="overflow: hidden;">
+              <button type="button"
+                      *ngIf="registry.value.editable"
+                      style="float:right"
+                      color="warn"
+                      (click)="removeRegistry(registry)"
+                      mat-raised-button>
+                Remove
+              </button>
+            </div>
+          </mat-card>
+
+        </div>
+
+      </mat-card>
+
+      <mat-card fxFlex.gt-xs="50"
+                [ngClass]="{'bg-invalid': daemonGroup.invalid}"
+                [formGroup]="daemonGroup">
+
+        <h2 class="mat-text-primary"
+            style="margin:0">
+          <mat-icon>computer</mat-icon>
+          Docker Daemon
+        </h2>
+
+        <mat-form-field>
+          <input type="url"
+                 matInput
+                 formControlName="url"
+                 name="daemon-url">
+        </mat-form-field>
+
+        <p>
+          Use
+          <code>docker-machine ip</code> to get it.
+        </p>
+
+      </mat-card>
+
+    </div>
+
+    <mat-card fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="8px"
+              style="margin-bottom: 16px;">
+      <mat-icon class="mat-icon-48 mat-text-primary">save</mat-icon>
+
+      <div fxFlex="fill">
+        <h3 class="mat-text-primary"
+            style="margin:0">
+          Save settings
+        </h3>
+      </div>
+
+      <div>
+        <button mat-raised-button
+                [disabled]="form.invalid"
+                color="primary">
+          <mat-icon>save_alt</mat-icon>
+          Save
+        </button>
+      </div>
+    </mat-card>
+
+  </form>
+</div>

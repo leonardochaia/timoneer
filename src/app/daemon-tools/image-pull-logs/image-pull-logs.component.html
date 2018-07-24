@@ -1,0 +1,25 @@
+<p *ngIf="connecting">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</p>
+
+<div class="logs-container"
+     [hidden]="connecting"
+     #containerLogs>
+  <p *ngFor="let log of logs; trackBy: trackByFn">
+
+    {{log.id ? '[' + log.id + ']' : ''}}
+    <span [ngClass]="log.error ? 'mat-text-warn': 'mat-text-primary'">
+      {{log.status || log.error}}
+    </span>
+    <span *ngIf="log.progressDetail?.current; else iconTemplate">
+      ( {{log.progressDetail.current | bytes}} / {{log.progressDetail.total | bytes}} )
+      <mat-progress-bar *ngIf="log.progressDetail.current !== log.progressDetail.total"
+                        mode="determinate"
+                        [value]="(log.progressDetail.current / log.progressDetail.total) * 100"
+                        style="margin-top:8px;"></mat-progress-bar>
+    </span>
+    <ng-template #iconTemplate>
+      <mat-icon [ngClass]="log.error ? 'mat-text-warn': 'mat-text-primary'">{{log.error ? 'highlight_off' : 'check_circle_outline' }}</mat-icon>
+    </ng-template>
+  </p>
+</div>

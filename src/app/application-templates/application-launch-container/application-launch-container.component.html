@@ -1,0 +1,8 @@
+<div fxLayout="row"
+     fxLayoutAlign="center start"
+     style="margin-top: 16px"
+     *ngIf="application">
+  <tim-application-launch [application]="application"
+                          fxFlex="90"
+                          fxFlex.gt-md="60"></tim-application-launch>
+</div>

@@ -1,0 +1,37 @@
+import { Component, OnInit } from '@angular/core';
+import { SettingsService } from '../../settings/settings.service';
+import { DockerRegistrySettings } from '../../settings/settings.model';
+
+@Component({
+  selector: 'tim-home-container',
+  templateUrl: './home-container.component.html',
+  styleUrls: ['./home-container.component.scss']
+})
+export class HomeContainerComponent implements OnInit {
+  public daemonValid: boolean;
+  public hasAnyRegistry: boolean;
+  public registries: { name: string, url: string }[];
+
+  constructor(private settingsService: SettingsService) { }
+
+  public ngOnInit() {
+    this.settingsService.areDaemonSettingsValid()
+      .subscribe(daemonValid => {
+        this.daemonValid = daemonValid;
+      });
+
+    this.settingsService.hasAnyRegistry()
+      .subscribe(hasAnyRegistry => {
+        this.hasAnyRegistry = hasAnyRegistry;
+      });
+
+    this.settingsService.getSettings()
+      .subscribe(settings => {
+        this.registries = settings.registries.map(x => ({
+          name: this.settingsService.getRegistryName(x),
+          url: x.url
+        }));
+      });
+  }
+
+}

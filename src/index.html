@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Timoneer</title>
+  <base href="/">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <link rel="icon"
+        type="image/x-icon"
+        href="favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .initial-loading {
+      top: 0;
+      opacity: 0;
+      position: absolute;
+      background: whitesmoke;
+      padding-top: 32vh;
+      text-align: center;
+      z-index: -1;
+      transition: opacity .8s ease-out;
+      height: 0;
+      width: 0;
+    }
+
+    tim-root:empty+.initial-loading {
+      opacity: 1;
+      height: 100%;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .initial-loading .logo {
+      width: 40%;
+    }
+
+    @media only screen and (min-width: 960px) {
+      .initial-loading .logo {
+        width: 20%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <tim-root></tim-root>
+  <div class="initial-loading">
+    <img class="logo"
+         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+  </div>
+</body>
+
+</html>

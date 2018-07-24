@@ -1,0 +1,24 @@
+<mat-card *ngFor="let app of applications$ | async"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px">
+  <mat-icon class="mat-icon-48 mat-text-primary">developer_mode</mat-icon>
+  <div fxFlex="grow">
+    <h2>
+      <span class="mat-text-primary">
+        {{app.title}}
+      </span>
+      <br>
+      <small>
+        {{app.description}}
+      </small>
+    </h2>
+  </div>
+
+  <a fxFlex
+     mat-raised-button
+     color="primary"
+     [routerLink]="['/applications/', app.id, 'launch']">
+    Launch
+  </a>
+</mat-card>

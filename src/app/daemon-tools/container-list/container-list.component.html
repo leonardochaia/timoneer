@@ -1,0 +1,56 @@
+<ng-template #loadingTemplate>
+  <tim-loading></tim-loading>
+</ng-template>
+<ng-container *ngIf="!loading; else loadingTemplate">
+
+  <mat-card *ngFor="let container of containers"
+            fxLayout="row"
+            fxLayoutGap="8px">
+    <mat-icon class="mat-text-primary mat-icon-48">computer</mat-icon>
+    <div fxFlex="grow">
+      <h2 style="margin-bottom: 0">
+        {{container.Names[0]}}
+        <small class="mat-text-primary">
+          {{container.State}}
+        </small>
+        <br>
+        <code>
+        {{container.Id | slice:0:12}}
+        {{container.Image}}
+      </code>
+      </h2>
+    </div>
+    <p>
+      <span title="Port Mappings"
+            class="text-nowrap">
+        <mat-icon>network_wifi</mat-icon>
+        <b>
+          {{container.Ports.length}}
+        </b>
+      </span>
+      <span title="Volume Mappings"
+            class="text-nowrap">
+        <mat-icon>storage</mat-icon>
+        <b>
+          {{container.Mounts.length}}
+        </b>
+      </span>
+      <br>{{container.Status}}
+    </p>
+    <p>
+      <a [routerLink]="['/docker/containers/', container.Id, 'attach']"
+         mat-raised-button
+         color="accent">
+        Attach
+      </a>
+    </p>
+    <p>
+      <a [routerLink]="['/docker/containers/', container.Id, 'exec']"
+         mat-raised-button
+         color="accent">
+        Exec
+      </a>
+    </p>
+  </mat-card>
+
+</ng-container>

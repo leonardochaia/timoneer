@@ -1,0 +1,112 @@
+@import '~xterm/dist/xterm.css';
+@import '~@angular/material/theming';
+@import 'blue-theme';
+@import 'indigo-theme';
+@import 'deep-purple-theme';
+@import 'application.variables';
+@import 'app-components';
+@import 'material-helper';
+/**
+    Material Core Classes
+**/
+
+@include mat-core();
+/** Default Theme **/
+
+// $default-theme: $indigo-theme;
+// @include angular-material-theme($default-theme);
+// @include app-components-theme($default-theme);
+// @include expose-material-theme-classes($default-theme);
+/**
+    Theming Classes
+**/
+
+.indigo-theme {
+  @include angular-material-theme($indigo-theme);
+  @include app-components-theme($indigo-theme);
+  @include expose-material-theme-classes($indigo-theme);
+}
+
+.indigo-dark-theme {
+  @include angular-material-theme($indigo-dark-theme);
+  @include app-components-theme($indigo-dark-theme);
+  @include expose-material-theme-classes($indigo-dark-theme);
+}
+
+.blue-theme {
+  @include angular-material-theme($blue-theme);
+  @include app-components-theme($blue-theme);
+  @include expose-material-theme-classes($blue-theme);
+}
+
+.blue-dark-theme {
+  @include angular-material-theme($blue-dark-theme);
+  @include app-components-theme($blue-dark-theme);
+  @include expose-material-theme-classes($blue-dark-theme);
+}
+
+.deep-purple-theme {
+  @include angular-material-theme($deep-purple-theme);
+  @include app-components-theme($deep-purple-theme);
+  @include expose-material-theme-classes($deep-purple-theme);
+}
+
+.deep-purple-dark-theme {
+  @include angular-material-theme($deep-purple-dark-theme);
+  @include app-components-theme($deep-purple-dark-theme);
+  @include expose-material-theme-classes($deep-purple-dark-theme);
+}
+
+/** General Classes **/
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100% !important;
+  background-color: whitesmoke
+}
+
+a:link,
+a:visited,
+a:focus,
+a:hover {
+  color: inherit;
+}
+
+/** Uilitie Classes **/
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.title-text {
+  text-transform: uppercase;
+  color: #006ee2;
+  font-weight: bold !important;
+}
+
+.material-icons,
+.icon-text {
+  vertical-align: middle;
+}
+
+.mat-tooltip.tooltip {
+  font-size: 12px;
+}
+
+.app-modal {
+  width: 80vw;
+  &.full-height {
+    height: 60vh;
+  }
+}
+
+.bg-invalid {
+  background-color: rgb(251, 217, 214) !important;
+}

@@ -1,0 +1,28 @@
+<div fxLayout="column"
+     style="height:100%">
+
+  <h1>
+    {{title}}
+  </h1>
+  <div fxFlex="fill">
+
+    <tim-image-pull-logs [observable]="imageLogs$"></tim-image-pull-logs>
+
+  </div>
+  <div class="footer-actions">
+    <button mat-raised-button
+            *ngIf="!finished"
+            style="float:right;"
+            color="warn"
+            (click)="cancel()">
+      Cancel
+    </button>
+
+    <button mat-raised-button
+            *ngIf="finished"
+            style="float:right;"
+            (click)="cancel()">
+      Close
+    </button>
+  </div>
+</div>

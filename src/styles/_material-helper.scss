@@ -1,0 +1,52 @@
+mat-form-field.large {
+    font-size: 1.2rem;
+}
+
+.mat-icon-48 {
+    font-size: 48px;
+    height: 48px !important;
+    width: 48px !important;
+}
+
+@mixin expose-material-theme-classes($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+    mat-card.cursor-pointer {
+        &:hover {
+            outline: 1px solid mat-color($primary);
+        }
+    }
+    .mat-bg-primary {
+        background-color: mat-color($primary);
+    }
+    .mat-bg-accent {
+        background-color: mat-color($accent);
+    }
+    .mat-bg-warn {
+        background-color: mat-color($warn);
+    }
+    .mat-text-primary {
+        color: mat-color($primary);
+    }
+    .mat-text-accent {
+        color: mat-color($accent);
+    }
+    .mat-text-warn {
+        color: mat-color($warn);
+    }
+    .mat-dialog-warn .mat-dialog-container {
+        background-color: mat-color($warn);
+        color: mat-color($foreground, text);
+    }
+    .mat-dialog-primary .mat-dialog-container {
+        background-color: mat-color($primary);
+        color: mat-color($foreground, text);
+    }
+    .mat-dialog-accent .mat-dialog-container {
+        background-color: mat-color($accent);
+        color: mat-color($foreground, text);
+    }
+}

@@ -1,0 +1,84 @@
+<div fxLayout="column"
+     fxLayoutAlign.gt-sm="center start"
+     fxLayout.gt-sm="row"
+     fxLayoutGap="16px"
+     style="padding:16px;">
+
+  <div fxFlex.gt-sm="50">
+    <h2 *ngIf="!daemonValid || !hasAnyRegistry">Status report</h2>
+
+    <mat-card fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="8px"
+              *ngIf="!daemonValid"
+              style="margin-bottom: 16px;">
+      <mat-icon class="mat-icon-48 mat-text-warn">settings</mat-icon>
+      <div fxFlex="grow">
+        <h2 style="margin: 0">
+          <span class="mat-text-primary">
+            Daemon Settings Invalid
+          </span>
+          <br>
+          <small>
+            You will not be able to launch containers.
+          </small>
+        </h2>
+      </div>
+
+      <a fxFlex
+         mat-raised-button
+         [routerLink]="['/settings/']">
+        Fix
+      </a>
+    </mat-card>
+
+    <mat-card fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="8px"
+              *ngIf="!hasAnyRegistry"
+              style="margin-bottom: 16px;">
+      <mat-icon class="mat-icon-48 mat-text-primary">settings</mat-icon>
+      <div fxFlex="grow">
+        <h2 style="margin: 0">
+          <span class="mat-text-primary">
+            Add Registries
+          </span>
+          <br>
+          <small>
+            Your custom registry or docker.io credentials
+          </small>
+        </h2>
+      </div>
+
+      <a fxFlex
+         mat-raised-button
+         [routerLink]="['/settings/']">
+        Fix
+      </a>
+    </mat-card>
+
+    <ng-container *ngIf="registries">
+      <div *ngFor="let registry of registries">
+        <h2>{{registry.name}}
+        </h2>
+        <tim-registry-list [registryUrl]="registry.url"
+                           [amount]="2"></tim-registry-list>
+        <a [routerLink]="['/registry', registry.name]"
+           style="float:right">
+          View all
+        </a>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <div fxFlex.gt-sm="50">
+    <h1>
+      Quick Templates
+    </h1>
+    <tim-application-list></tim-application-list>
+    <a routerLink="/applications">
+      View all
+    </a>
+  </div>
+</div>

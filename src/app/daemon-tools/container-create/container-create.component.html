@@ -1,0 +1,198 @@
+<form fxLayout="column"
+      [formGroup]="form"
+      (ngSubmit)="launch()">
+
+  <tim-image-selector-card formControlName="image"
+                           (imageLoaded)="imageSelected($event)">
+  </tim-image-selector-card>
+
+  <div fxLayout="column"
+       fxLayout.gt-xs="row"
+       fxLayoutGap="16px"
+       style="margin-bottom: 16px;">
+
+    <!-- Port Mappings -->
+    <mat-card fxFlex.gt-xs="50">
+
+      <h2 class="mat-text-primary"
+          style="margin:0">
+        <mat-icon>network_wifi</mat-icon>
+        Ports Mapping
+      </h2>
+
+      <div fxLayout="row"
+           fxLayoutGap="16px">
+
+        <button mat-raised-button
+                type="button"
+                [disabled]="!canAddPortBinding()"
+                (click)="addPortBinding()">
+          Add Port Mapping
+        </button>
+
+        <mat-chip-list multiple="false"
+                       *ngIf="filteredPorts && filteredPorts.length">
+          <mat-chip *ngFor="let port of filteredPorts"
+                    class="cursor-pointer"
+                    [title]="port.description"
+                    (click)="addPortBinding(port)">{{port.containerPort}}</mat-chip>
+        </mat-chip-list>
+      </div>
+
+      <div style="max-height: 400px; overflow:auto; margin-top: 8px">
+        <mat-card *ngFor="let mapping of portBindingsArray.controls"
+                  [formGroup]="mapping"
+                  [ngClass]="{'bg-invalid': mapping.invalid}"
+                  style="margin:16px">
+
+          <p *ngIf="mapping.value.description">
+            {{mapping.value.description}}
+          </p>
+
+          <mat-form-field style="display: block">
+            <input type="number"
+                   matInput
+                   formControlName="containerPort"
+                   placeholder="Container Port">
+          </mat-form-field>
+
+          <mat-form-field *ngIf="!mapping.value.assignRandomPort"
+                          style="display: block">
+            <input type="number"
+                   matInput
+                   formControlName="hostPort"
+                   placeholder="Host Port">
+          </mat-form-field>
+
+          <mat-checkbox formControlName="assignRandomPort">
+            Random Host Port
+          </mat-checkbox>
+
+          <button type="button"
+                  style="float:right"
+                  color="warn"
+                  (click)="removePortBinding(mapping)"
+                  mat-raised-button>
+            Remove
+          </button>
+        </mat-card>
+      </div>
+    </mat-card>
+
+    <!-- Volume Mappings -->
+    <mat-card fxFlex.gt-xs="50">
+
+      <h2 class="mat-text-primary"
+          style="margin:0">
+        <mat-icon>storage</mat-icon>
+        Volume Mapping
+      </h2>
+
+      <div fxLayout="row"
+           fxLayoutGap="16px">
+
+        <button mat-raised-button
+                [disabled]="!canAddVolumeBinding()"
+                type="button"
+                (click)="addVolumeBinding()">
+          Add Volume Mapping
+        </button>
+
+        <mat-chip-list multiple="false"
+                       *ngIf="filteredVolumes && filteredVolumes.length">
+          <mat-chip *ngFor="let volume of filteredVolumes"
+                    class="cursor-pointer"
+                    [title]="volume.description"
+                    (click)="addVolumeBinding(volume)">{{volume.containerPath}}</mat-chip>
+        </mat-chip-list>
+      </div>
+
+
+      <div style="max-height: 400px; overflow:auto; margin-top: 8px">
+        <mat-card *ngFor="let mapping of volumeBindingsArray.controls"
+                  [formGroup]="mapping"
+                  [ngClass]="{'bg-invalid': mapping.invalid}"
+                  style="margin:16px">
+
+          <p *ngIf="mapping.value.description">
+            {{mapping.value.description}}
+          </p>
+
+          <mat-form-field style="display: block">
+            <input type="string"
+                   matInput
+                   formControlName="containerPath"
+                   placeholder="Container Path">
+          </mat-form-field>
+
+          <mat-form-field style="display: block">
+            <input type="string"
+                   matInput
+                   formControlName="hostPath"
+                   placeholder="Host Path">
+          </mat-form-field>
+
+          <mat-checkbox formControlName="readonly">
+            Read-only
+          </mat-checkbox>
+
+          <button type="button"
+                  style="float:right"
+                  color="warn"
+                  (click)="removeVolumeBinding(mapping)"
+                  mat-raised-button>
+            Remove
+          </button>
+        </mat-card>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;"
+            [formGroup]="form.get('launchConfig')">
+
+    <mat-icon class="mat-icon-48 mat-text-primary">developer_mode</mat-icon>
+
+    <div fxFlex="fill">
+      <h3 class="mat-text-primary"
+          style="margin:0">
+        Launch new container
+      </h3>
+
+      <div>
+        <mat-form-field>
+          <input type="text"
+                 matInput
+                 formControlName="command"
+                 placeholder="Command">
+        </mat-form-field>
+        <span *ngIf="imageData">
+          Default:
+          <code>{{imageData.Config.Cmd|json}}</code>
+        </span>
+      </div>
+
+      <mat-form-field>
+        <input type="text"
+               matInput
+               formControlName="containerName"
+               placeholder="Container Name">
+      </mat-form-field>
+
+      <mat-checkbox formControlName="tty"
+                    style="margin-left:8px;">TTY</mat-checkbox>
+    </div>
+    <div>
+      <button mat-raised-button
+              type="submit"
+              color="primary">
+        <mat-icon>publish</mat-icon>
+        Launch
+      </button>
+    </div>
+  </mat-card>
+
+</form>

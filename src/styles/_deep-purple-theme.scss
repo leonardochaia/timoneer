@@ -1,0 +1,8 @@
+@import '~@angular/material/theming';
+$deep-purple-theme-primary: mat-palette($mat-deep-purple);
+$deep-purple-theme-accent: mat-palette($mat-amber, A200, A100, A400);
+$deep-purple-theme: mat-light-theme($deep-purple-theme-primary, $deep-purple-theme-accent);
+$deep-purple-dark-theme: mat-dark-theme($deep-purple-theme-primary, $deep-purple-theme-accent);
+.mat-bg-deep-purple {
+    background-color: mat-color($deep-purple-theme-primary);
+}

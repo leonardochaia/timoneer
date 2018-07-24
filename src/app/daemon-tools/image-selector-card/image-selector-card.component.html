@@ -1,0 +1,76 @@
+<!-- Image Data -->
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;">
+  <mat-icon class="mat-icon-48 mat-text-primary">iso</mat-icon>
+  <div fxFlex="fill">
+    <ng-content></ng-content>
+    <ng-template #disabledTemplate>
+      <h2 style="margin: 0"
+          class="mat-text-primary">
+        {{image}}
+      </h2>
+    </ng-template>
+    <mat-form-field style="width:100%"
+                    *ngIf="!disabled; else disabledTemplate">
+      <input type="text"
+             matInput
+             autocomplete="off"
+             placeholder="Select an image"
+             [formControl]="imageSelectControl"
+             [matAutocomplete]="autoGroup"
+             #trigger="matAutocompleteTrigger"
+             (click)="trigger.openPanel()">
+      <mat-autocomplete #autoGroup="matAutocomplete"
+                        (opened)="clearImageData()">
+        <mat-optgroup *ngFor="let group of registries | async"
+                      [label]="group.name">
+          <mat-option *ngFor="let image of group.repos"
+                      [value]="group.name.includes('/') ? group.name + image : image">
+            {{image}}
+          </mat-option>
+        </mat-optgroup>
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+    <p *ngIf="loadingImageData">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+
+    <p *ngIf="!disabled">
+      <mat-chip-list multiple="false"
+                     [disabled]="disabled"
+                     [selectable]="!disabled">
+        <mat-chip *ngFor="let tag of imageTags"
+                  (click)="tagChanged(tag)">{{tag}}</mat-chip>
+      </mat-chip-list>
+    </p>
+
+    <p>
+      <span *ngIf="imageNotFound"
+            class="mat-text-warn">
+        Image metadata not available. (Image not found on Daemon. It will be pulled when launching)
+      </span>
+      <span *ngIf="!imageNotFound && imageError"
+            class="mat-text-warn">
+        Failed to obtain image from Daemon: {{imageError}}
+      </span>
+
+      <span *ngIf="imageData">
+        Os: {{imageData.Os}} {{imageData.Architecture}} - Created: {{imageData.Created | date: 'medium'}}
+      </span>
+    </p>
+
+  </div>
+  <div *ngIf="!loadingImageData && imageNotFound">
+    <button matSuffix
+            mat-raised-button
+            (click)="pullImage()"
+            type="button"
+            color="primary">
+      Pull Now
+    </button>
+  </div>
+</mat-card>
