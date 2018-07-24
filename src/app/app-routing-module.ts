@@ -18,6 +18,7 @@ import {
     ApplicationLaunchContainerComponent
 } from './application-templates/application-launch-container/application-launch-container.component';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
+import { ContainerCreateContainerComponent } from './daemon-tools/container-create-container/container-create-container.component';
 
 export const routes: Routes = [
     {
@@ -44,6 +45,10 @@ export const routes: Routes = [
             {
                 path: 'docker/images',
                 component: ImageListContainerComponent,
+            },
+            {
+                path: 'docker/containers/create',
+                component: ContainerCreateContainerComponent,
             },
             {
                 path: 'docker/containers/:containerId/attach',

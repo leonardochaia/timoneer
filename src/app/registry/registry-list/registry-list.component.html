@@ -25,11 +25,14 @@
       </h2>
     </div>
 
-    <a fxFlex
-       mat-raised-button
-       color="primary">
-      Run
-    </a>
+    <div>
+      <a mat-raised-button
+         color="primary"
+         [routerLink]="['/docker/containers/create']"
+         [queryParams]="{image: getImageName(repo) | async}">
+        New Container
+      </a>
+    </div>
   </mat-card>
 
 </ng-container>

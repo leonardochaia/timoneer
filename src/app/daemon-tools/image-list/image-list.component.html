@@ -47,6 +47,14 @@
     <p class="text-nowrap">
       <b>{{image.Size | bytes}}</b>
     </p>
+    <div>
+      <a mat-raised-button
+         color="primary"
+         [routerLink]="['/docker/containers/create']"
+         [queryParams]="{image: image.RepoTags[0] || image.Id}">
+        New Container
+      </a>
+    </div>
   </mat-card>
 
 </ng-container>

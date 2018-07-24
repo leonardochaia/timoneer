@@ -28,6 +28,7 @@ import { ContainerExecContainerComponent } from './container-exec-container/cont
 import { ContainerExecComponent } from './container-exec/container-exec.component';
 import { ContainerCreateComponent } from './container-create/container-create.component';
 import { ImageSelectorCardComponent } from './image-selector-card/image-selector-card.component';
+import { ContainerCreateContainerComponent } from './container-create-container/container-create-container.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -65,6 +66,7 @@ import { ImageSelectorCardComponent } from './image-selector-card/image-selector
     ContainerExecComponent,
     ContainerCreateComponent,
     ImageSelectorCardComponent,
+    ContainerCreateContainerComponent,
   ],
   exports: [
     ContainerListComponent,

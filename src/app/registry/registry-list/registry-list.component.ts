@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RegistryService } from '../registry.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SettingsService } from '../../settings/settings.service';
+import { map } from '../../../../node_modules/rxjs/operators';
 
 @Component({
   selector: 'tim-registry-list',
@@ -20,7 +22,8 @@ export class RegistryListComponent implements OnInit {
   @Input()
   public amount: number;
 
-  constructor(private registryService: RegistryService) { }
+  constructor(private registryService: RegistryService,
+    private settingsService: SettingsService) { }
 
   public ngOnInit(): void {
     this.loading = true;
@@ -36,6 +39,11 @@ export class RegistryListComponent implements OnInit {
           this.error = e.message;
         }
       });
+  }
+
+  public getImageName(repo: string) {
+    return this.settingsService.getRegistrySettingsForUrl(this.registryUrl)
+      .pipe(map(settings => this.settingsService.getRegistryName(settings) + repo));
   }
 
 }
