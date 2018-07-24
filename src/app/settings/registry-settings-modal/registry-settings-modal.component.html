@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>
+  Registry
+</h1>
+
+<form [formGroup]="registryFormGroup">
+  <mat-form-field>
+    <input type="url"
+           matInput
+           formControlName="url"
+           placeholder="Url">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input type="text"
+           matInput
+           formControlName="username"
+           placeholder="Username">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input type="password"
+           matInput
+           formControlName="password"
+           placeholder="Password">
+  </mat-form-field>
+
+  <mat-checkbox formControlName="allowsCatalog">
+    Allows Catalog
+  </mat-checkbox>
+</form>
+
+<div fxLayout="row"
+     style="margin-top: 16px;">
+  <div fxFlex="fill">
+    <button mat-raised-button
+            [mat-dialog-close]="">
+      Cancel
+    </button>
+  </div>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="registryFormGroup.invalid"
+          [mat-dialog-close]="registryFormGroup"
+          cdkFocusInitial>
+    Confirm
+  </button>
+</div>

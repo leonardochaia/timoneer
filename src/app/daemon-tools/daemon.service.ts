@@ -6,7 +6,7 @@ import { ContainerApi, ImageApi, ExecApi } from 'docker-client';
 import { from, Observable } from 'rxjs';
 
 import { DockerStreamResponse } from './docker-client.model';
-import { HttpErrorResponse } from '../../../node_modules/@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

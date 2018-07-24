@@ -4,10 +4,11 @@ import { SettingsContainerComponent } from './settings-container/settings-contai
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatIconModule, MatCardModule, MatFormFieldModule, MatInputModule,
-  MatButtonModule, MatSnackBarModule, MatExpansionModule, MatCheckboxModule
+  MatButtonModule, MatSnackBarModule, MatExpansionModule, MatCheckboxModule, MatDialogModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 
 @NgModule({
   imports: [
@@ -24,10 +25,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatSnackBarModule,
     MatExpansionModule,
+    MatDialogModule,
   ],
   declarations: [
     SettingsContainerComponent,
-  ], exports: [
+    RegistrySettingsModalComponent,
+  ],
+  entryComponents: [
+    RegistrySettingsModalComponent,
+  ],
+  exports: [
     SettingsContainerComponent,
   ]
 })

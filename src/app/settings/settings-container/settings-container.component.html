@@ -38,57 +38,46 @@
           <button type="button"
                   style="float:right"
                   [disabled]="!canAddRegistry()"
-                  (click)="addRegistry()"
+                  (click)="createRegistry()"
                   mat-raised-button>
             Add Registry
           </button>
         </h2>
 
-        <div style="margin-top: 16px; max-height: 400px; overflow:auto;">
-          <mat-card *ngFor="let registry of registriesArray.controls"
-                    [formGroup]="registry"
-                    [ngClass]="{'bg-invalid': registry.invalid}"
-                    style="margin: 8px;">
-            <mat-form-field>
-              <input type="url"
-                     matInput
-                     formControlName="url"
-                     placeholder="Url">
-            </mat-form-field>
+        <div style="margin-top: 16px; max-height: 400px; overflow-y:auto;">
+          <mat-card *ngFor="let ctrl of registriesArray.controls"
+                    style="margin: 8px;"
+                    [ngClass]="{'bg-invalid': ctrl.invalid}"
+                    fxLayout="column"
+                    fxLayout.gt-sm="row"
+                    fxLayoutAlign.gt-sm="start center"
+                    fxLayoutGap="8px">
 
-            <mat-form-field>
-              <input type="text"
-                     matInput
-                     formControlName="username"
-                     placeholder="Username">
-            </mat-form-field>
-
-            <mat-form-field>
-              <input type="password"
-                     matInput
-                     formControlName="password"
-                     placeholder="Password">
-            </mat-form-field>
-
-            <mat-checkbox formControlName="allowsCatalog">
-              Allows Catalog
-            </mat-checkbox>
-
-
-            <div style="overflow: hidden;">
+            <ng-container *ngIf="getRegistryFromGroup(ctrl) as registry">
+              <div fxFlex="fill">
+                <h2>
+                  {{registry.url}}
+                </h2>
+                <p *ngIf="registry.username">
+                  Username:
+                  <b>{{registry.username}}</b>
+                </p>
+              </div>
               <button type="button"
-                      *ngIf="registry.value.editable"
-                      style="float:right"
+                      (click)="editRegistry(ctrl)"
+                      mat-raised-button>
+                Edit
+              </button>
+              <button type="button"
+                      *ngIf="registry.editable"
                       color="warn"
                       (click)="removeRegistry(registry)"
                       mat-raised-button>
                 Remove
               </button>
-            </div>
+            </ng-container>
           </mat-card>
-
         </div>
-
       </mat-card>
 
       <mat-card fxFlex.gt-xs="50"

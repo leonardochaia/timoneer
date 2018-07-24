@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { ApplicationSettings, DockerRegistrySettings } from './settings.model';
 import { of, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
+import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
+import { FormGroup } from '../../../node_modules/@angular/forms';
 
 const SETTINGS_KEY = 'registry-ui-settings';
 
@@ -11,6 +14,8 @@ const SETTINGS_KEY = 'registry-ui-settings';
 export class SettingsService {
 
   private settingsSubject = new BehaviorSubject<ApplicationSettings>(null);
+
+  constructor(public matDialog: MatDialog) { }
 
   public saveSettings(settings: ApplicationSettings) {
     const json = JSON.stringify(settings);
@@ -119,6 +124,12 @@ export class SettingsService {
       .pipe(
         map(settings => settings.registries[0]),
     );
+  }
+
+  public openRegistrySettingsDialog(registryFormGroup: FormGroup) {
+    return this.matDialog.open(RegistrySettingsModalComponent, {
+      data: registryFormGroup,
+    });
   }
 
   private ensureEndingSlash(str: string) {

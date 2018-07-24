@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApplicationSettings, DockerRegistrySettings } from '../settings.model';
+import { DockerRegistrySettings } from '../settings.model';
 import { SettingsService } from '../settings.service';
 import { MatSnackBar } from '@angular/material';
-import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -31,24 +31,25 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
     private fb: FormBuilder) {
   }
 
-  public addRegistry(registrySettings: DockerRegistrySettings) {
-    registrySettings = registrySettings || {
-      url: 'http://',
-      username: '',
-      password: '',
-      allowsCatalog: true,
-      editable: true,
-    };
-    const ctrl = this.fb.group({
-      'url': [{ value: registrySettings.url, disabled: !registrySettings.editable },
-      Validators.compose([Validators.required, Validators.pattern('https?://.+')])],
-      'username': [registrySettings.username],
-      'password': [registrySettings.password],
-      'allowsCatalog': [{ value: registrySettings.allowsCatalog, disabled: !registrySettings.editable }, Validators.required],
-      'editable': [registrySettings.editable, Validators.required],
-    });
-    this.registriesArray.push(ctrl);
-    return ctrl;
+  public createRegistry() {
+    const group = this.createRegistryGroup();
+    this.settingsService.openRegistrySettingsDialog(group)
+      .afterClosed().subscribe(newGroup => {
+        if (newGroup) {
+          this.registriesArray.push(newGroup);
+        }
+      });
+  }
+
+  public editRegistry(group: FormGroup) {
+    const index = this.registriesArray.controls.indexOf(group);
+    const clone = this.createRegistryGroup(group.getRawValue());
+    this.settingsService.openRegistrySettingsDialog(clone)
+      .afterClosed().subscribe(newGroup => {
+        if (newGroup) {
+          this.registriesArray.setControl(index, newGroup);
+        }
+      });
   }
 
   public removeRegistry(registry: AbstractControl) {
@@ -89,5 +90,33 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+  }
+
+  public getRegistryFromGroup(group: AbstractControl) {
+    return (group as FormGroup).getRawValue() as DockerRegistrySettings;
+  }
+
+  private createRegistryGroup(registrySettings?: DockerRegistrySettings) {
+    registrySettings = registrySettings || {
+      url: 'https://',
+      username: '',
+      password: '',
+      allowsCatalog: true,
+      editable: true,
+    };
+    return this.fb.group({
+      'url': [{ value: registrySettings.url, disabled: !registrySettings.editable },
+      Validators.compose([Validators.required, Validators.pattern('https?://.+')])],
+      'username': [registrySettings.username],
+      'password': [registrySettings.password],
+      'allowsCatalog': [{ value: registrySettings.allowsCatalog, disabled: !registrySettings.editable }, Validators.required],
+      'editable': [registrySettings.editable, Validators.required],
+    });
+  }
+
+  private addRegistry(registrySettings?: DockerRegistrySettings) {
+    const group = this.createRegistryGroup(registrySettings);
+    this.registriesArray.push(group);
+    return group;
   }
 }
