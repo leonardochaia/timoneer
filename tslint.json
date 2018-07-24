@@ -32,17 +32,9 @@
       140
     ],
     "member-access": [true, "check-accessor"],
-    "member-ordering": [
-      true,
-      {
-        "order": [
-          "static-field",
-          "instance-field",
-          "static-method",
-          "instance-method"
-        ]
-      }
-    ],
+    "member-ordering": [true, {
+      "order": "fields-first"
+    }],
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [
@@ -107,7 +99,7 @@
       }
     ],
     "unified-signatures": true,
-    "variable-name": false,
+    "variable-name": [true, "ban-keywords", "check-format"],
     "whitespace": [
       true,
       "check-branch",

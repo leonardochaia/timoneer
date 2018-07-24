@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, forwardRef } from '@angular/core';
-import { takeUntil, map, switchMap, debounceTime, catchError, take } from 'rxjs/operators';
+import { map, switchMap, debounceTime, catchError, take } from 'rxjs/operators';
 import { Subject, Observable, of, throwError, forkJoin } from 'rxjs';
 import { DaemonService } from '../daemon.service';
 import { Image } from 'docker-client';

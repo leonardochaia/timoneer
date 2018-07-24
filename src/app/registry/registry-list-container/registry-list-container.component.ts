@@ -13,9 +13,9 @@ export class RegistryListContainerComponent implements OnInit, OnDestroy {
 
   public registryUrl: string;
 
-  private componetDestroyed = new Subject();
-
   public registryName: string;
+
+  private componetDestroyed = new Subject();
 
   constructor(private activatedRoute: ActivatedRoute,
     private settingsService: SettingsService) { }
@@ -36,5 +36,4 @@ export class RegistryListContainerComponent implements OnInit, OnDestroy {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
   }
-
 }

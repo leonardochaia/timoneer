@@ -11,9 +11,6 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./image-list.component.scss']
 })
 export class ImageListComponent implements OnInit, OnDestroy {
-
-  private componetDestroyed = new Subject();
-
   public originalImages: ImageSummary[];
   public images: ImageSummary[];
   public danglingAmount: number;
@@ -27,6 +24,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public get searchTermControl() {
     return this.filterForm.controls['searchTerm'];
   }
+
+  private componetDestroyed = new Subject();
 
   constructor(private daemonService: DaemonService,
     private fb: FormBuilder) {

@@ -13,14 +13,15 @@ export class ImagePullLogsComponent implements OnInit, OnDestroy {
   @Input()
   public observable: Observable<DockerStreamResponse>;
 
-  @ViewChild('containerLogs')
-  private containerLogsElement: ElementRef;
+  public logs: DockerStreamResponse[] = [];
 
   public connecting: boolean;
 
+  @ViewChild('containerLogs')
+  private containerLogsElement: ElementRef;
+
   private componetDestroyed = new Subject();
 
-  public logs: DockerStreamResponse[] = [];
   public ngOnInit() {
     this.connecting = true;
     this.observable
@@ -49,6 +50,11 @@ export class ImagePullLogsComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
+  public ngOnDestroy() {
+    this.componetDestroyed.next();
+    this.componetDestroyed.unsubscribe();
+  }
+
   private scrollLogsToBottom() {
     setTimeout(() => {
       const elm = this.containerLogsElement.nativeElement;
@@ -56,8 +62,4 @@ export class ImagePullLogsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public ngOnDestroy() {
-    this.componetDestroyed.next();
-    this.componetDestroyed.unsubscribe();
-  }
 }

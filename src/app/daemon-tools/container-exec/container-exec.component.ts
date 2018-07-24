@@ -16,13 +16,14 @@ export class ContainerExecComponent implements OnInit, OnDestroy {
   @ViewChild('terminalContainer')
   public terminalContainer: ElementRef;
 
-  private componetDestroyed = new Subject();
-
   public command = 'ls';
 
   @Input()
   public containerId: string;
+
   private term: Terminal;
+
+  private componetDestroyed = new Subject();
 
   constructor(private daemonService: DaemonService) { }
 

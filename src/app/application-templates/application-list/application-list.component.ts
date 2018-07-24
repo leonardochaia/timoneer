@@ -14,7 +14,7 @@ export class ApplicationListComponent implements OnInit {
     return this.applicationService.getApplications();
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

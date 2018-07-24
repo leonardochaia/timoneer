@@ -13,18 +13,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class DaemonService {
 
-  public ContainerApi = this.daemonUrl.pipe(
-    map(url => new ContainerApi({ basePath: url })),
-  );
-
-  public ImageApi = this.daemonUrl.pipe(
-    map(url => new ImageApi({ basePath: url })),
-  );
-
-  public ExecApi = this.daemonUrl.pipe(
-    map(url => new ExecApi({ basePath: url })),
-  );
-
   protected get daemonUrl() {
     return this.settingsService.getSettings()
       .pipe(map(settings => settings.dockerDaemonSettings.url));
@@ -33,19 +21,22 @@ export class DaemonService {
   constructor(private settingsService: SettingsService) { }
 
   public imageApi<T>(fn: (api: ImageApi) => Promise<T>) {
-    return this.ImageApi.pipe(
+    return this.daemonUrl.pipe(
+      map(url => new ImageApi({ basePath: url })),
       switchMap(api => this.responsePromiseToObservable(fn(api)))
     );
   }
 
   public containerApi<T>(fn: (api: ContainerApi) => Promise<T>) {
-    return this.ContainerApi.pipe(
+    return this.daemonUrl.pipe(
+      map(url => new ContainerApi({ basePath: url })),
       switchMap(api => this.responsePromiseToObservable(fn(api)))
     );
   }
 
   public execApi<T>(fn: (api: ExecApi) => Promise<T>) {
-    return this.ExecApi.pipe(
+    return this.daemonUrl.pipe(
+      map(url => new ExecApi({ basePath: url })),
       switchMap(api => this.responsePromiseToObservable(fn(api)))
     );
   }
