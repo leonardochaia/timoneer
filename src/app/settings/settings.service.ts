@@ -76,7 +76,7 @@ export class SettingsService {
     if (image.includes('/')) {
       return this.getSettings()
         .pipe(map(settings =>
-          settings.registries.filter(x => image.includes(x.url.replace('http://', '').replace('https://', '')))[0]
+          settings.registries.filter(x => image.includes(this.getRegistryName(x)))[0]
         ));
     } else {
       return this.getDockerIOSettings();
