@@ -27,10 +27,12 @@ export class HomeContainerComponent implements OnInit {
 
     this.settingsService.getSettings()
       .subscribe(settings => {
-        this.registries = settings.registries.map(x => ({
-          name: this.settingsService.getRegistryName(x),
-          url: x.url
-        }));
+        this.registries = settings.registries
+          .filter(r => r.allowsCatalog)
+          .map(r => ({
+            name: this.settingsService.getRegistryName(r),
+            url: r.url
+          }));
       });
   }
 
