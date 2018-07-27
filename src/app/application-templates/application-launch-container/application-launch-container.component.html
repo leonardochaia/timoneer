@@ -2,7 +2,19 @@
      fxLayoutAlign="center start"
      style="margin-top: 16px"
      *ngIf="application">
-  <tim-application-launch [application]="application"
-                          fxFlex="90"
-                          fxFlex.gt-md="60"></tim-application-launch>
+
+    <div fxFlex="90"
+         fxFlex.gt-md="60"
+         fxLayout="column"
+         style="padding:16px;">
+
+        <h1 class="mat-display-1"
+            style="text-align: center; margin-bottom: 32px">
+            Launch application
+        </h1>
+
+        <tim-application-launch [application]="application"></tim-application-launch>
+    </div>
+
+
 </div>
