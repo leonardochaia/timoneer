@@ -36,6 +36,7 @@
 
           <button type="button"
                   style="float:right"
+                  color="primary"
                   [disabled]="!canAddRegistry()"
                   (click)="createRegistry()"
                   mat-raised-button>
@@ -62,18 +63,21 @@
                   <b>{{registry.username}}</b>
                 </p>
               </div>
-              <button type="button"
-                      (click)="editRegistry(ctrl)"
-                      mat-raised-button>
-                Edit
-              </button>
-              <button type="button"
-                      *ngIf="registry.editable"
-                      color="warn"
-                      (click)="removeRegistry(registry)"
-                      mat-raised-button>
-                Remove
-              </button>
+              <div fxLayout="row"
+                   fxLayoutGap="8px">
+                <button mat-mini-fab
+                        (click)="editRegistry(ctrl)"
+                        type="button">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-mini-fab
+                        *ngIf="registry.editable"
+                        color="warn"
+                        (click)="removeRegistry(registry)"
+                        type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </ng-container>
           </mat-card>
         </div>
