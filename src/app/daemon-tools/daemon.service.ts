@@ -148,8 +148,16 @@ export class DaemonService {
 
   private responsePromiseToObservable<T>(promise: Promise<T>) {
     return from(promise.then(v => v, (e: Response | HttpErrorResponse) => {
-      if (e instanceof Response) {
-        return e && e.json().then(j => Promise.reject({ message: j.message, status: e.status }));
+      if (e && e instanceof Response) {
+        return e.text().then(text => {
+          let obj: { message: string };
+          if (text.length) {
+            obj = JSON.parse(text);
+          } else {
+            obj = { message: `${e.status}: ${e.statusText}` };
+          }
+          return Promise.reject({ message: obj.message, status: e.status });
+        });
       } else {
         return Promise.reject(e);
       }
