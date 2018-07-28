@@ -11,7 +11,9 @@ import {
   MatProgressBarModule,
   MatDialogModule,
   MatAutocompleteModule,
-  MatChipsModule
+  MatChipsModule,
+  MatListModule,
+  MatBottomSheetModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
@@ -29,6 +31,7 @@ import { ContainerExecComponent } from './container-exec/container-exec.componen
 import { ContainerCreateComponent } from './container-create/container-create.component';
 import { ImageSelectorCardComponent } from './image-selector-card/image-selector-card.component';
 import { ContainerCreateContainerComponent } from './container-create-container/container-create-container.component';
+import { ContainerActionsSheetComponent } from './container-actions-sheet/container-actions-sheet.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -48,6 +51,8 @@ import { ContainerCreateContainerComponent } from './container-create-container/
     MatDialogModule,
     MatAutocompleteModule,
     MatChipsModule,
+    MatListModule,
+    MatBottomSheetModule,
 
     SharedModule,
     SettingsModule,
@@ -67,6 +72,7 @@ import { ContainerCreateContainerComponent } from './container-create-container/
     ContainerCreateComponent,
     ImageSelectorCardComponent,
     ContainerCreateContainerComponent,
+    ContainerActionsSheetComponent,
   ],
   exports: [
     ContainerListComponent,
@@ -81,6 +87,7 @@ import { ContainerCreateContainerComponent } from './container-create-container/
   ],
   entryComponents: [
     ImagePullModalComponent,
+    ContainerActionsSheetComponent,
   ]
 })
 export class DaemonToolsModule { }

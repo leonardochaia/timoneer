@@ -1,0 +1,42 @@
+<h1>
+  <mat-icon>computer</mat-icon>
+  {{container.Names[0]}}
+</h1>
+<mat-progress-bar *ngIf="loading"
+                  mode="indeterminate"></mat-progress-bar>
+<p *ngIf="error"
+   class="mat-text-warn">
+  {{error}}
+</p>
+<mat-nav-list>
+
+  <a [routerLink]="['/docker/containers/', container.Id, 'attach']"
+     mat-list-item
+     (click)="dismiss()">
+    <mat-icon mat-list-icon>folder</mat-icon>
+    <h4 mat-line>Attach</h4>
+    <p mat-line>Attach to the container's process</p>
+  </a>
+
+  <a [routerLink]="['/docker/containers/', container.Id, 'exec']"
+     mat-list-item
+     (click)="dismiss()">
+    <mat-icon mat-list-icon>folder</mat-icon>
+    <h4 mat-line>Exec</h4>
+    <p mat-line>Execute a command inside the container</p>
+  </a>
+
+  <a mat-list-item
+     (click)="stop()">
+    <mat-icon mat-list-icon>folder</mat-icon>
+    <h4 mat-line>Stop</h4>
+    <p mat-line>Stops the container</p>
+  </a>
+
+  <a mat-list-item
+     (click)="remove()">
+    <mat-icon mat-list-icon>delete</mat-icon>
+    <h4 mat-line>Remove</h4>
+    <p mat-line>Stops and removes the container</p>
+  </a>
+</mat-nav-list>
