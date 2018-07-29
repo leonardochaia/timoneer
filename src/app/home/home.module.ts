@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { RegistryModule } from '../registry/registry.module';
 import { MatButtonModule, MatIconModule, MatCardModule } from '@angular/material';
 import { ApplicationTemplatesModule } from '../application-templates/application-templates.module';
+import { DaemonStatusCardComponent } from './daemon-status-card/daemon-status-card.component';
+import { SharedModule } from '../shared/shared.module';
+import { HubSettingsCardComponent } from './hub-settings-card/hub-settings-card.component';
 
 @NgModule({
   imports: [
@@ -19,7 +22,12 @@ import { ApplicationTemplatesModule } from '../application-templates/application
 
     RegistryModule,
     ApplicationTemplatesModule,
+    SharedModule,
   ],
-  declarations: [HomeContainerComponent]
+  declarations: [
+    HomeContainerComponent,
+    DaemonStatusCardComponent,
+    HubSettingsCardComponent
+  ]
 })
 export class HomeModule { }

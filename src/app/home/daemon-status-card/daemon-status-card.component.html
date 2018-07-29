@@ -1,0 +1,38 @@
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;">
+  <mat-icon class="mat-icon-48"
+            [ngClass]="daemonRacheable ? 'mat-text-primary': 'mat-text-warn'">computer</mat-icon>
+  <div fxFlex="grow">
+    <ng-container *ngIf="loading; else daemonTemplate">
+      <tim-loading [alternative]="true"></tim-loading>
+    </ng-container>
+    <ng-template #daemonTemplate>
+      <ng-container *ngIf="daemonRacheable; else daemonErrorTemplate">
+        <h2 style="margin: 0">
+          <span class="mat-text-primary">
+            Docker Daemon {{daemonInfo.ServerVersion}}
+          </span>
+        </h2>
+        <p>
+          {{daemonInfo.OperatingSystem}}
+        </p>
+      </ng-container>
+    </ng-template>
+    <ng-template #daemonErrorTemplate>
+      <h2 style="margin: 0">
+        <span class="mat-text-primary">
+          Docker Daemon Unreacheable
+        </span>
+      </h2>
+      <p>
+        Daemon Host: {{settings.dockerClientSettings.url}}
+      </p>
+      <p *ngIf="daemonError"
+         class="mat-text-warn">
+        Error: {{daemonError}}
+      </p>
+    </ng-template>
+  </div>
+</mat-card>

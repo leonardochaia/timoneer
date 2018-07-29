@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from './loading/loading.component';
-import { MatProgressSpinnerModule, MatSnackBarModule } from '@angular/material';
+import { MatProgressSpinnerModule, MatSnackBarModule, MatProgressBarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
@@ -12,6 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
     FlexLayoutModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
   ],
   declarations: [
     LoadingComponent,

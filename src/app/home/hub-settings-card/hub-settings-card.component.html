@@ -1,0 +1,28 @@
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;">
+  <mat-icon class="mat-icon-48 mat-text-primary">settings</mat-icon>
+
+  <div fxFlex="grow">
+    <ng-container *ngIf="loading; else settingsTemplate">
+      <tim-loading [alternative]="true"></tim-loading>
+    </ng-container>
+    <ng-template #settingsTemplate>
+      <h2 style="margin: 0">
+        <span class="mat-text-primary">
+          Docker Hub {{valid? '' : 'is not'}} Configured
+        </span>
+      </h2>
+      <p *ngIf="valid">
+        Username: {{hubSettings.username}}
+      </p>
+    </ng-template>
+  </div>
+  <a fxFlex
+     *ngIf="!valid"
+     mat-raised-button
+     [routerLink]="['/settings/']">
+    Configure
+  </a>
+</mat-card>

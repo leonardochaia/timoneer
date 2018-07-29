@@ -5,37 +5,16 @@
      style="padding:16px;">
 
   <div fxFlex.gt-sm="50">
-    <h2 *ngIf="!daemonValid || !hasAnyRegistry">Status report</h2>
+    <h2>Status report</h2>
+
+    <tim-daemon-status-card></tim-daemon-status-card>
+
+    <tim-hub-settings-card></tim-hub-settings-card>
 
     <mat-card fxLayout="row"
               fxLayoutAlign="start center"
               fxLayoutGap="8px"
-              *ngIf="!daemonValid"
-              style="margin-bottom: 16px;">
-      <mat-icon class="mat-icon-48 mat-text-warn">settings</mat-icon>
-      <div fxFlex="grow">
-        <h2 style="margin: 0">
-          <span class="mat-text-primary">
-            Daemon Settings Invalid
-          </span>
-          <br>
-          <small>
-            You will not be able to launch containers.
-          </small>
-        </h2>
-      </div>
-
-      <a fxFlex
-         mat-raised-button
-         [routerLink]="['/settings/']">
-        Fix
-      </a>
-    </mat-card>
-
-    <mat-card fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="8px"
-              *ngIf="!hasAnyRegistry"
+              *ngIf="!registries.length"
               style="margin-bottom: 16px;">
       <mat-icon class="mat-icon-48 mat-text-primary">settings</mat-icon>
       <div fxFlex="grow">
@@ -45,7 +24,7 @@
           </span>
           <br>
           <small>
-            Your custom registry or docker.io credentials
+            You can add your custom registry so we can list your images.
           </small>
         </h2>
       </div>
@@ -53,7 +32,7 @@
       <a fxFlex
          mat-raised-button
          [routerLink]="['/settings/']">
-        Fix
+        Add
       </a>
     </mat-card>
 

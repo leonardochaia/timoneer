@@ -83,11 +83,6 @@ export class SettingsService {
       .pipe(map(settings => settings && !!settings.url));
   }
 
-  public hasAnyRegistry() {
-    return this.getSettings()
-      .pipe(map(settings => settings && settings.registries && !!settings.registries.length));
-  }
-
   public getRegistrySettingsForUrl(url: string) {
     return this.getSettings()
       .pipe(map(settings =>
@@ -109,7 +104,7 @@ export class SettingsService {
   public getRegistrySettingsForName(name: string) {
     return this.getSettings()
       .pipe(
-        map(settings => settings.registries.filter(x => x.url.includes(name))[0])
+        map(settings => settings.registries.filter(x => x.url && x.url.includes(name))[0])
       );
   }
 

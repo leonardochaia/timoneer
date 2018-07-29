@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'tim-loading',
@@ -6,4 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./loading.component.scss']
 })
 export class LoadingComponent {
+
+  @Input()
+  public alternative: boolean;
 }

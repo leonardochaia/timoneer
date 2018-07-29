@@ -1,4 +1,9 @@
 <div fxLayout="row"
      fxLayoutAlign="center center">
-  <mat-spinner mode="indeterminate"></mat-spinner>
+  <ng-container *ngIf="alternative; else standard">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-container>
+  <ng-template #standard>
+    <mat-spinner mode="indeterminate"></mat-spinner>
+  </ng-template>
 </div>
