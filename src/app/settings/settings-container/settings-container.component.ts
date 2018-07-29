@@ -100,26 +100,34 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
       'certPath': [settings.certPath || ''],
     });
 
-    const updateDisabledFields = () => {
+    const onFromEnvironmentChanged = () => {
       const value = this.clientGroup.get('fromEnvironment').value as boolean;
+      const url = this.clientGroup.get('url');
+      const tlsVerify = this.clientGroup.get('tlsVerify');
+      const certPath = this.clientGroup.get('certPath');
       if (value) {
-        this.clientGroup.get('url').disable();
-        this.clientGroup.get('tlsVerify').disable();
-        this.clientGroup.get('certPath').disable();
+        url.disable();
+        tlsVerify.disable();
+        certPath.disable();
+
+        const envSettings = this.settingsService.getDockerClientConfigFromEnvironment();
+        url.setValue(envSettings.url);
+        tlsVerify.setValue(envSettings.tlsVerify);
+        certPath.setValue(envSettings.certPath);
       } else {
-        this.clientGroup.get('url').enable();
-        this.clientGroup.get('tlsVerify').enable();
-        this.clientGroup.get('certPath').enable();
+        url.enable();
+        tlsVerify.enable();
+        certPath.enable();
       }
     };
 
     this.clientGroup.get('fromEnvironment')
       .valueChanges
       .subscribe(() => {
-        updateDisabledFields();
+        onFromEnvironmentChanged();
       });
 
-    updateDisabledFields();
+    onFromEnvironmentChanged();
   }
 
   private createRegistryGroup(registrySettings?: DockerRegistrySettings) {

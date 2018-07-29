@@ -139,20 +139,20 @@ export class SettingsService {
     });
   }
 
-  private ensureEndingSlash(str: string) {
-    if (!str.endsWith('/')) {
-      return str + '/';
-    } else {
-      return str;
-    }
-  }
-
-  private getDockerClientConfigFromEnvironment(): DockerClientSettings {
+  public getDockerClientConfigFromEnvironment(): DockerClientSettings {
     return {
       fromEnvironment: true,
       url: process.env.DOCKER_HOST,
       tlsVerify: process.env.DOCKER_TLS_VERIFY === '1',
       certPath: process.env.DOCKER_CERT_PATH,
     };
+  }
+
+  private ensureEndingSlash(str: string) {
+    if (!str.endsWith('/')) {
+      return str + '/';
+    } else {
+      return str;
+    }
   }
 }
