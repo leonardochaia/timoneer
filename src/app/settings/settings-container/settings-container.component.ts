@@ -17,10 +17,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
 
   public clientGroup: FormGroup;
 
-  public form = this.fb.group({
-    'dockerClientSettings': this.clientGroup,
-    'registries': this.registriesArray
-  });
+  public form: FormGroup;
 
   private componetDestroyed = new Subject();
 
@@ -62,8 +59,11 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
     this.settingsService.getSettings()
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(settings => {
-
         this.setClientSettings(settings.dockerClientSettings);
+        this.form = this.fb.group({
+          'dockerClientSettings': this.clientGroup,
+          'registries': this.registriesArray
+        });
 
         this.registriesArray.controls.splice(0, this.registriesArray.length);
         for (const registrySetting of settings.registries) {
@@ -73,7 +73,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   }
 
   public save() {
-    this.settingsService.saveSettings(this.form.getRawValue())
+    this.settingsService.saveSettings(this.form.value)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(() => {
         this.snackBar.open('Settings saved.', null, {

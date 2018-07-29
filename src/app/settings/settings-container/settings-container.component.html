@@ -56,7 +56,7 @@
             <ng-container *ngIf="getRegistryFromGroup(ctrl) as registry">
               <div fxFlex="fill">
                 <h2>
-                  {{registry.url}}
+                  {{registry.url || 'Docker Hub'}}
                 </h2>
                 <p *ngIf="registry.username">
                   Username:

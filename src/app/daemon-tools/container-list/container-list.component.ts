@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DaemonService } from '../daemon.service';
 import { Subject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 import { MatBottomSheet } from '@angular/material';
 import { ContainerActionsSheetComponent } from '../container-actions-sheet/container-actions-sheet.component';
@@ -33,11 +33,13 @@ export class ContainerListComponent implements OnInit, OnDestroy {
     ).subscribe(containers => {
       this.loading = false;
       this.containers = containers;
-    }, () => {
+    }, e => {
       this.loading = false;
       this.notificationService.open('Error ocurred while obtaining containers!', null, {
         panelClass: 'mat-bg-warn'
       });
+      this.containers = [];
+      console.error(e);
     });
   }
 

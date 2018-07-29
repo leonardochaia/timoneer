@@ -8,6 +8,10 @@ import { IncomingMessage } from 'http';
 import * as Dockerode from 'dockerode';
 import { Exec } from 'dockerode';
 import { TLSSocket } from 'tls';
+import { DockerClientSettings } from '../settings/settings.model';
+
+import * as path from 'path';
+import * as splitca from 'split-ca';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +27,7 @@ export class DaemonService {
 
   constructor(private settingsService: SettingsService,
     private zone: NgZone,
-    electronService: ElectronService) {
+    private electronService: ElectronService) {
 
     settingsService.getSettings()
       .pipe(map(settings => settings.dockerClientSettings))
@@ -31,26 +35,17 @@ export class DaemonService {
         if (settings.fromEnvironment) {
           this.dockerSubject.next(new Dockerode());
         } else {
-          const fs = electronService.fs;
-          this.dockerSubject.next(new Dockerode({
-            host: settings.url,
-            cert: fs.readFileSync(`${settings.certPath}/cert.pem`),
-            ca: fs.readFileSync(`${settings.certPath}/ca.pem`),
-            key: fs.readFileSync(`${settings.certPath}/key.pem`)
-          }));
+          const opts = this.getDockerodeConfigFromSettings(settings);
+          this.dockerSubject.next(new Dockerode(opts));
         }
       });
   }
 
   public docker<T>(fn: (api: Dockerode) => Promise<T>) {
-    if (this.dockerSubject.value) {
-      return from(fn(this.dockerSubject.value));
-    } else {
-      return this.dockerSubject.asObservable()
-        .pipe(
-          switchMap(docker => from(fn(docker)))
-        );
-    }
+    return this.dockerSubject
+      .pipe(
+        switchMap(docker => from(fn(docker)))
+      );
   }
 
   public streamToObservable<T>(stream: NodeJS.EventEmitter) {
@@ -117,6 +112,40 @@ export class DaemonService {
           modem.followProgress(msg.message, onFinished, onProgress);
         }))
       );
+  }
+
+  private getDockerodeConfigFromSettings(settings: DockerClientSettings) {
+    const opts: Dockerode.DockerOptions = {};
+    if (settings.url) {
+      // inspierd on docker-modem: https://github.com/apocas/docker-modem/blob/master/lib/modem.js
+      if (settings.url.indexOf('unix://') === 0) {
+        opts.socketPath = settings.url.substring(7);
+      } else {
+        const split = /(?:tcp:\/\/)?(.*?):([0-9]+)/g.exec(settings.url);
+
+        if (!split || split.length !== 3) {
+          throw new Error('Url env variable should be something like tcp://localhost:2376');
+        }
+
+        opts.port = split[2];
+
+        if (settings.tlsVerify || opts.port === '2376') {
+          opts.protocol = 'https';
+        } else {
+          opts.protocol = 'http';
+        }
+
+        opts.host = split[1];
+
+        if (settings.certPath) {
+          const fs = this.electronService.fs;
+          opts.ca = splitca(path.join(settings.certPath, 'ca.pem'));
+          opts.cert = fs.readFileSync(path.join(settings.certPath, 'cert.pem'));
+          opts.key = fs.readFileSync(path.join(settings.certPath, 'key.pem'));
+        }
+      }
+    }
+    return opts;
   }
 
 }

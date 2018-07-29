@@ -5,8 +5,10 @@ import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { FormGroup } from '@angular/forms';
+import { ElectronService } from '../electron-tools/electron.service';
+import * as ElectronSettings from 'electron-settings';
 
-const SETTINGS_KEY = 'registry-ui-settings';
+const SETTINGS_KEY = 'app-settings';
 
 @Injectable({
   providedIn: 'root'
@@ -15,20 +17,23 @@ export class SettingsService {
 
   private settingsSubject = new BehaviorSubject<ApplicationSettings>(null);
 
-  constructor(public matDialog: MatDialog) { }
+  private get electronSettings() {
+    return this.electronService.remote.require('electron-settings') as typeof ElectronSettings;
+  }
+
+  constructor(public matDialog: MatDialog,
+    private electronService: ElectronService) { }
 
   public saveSettings(settings: ApplicationSettings) {
-    const json = JSON.stringify(settings);
-    localStorage.setItem(SETTINGS_KEY, json);
+    this.electronSettings.set(SETTINGS_KEY, settings as any);
     this.settingsSubject.next(settings);
     return of(settings);
   }
 
   public getSettings() {
     if (!this.settingsSubject.value) {
-      const json = localStorage.getItem(SETTINGS_KEY);
-      if (json) {
-        const fromLocal = JSON.parse(json) as ApplicationSettings;
+      if (this.electronSettings.has(SETTINGS_KEY)) {
+        const fromLocal = this.electronSettings.get(SETTINGS_KEY) as any as ApplicationSettings;
         this.settingsSubject.next(fromLocal);
       } else {
         this.settingsSubject.next(<ApplicationSettings>{
@@ -46,7 +51,7 @@ export class SettingsService {
 
     return this.settingsSubject.asObservable()
       .pipe(map(settings => {
-        if (settings && settings.dockerClientSettings) {
+        if (settings.dockerClientSettings) {
           const clientSettings = settings.dockerClientSettings;
           if (clientSettings.fromEnvironment) {
             settings.dockerClientSettings = this.getDockerClientConfigFromEnvironment();
@@ -55,11 +60,17 @@ export class SettingsService {
               settings.dockerClientSettings.url.slice(settings.dockerClientSettings.url.length - 1);
             }
           }
+        } else {
+          settings.dockerClientSettings = {
+            fromEnvironment: true
+          };
         }
 
-        if (settings && settings.registries && settings.registries.length) {
+        if (settings.registries && settings.registries.length) {
           for (const registry of settings.registries) {
-            registry.url = this.ensureEndingSlash(registry.url);
+            if (registry.url) {
+              registry.url = this.ensureEndingSlash(registry.url);
+            }
           }
         }
         return settings;
