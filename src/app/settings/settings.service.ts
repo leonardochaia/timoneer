@@ -4,7 +4,7 @@ import { of, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
-import { FormGroup } from '../../../node_modules/@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 const SETTINGS_KEY = 'registry-ui-settings';
 

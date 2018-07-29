@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DaemonService } from '../daemon.service';
-import { ContainerSummary, ContainerSummaryInner } from 'docker-client';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 import { MatBottomSheet } from '@angular/material';
 import { ContainerActionsSheetComponent } from '../container-actions-sheet/container-actions-sheet.component';
+import { ContainerInfo } from 'dockerode';
 
 @Component({
   selector: 'tim-container-list',
@@ -13,7 +13,7 @@ import { ContainerActionsSheetComponent } from '../container-actions-sheet/conta
   styleUrls: ['./container-list.component.scss']
 })
 export class ContainerListComponent implements OnInit, OnDestroy {
-  public containers: ContainerSummary;
+  public containers: ContainerInfo[];
 
   public loading: boolean;
 
@@ -25,8 +25,9 @@ export class ContainerListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.loading = true;
+
     this.daemonService
-      .containerApi(api => api.containerList())
+      .docker(d => d.listContainers())
       .pipe(
         takeUntil(this.componetDestroyed),
     ).subscribe(containers => {
@@ -40,7 +41,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
     });
   }
 
-  public openContainerMenu(container: ContainerSummaryInner) {
+  public openContainerMenu(container: ContainerInfo) {
     this.bottomSheet.open(ContainerActionsSheetComponent, {
       data: container
     });

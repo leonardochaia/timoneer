@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { SettingsService } from '../settings/settings.service';
-import { map, switchMap, share } from 'rxjs/operators';
-
-import { ContainerApi, ImageApi, ExecApi } from 'docker-client';
-import { from, Observable } from 'rxjs';
-
+import { map, switchMap } from 'rxjs/operators';
+import { from, Observable, BehaviorSubject } from 'rxjs';
 import { DockerStreamResponse } from './docker-client.model';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ElectronService } from '../electron-tools/electron.service';
+import { IncomingMessage } from 'http';
+import * as Dockerode from 'dockerode';
+import { Exec } from 'dockerode';
+import { TLSSocket } from 'tls';
 
 @Injectable({
   providedIn: 'root'
@@ -18,149 +19,104 @@ export class DaemonService {
       .pipe(map(settings => settings.dockerClientSettings.url));
   }
 
-  constructor(private settingsService: SettingsService) { }
+  protected dockerSubject = new BehaviorSubject<Dockerode>(null);
 
-  public imageApi<T>(fn: (api: ImageApi) => Promise<T>) {
-    return this.daemonUrl.pipe(
-      map(url => new ImageApi({ basePath: url })),
-      switchMap(api => this.responsePromiseToObservable(fn(api)))
-    );
-  }
+  constructor(private settingsService: SettingsService,
+    private zone: NgZone,
+    electronService: ElectronService) {
 
-  public containerApi<T>(fn: (api: ContainerApi) => Promise<T>) {
-    return this.daemonUrl.pipe(
-      map(url => new ContainerApi({ basePath: url })),
-      switchMap(api => this.responsePromiseToObservable(fn(api)))
-    );
-  }
-
-  public execApi<T>(fn: (api: ExecApi) => Promise<T>) {
-    return this.daemonUrl.pipe(
-      map(url => new ExecApi({ basePath: url })),
-      switchMap(api => this.responsePromiseToObservable(fn(api)))
-    );
-  }
-
-  public responseStreamToObservable(response: Response) {
-    return new Observable<DockerStreamResponse>(observer => {
-      const reader = response.body.getReader();
-      const decoder = new window['TextDecoder']('utf-8');
-
-      let previousJson: string = null;
-
-      const processText = (done: boolean, value: any) => {
-        // Result objects contain two properties:
-        // done  - true if the stream has already given you all its data.
-        // value - some data. Always undefined when done is true.
-        if (done) {
-          observer.complete();
-          return;
+    settingsService.getSettings()
+      .pipe(map(settings => settings.dockerClientSettings))
+      .subscribe(settings => {
+        if (settings.fromEnvironment) {
+          this.dockerSubject.next(new Dockerode());
+        } else {
+          const fs = electronService.fs;
+          this.dockerSubject.next(new Dockerode({
+            host: settings.url,
+            cert: fs.readFileSync(`${settings.certPath}/cert.pem`),
+            ca: fs.readFileSync(`${settings.certPath}/ca.pem`),
+            key: fs.readFileSync(`${settings.certPath}/key.pem`)
+          }));
         }
-
-        const decoded = decoder
-          .decode(value);
-        const jsons = decoded
-          .split('\n');
-
-        for (const json of jsons) {
-          if (json === '' || json === ' ') {
-            continue;
-          }
-
-          try {
-            const dockerResponse = JSON.parse(json) as DockerStreamResponse;
-            observer.next(dockerResponse);
-            previousJson = null;
-          } catch (error) {
-
-            // console.info("FAILED TO DESERIALIZE JSON");
-
-            // console.info('FULL CHUNK:');
-            // console.log(decoded);
-
-            // console.info('JSON THAT FAILED:');
-            // console.log(json);
-            // console.info('JSON ERROR:');
-            // console.log(error);
-
-            if (previousJson) {
-              previousJson += json;
-              console.log('Attempting to merge failed json from previous chunk..');
-              console.log(previousJson);
-              try {
-                const dockerResponse = JSON.parse(previousJson) as DockerStreamResponse;
-                observer.next(dockerResponse);
-              } catch (error) {
-                console.log('Failed to deserialize merged json from previous chunk..');
-                console.error(error);
-              }
-              previousJson = null;
-            } else {
-              previousJson = json;
-            }
-
-          }
-        }
-
-        // Read some more, and call this function again
-        return reader.read().then((r) => processText(r.done, r.value));
-      };
-
-      reader.read().then((r) => processText(r.done, r.value));
-
-      return {
-        unsubscribe: () => reader.cancel
-      };
-    });
+      });
   }
 
-  public logResponseStreamToObservable(response: Response) {
-    return new Observable<string>(observer => {
-      const reader = response.body.getReader();
-      const decoder = new window['TextDecoder']('utf-8');
-
-      const processText = (done: boolean, value: any) => {
-        // Result objects contain two properties:
-        // done  - true if the stream has already given you all its data.
-        // value - some data. Always undefined when done is true.
-        if (done) {
-          observer.complete();
-          return;
-        }
-
-        const decoded = decoder
-          .decode(value);
-
-        console.log(decoded);
-        observer.next(decoded);
-
-        // Read some more, and call this function again
-        return reader.read().then((r) => processText(r.done, r.value));
-      };
-
-      reader.read().then((r) => processText(r.done, r.value));
-
-      return {
-        unsubscribe: () => reader.cancel
-      };
-    });
+  public docker<T>(fn: (api: Dockerode) => Promise<T>) {
+    if (this.dockerSubject.value) {
+      return from(fn(this.dockerSubject.value));
+    } else {
+      return this.dockerSubject.asObservable()
+        .pipe(
+          switchMap(docker => from(fn(docker)))
+        );
+    }
   }
 
-  private responsePromiseToObservable<T>(promise: Promise<T>) {
-    return from(promise.then(v => v, (e: Response | HttpErrorResponse) => {
-      if (e && e instanceof Response) {
-        return e.text().then(text => {
-          let obj: { message: string };
-          if (text.length) {
-            obj = JSON.parse(text);
-          } else {
-            obj = { message: `${e.status}: ${e.statusText}` };
-          }
-          return Promise.reject({ message: obj.message, status: e.status });
+  public streamToObservable<T>(stream: NodeJS.EventEmitter) {
+    return new Observable<T>(observer => {
+      stream.on('data', (data) => {
+        this.zone.run(() => {
+          observer.next(data);
         });
-      } else {
-        return Promise.reject(e);
-      }
-    }));
+      });
+
+      stream.on('error', (data) => {
+        this.zone.run(() => {
+          observer.error(data);
+        });
+      });
+
+      stream.on('end', () => {
+        this.zone.run(() => {
+          observer.complete();
+        });
+      });
+    });
   }
+
+  public exec(containerId: string) {
+    return this.docker(d => d.getContainer(containerId).exec({
+      Cmd: ['bin/sh'],
+      AttachStdin: true,
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: true,
+    }))
+      .pipe(
+        switchMap((exec: Exec) => from(exec.start({
+          hijack: true,
+        }))),
+        map(socket => socket.output as TLSSocket)
+      );
+  }
+
+  public pullImage(image: string) {
+    return this.settingsService.getRegistryAuthForImage(image)
+      .pipe(
+        switchMap(auth =>
+          this.docker(d => d.pull(image, { 'authconfig': { key: auth } }))
+        ),
+        map(r => <IncomingMessage>r),
+        switchMap(r => this.docker(d => Promise.resolve(d.modem)).pipe(map(m => ({ message: r, modem: m })))),
+        switchMap(msg => new Observable<DockerStreamResponse>(observer => {
+          const modem = msg.modem as any;
+
+          const onFinished = () => {
+            this.zone.run(() => {
+              observer.complete();
+            });
+            // output is an array with output json parsed objects
+          };
+
+          const onProgress = (event: DockerStreamResponse) => {
+            this.zone.run(() => {
+              observer.next(event);
+            });
+          };
+          modem.followProgress(msg.message, onFinished, onProgress);
+        }))
+      );
+  }
+
 }

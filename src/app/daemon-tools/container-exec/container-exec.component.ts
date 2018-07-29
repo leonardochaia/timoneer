@@ -1,7 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { switchResponseToObservable } from '../switch-response-to-observable';
 import { DaemonService } from '../daemon.service';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
@@ -16,56 +14,66 @@ export class ContainerExecComponent implements OnInit, OnDestroy {
   @ViewChild('terminalContainer')
   public terminalContainer: ElementRef;
 
-  public command = 'ls';
-
   @Input()
   public containerId: string;
 
-  private term: Terminal;
+  public connected: boolean;
+
+  public loading: boolean;
+
+  public error: string;
+
+  private terminal: Terminal;
 
   private componetDestroyed = new Subject();
 
   constructor(private daemonService: DaemonService) { }
 
   public ngOnInit() {
-    this.term = new Terminal({
-      cursorBlink: false,
-    });
-    this.term.open(this.terminalContainer.nativeElement);
-    this.term.focus();
-    fit(this.term);
-    this.exec();
-  }
 
-  public exec() {
-    this.term.clear();
-    const command = ['bin/sh', '-c', this.command];
-    this.daemonService.execApi(api => api.containerExec({
-      AttachStdin: false,
-      AttachStderr: true,
-      AttachStdout: true,
-      Tty: true,
-      Cmd: command,
-    }, this.containerId))
-      .pipe(
-        takeUntil(this.componetDestroyed),
-        switchMap(withId => {
-          this.term.writeln(`Executing exec [${withId.Id}]`);
-          this.term.writeln(`# ${this.command}`);
-          return this.daemonService.execApi(api => api.execStart(withId.Id));
-        }),
-        switchResponseToObservable<string>(),
-    )
-      .subscribe((line) => {
-        this.term.writeln(line);
-      }, (error) => {
-        this.term.writeln(`HTTP ${error.status}`);
-        this.term.writeln(error.message);
+    this.loading = true;
+
+    this.setupTerminal();
+    this.daemonService.exec(this.containerId)
+      .subscribe((socket) => {
+        this.connected = true;
+        this.loading = false;
+
+        this.daemonService.streamToObservable(socket)
+          .subscribe(line => {
+            this.terminal.write(line.toString());
+          }, e => {
+            console.error(e);
+          }, () => {
+            this.connected = false;
+          });
+
+        this.terminal.on('key', key => {
+          socket.write(key);
+        });
+
+      }, e => {
+        this.error = e.message;
+        this.connected = false;
+        this.loading = false;
       });
+
   }
 
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+    if (this.terminal) {
+      this.terminal.dispose();
+    }
+  }
+
+  private setupTerminal() {
+    this.terminal = new Terminal({
+      cursorBlink: false,
+    });
+    this.terminal.open(this.terminalContainer.nativeElement);
+    this.terminal.focus();
+    fit(this.terminal);
   }
 }

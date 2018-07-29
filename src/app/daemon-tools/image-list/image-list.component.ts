@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DaemonService } from '../daemon.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ImageSummary } from 'docker-client';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ImageInfo } from 'dockerode';
 
 @Component({
   selector: 'tim-image-list',
@@ -11,8 +11,8 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./image-list.component.scss']
 })
 export class ImageListComponent implements OnInit, OnDestroy {
-  public originalImages: ImageSummary[];
-  public images: ImageSummary[];
+  public originalImages: ImageInfo[];
+  public images: ImageInfo[];
   public danglingAmount: number;
 
   public filterForm: FormGroup;
@@ -47,7 +47,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
     this.reload();
   }
 
-  public isImageDangling(image: ImageSummary) {
+  public isImageDangling(image: ImageInfo) {
     return image.RepoTags && image.RepoTags[0] === '<none>:<none>';
   }
 
@@ -57,8 +57,10 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   private reload() {
-    this.daemonService.imageApi(api => api.imageList())
-      .pipe(takeUntil(this.componetDestroyed))
+    this.daemonService.docker(d => d.listImages())
+      .pipe(
+        takeUntil(this.componetDestroyed)
+      )
       .subscribe(images => {
         this.originalImages = this.images = images;
         this.danglingAmount = this.originalImages.filter(i => this.isImageDangling(i)).length;

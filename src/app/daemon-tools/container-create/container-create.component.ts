@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { ContainerCreateBody, Image } from 'docker-client';
 import { DaemonService } from '../daemon.service';
 import { switchMap, map, filter, takeWhile } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
+import { ContainerCreateOptions, ImageInspectInfo, Container } from 'dockerode';
+import { from } from 'rxjs';
 
 interface PortBinding {
   containerPort?: number;
@@ -60,7 +61,7 @@ export class ContainerCreateComponent implements OnInit {
     return this.form.get('volumeBindings') as FormArray;
   }
 
-  public imageData: Image;
+  public imageData: ImageInspectInfo;
 
   public get filteredPorts() {
     return this.availablePorts.filter(p => !this.portBindingsArray.controls.some(c => c.value.containerPort === p.containerPort));
@@ -154,7 +155,7 @@ export class ContainerCreateComponent implements OnInit {
     this.portBindingsArray.removeAt(this.portBindingsArray.controls.indexOf(control));
   }
 
-  public imageSelected(image: Image) {
+  public imageSelected(image: ImageInspectInfo) {
     this.portBindingsArray.controls.splice(0, this.portBindingsArray.length);
     this.imageData = image;
     if (image) {
@@ -176,7 +177,7 @@ export class ContainerCreateComponent implements OnInit {
   }
 
   public launch() {
-    const data: ContainerCreateBody = {
+    const data: ContainerCreateOptions = {
       Image: this.form.getRawValue().image,
       Tty: this.form.value.launchConfig.tty,
       HostConfig: {
@@ -202,17 +203,16 @@ export class ContainerCreateComponent implements OnInit {
       data.Cmd = JSON.parse(launchConfig.command);
     }
 
-    const containerName = launchConfig.containerName;
-    this.daemonService.containerApi(api => api.containerCreate(data, containerName))
+    data.name = launchConfig.containerName;
+
+    this.daemonService.docker(d => d.createContainer(data))
       .pipe(switchMap(container => {
-        this.notification.open(`Container Created. Starting.. ${container.Id}`);
-        console.log(container);
-        return this.daemonService.containerApi(api => api.containerStart(container.Id))
-          .pipe(map(() => container));
+        this.notification.open(`Container Created. Starting.. ${container.id}`);
+        return from(container.start() as Promise<Container>);
       }))
       .subscribe(container => {
-        this.created.emit(container.Id);
+        console.log(container);
+        this.created.emit(container.id);
       });
   }
-
 }

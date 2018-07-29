@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { RegistryService } from '../registry.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SettingsService } from '../../settings/settings.service';
-import { map } from '../../../../node_modules/rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'tim-registry-list',

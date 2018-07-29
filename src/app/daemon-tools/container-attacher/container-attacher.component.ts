@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { Terminal } from 'xterm';
-import { attach } from 'xterm/lib/addons/attach/attach';
 import { fit } from 'xterm/lib/addons/fit/fit';
-import { SettingsService } from '../../settings/settings.service';
 import { Subject } from 'rxjs';
+import { DaemonService } from '../daemon.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +12,6 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ContainerAttacherComponent implements OnInit, OnDestroy {
 
-
   @Input()
   public containerId: string;
 
@@ -22,60 +20,69 @@ export class ContainerAttacherComponent implements OnInit, OnDestroy {
   public socket: WebSocket;
 
   public attaching: boolean;
+  public connected: boolean;
   public error: string;
 
   private componetDestroyed = new Subject();
+  private terminal: Terminal;
 
-  public get connected() {
-    return this.socket.readyState === WebSocket.OPEN;
-  }
-
-  constructor(private settingsService: SettingsService) {
-  }
+  constructor(private daemonService: DaemonService) { }
 
   public ngOnInit() {
 
+    this.connected = false;
     this.attaching = true;
-    this.settingsService.getSettings()
+
+    this.daemonService.docker(d => d.getContainer(this.containerId).attach({
+      stream: true,
+      hijack: true,
+      stdin: true,
+      stdout: true,
+      stderr: true,
+      logs: true
+    }))
       .pipe(takeUntil(this.componetDestroyed))
-      .subscribe(settings => {
-        const wss = settings.dockerClientSettings.url.replace('http://', 'ws://')
-          + `/containers/${this.containerId}/attach/ws?logs=true&stream=true&stdin=true&stdout=true&stderr=true`;
+      .subscribe(str => {
+        const stream = <any>str as NodeJS.WritableStream;
+        this.connected = true;
+        this.attaching = false;
 
-        this.socket = new WebSocket(wss);
-        this.socket.binaryType = 'arraybuffer';
+        this.setupTerminal();
 
-        this.socket.onerror = (error) => {
-          console.error(error);
-          this.attaching = false;
-          this.error = 'An error has ocurred!';
-        };
-
-        this.socket.onopen = () => {
-          this.attaching = false;
-          const term = new Terminal({
-            cursorBlink: true,
+        this.daemonService.streamToObservable(str)
+          .subscribe(line => {
+            this.terminal.write(line.toString());
+          }, e => {
+            console.error(e);
+          }, () => {
+            this.connected = false;
           });
-          term.open(this.terminalContainer.nativeElement);
-          term.focus();
-          fit(term);
-          attach(term, this.socket, true, true);
-        };
 
-        this.socket.onclose = () => {
-          this.attaching = false;
-        };
+        this.terminal.on('key', k => {
+          stream.write(k);
+        });
 
+      }, e => {
+        this.error = e.message;
+        this.attaching = false;
+        this.connected = false;
       });
-
   }
 
   public ngOnDestroy() {
-    if (this.socket) {
-      this.socket.close();
-    }
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+    if (this.terminal) {
+      this.terminal.dispose();
+    }
   }
 
+  private setupTerminal() {
+    this.terminal = new Terminal({
+      cursorBlink: true,
+    });
+    this.terminal.open(this.terminalContainer.nativeElement);
+    this.terminal.focus();
+    fit(this.terminal);
+  }
 }

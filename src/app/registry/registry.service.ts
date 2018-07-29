@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, switchMap, map, take } from 'rxjs/operators';
-import { throwError, Observable, forkJoin } from 'rxjs';
+import { throwError, Observable, forkJoin, of } from 'rxjs';
 import { SettingsService } from '../settings/settings.service';
 import { DockerRegistrySettings } from '../settings/settings.model';
 import { RegistryAuthService } from './registry-auth.service';
@@ -41,7 +41,7 @@ export class RegistryService {
     return this.settingsService.getSettings()
       .pipe(
         map(settings => settings.registries),
-        switchMap(registries => forkJoin(registries.filter(r => r.allowsCatalog).map(r => getRepos(r))))
+        switchMap(registries => registries.length ? forkJoin(registries.filter(r => r.allowsCatalog).map(r => getRepos(r))) : of())
       );
   }
 

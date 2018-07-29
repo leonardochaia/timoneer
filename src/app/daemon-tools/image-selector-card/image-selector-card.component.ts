@@ -2,11 +2,11 @@ import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, forwardRef }
 import { map, switchMap, debounceTime, catchError, take } from 'rxjs/operators';
 import { Subject, Observable, of, throwError, forkJoin } from 'rxjs';
 import { DaemonService } from '../daemon.service';
-import { Image } from 'docker-client';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { RegistryService } from '../../registry/registry.service';
 import { SettingsService } from '../../settings/settings.service';
 import { DaemonModalService } from '../daemon-modal.service';
+import { ImageInspectInfo } from 'dockerode';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -23,7 +23,7 @@ export const DEFAULT_VALUE_ACCESSOR: any = {
 export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Output()
-  public imageLoaded = new EventEmitter<Image>();
+  public imageLoaded = new EventEmitter<ImageInspectInfo>();
 
   @Input()
   public showDaemonImages = true;
@@ -38,7 +38,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
 
   public disabled: boolean;
   public imageTags: string[];
-  public imageData: Image;
+  public imageData: ImageInspectInfo;
   public loadingImageData: boolean;
   public imageNotFound: boolean;
   public imageError: string;
@@ -124,7 +124,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
     }
   }
   private getDameonImages() {
-    return this.daemonService.imageApi(api => api.imageList())
+    return this.daemonService.docker(d => d.listImages())
       .pipe(
         map(images => [{
           name: 'Docker Daemon',
@@ -170,19 +170,18 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
     }
 
     this.loadingImageData = true;
-    const inspect = this.daemonService.imageApi(api => api.imageInspect(encodeURI(this.image)))
+    const inspect = this.daemonService.docker(d => d.getImage(encodeURI(this.image)).inspect())
       .pipe(
-        // takeUntil(this.componetDestroyed),
         map(image => {
           this.imageData = image;
           this.imageLoaded.emit(this.imageData);
           return this.imageData;
         }),
-        catchError((e: { message: string, status: number }) => {
-          if (e.status === 404) {
+        catchError((e: { reason: string, statusCode: number }) => {
+          if (e.statusCode === 404) {
             this.imageNotFound = true;
           }
-          this.imageError = e.message;
+          this.imageError = e.reason;
           return throwError(e);
         })
       );

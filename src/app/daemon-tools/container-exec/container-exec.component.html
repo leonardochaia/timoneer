@@ -1,14 +1,21 @@
-<form (ngSubmit)="exec()">
-  <p>Command wil be run using sh. Output will be shown. Non interactive session.</p>
-  <mat-form-field style="width: 100%">
-    <span matPrefix
-          style="padding-right:8px">#</span>
-    <input type="text"
-           matInput
-           name="command"
-           [(ngModel)]="command"
-           placeholder="Command">
-  </mat-form-field>
-</form>
+<tim-loading *ngIf="loading">
+</tim-loading>
+
+<h2 *ngIf="connected; else offlineTemplate"
+    class="mat-text-primary">
+    <mat-icon>check_circle_outline</mat-icon>
+    Connected
+</h2>
+<ng-template #offlineTemplate>
+    <h2 class="mat-text-warn">
+        <mat-icon>highlight_off</mat-icon>
+        Offline
+    </h2>
+</ng-template>
 
 <div #terminalContainer></div>
+
+<p *ngIf="error"
+   class="mat-text-warn">
+    {{error}}
+</p>
