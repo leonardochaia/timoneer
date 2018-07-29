@@ -4,4 +4,20 @@
 
 Multiplatform Docker Client with Material Design UI (**Still on early development**)
 
+## What's Included
+
+Electron Application, using Angular 6 and Dockerode as Docker client.
+
+## Development
+
+```bash
+yarn
+```
+
+```bash
+yarn start
+```
+
+## Credits
+
 Angular Electron build setup from [maximegris/angular-electron](https://github.com/maximegris/angular-electron)
