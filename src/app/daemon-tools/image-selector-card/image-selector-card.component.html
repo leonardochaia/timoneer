@@ -35,9 +35,9 @@
 
     </mat-form-field>
 
-    <p *ngIf="loadingImageData">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    </p>
+    <tim-loading *ngIf="loadingImageData"
+                 [alternative]="true"></tim-loading>
+
 
     <p *ngIf="!disabled">
       <mat-chip-list multiple="false"

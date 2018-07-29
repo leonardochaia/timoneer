@@ -2,8 +2,8 @@
   <mat-icon>computer</mat-icon>
   {{container.Names[0]}}
 </h1>
-<mat-progress-bar *ngIf="loading"
-                  mode="indeterminate"></mat-progress-bar>
+<tim-loading *ngIf="loading"
+             [alternative]="true"></tim-loading>
 <p *ngIf="error"
    class="mat-text-warn">
   {{error}}
