@@ -39,7 +39,7 @@ export class ContainerAttacherComponent implements OnInit, OnDestroy {
     this.settingsService.getSettings()
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(settings => {
-        const wss = settings.dockerDaemonSettings.url.replace('http://', 'ws://')
+        const wss = settings.dockerClientSettings.url.replace('http://', 'ws://')
           + `/containers/${this.containerId}/attach/ws?logs=true&stream=true&stdin=true&stdout=true&stderr=true`;
 
         this.socket = new WebSocket(wss);

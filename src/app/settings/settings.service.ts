@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApplicationSettings, DockerRegistrySettings } from './settings.model';
+import { ApplicationSettings, DockerRegistrySettings, DockerClientSettings } from './settings.model';
 import { of, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
@@ -37,16 +37,23 @@ export class SettingsService {
             allowsCatalog: false,
             editable: false,
           }],
-          dockerDaemonSettings: {}
+          dockerClientSettings: {
+            fromEnvironment: true,
+          }
         });
       }
     }
 
     return this.settingsSubject.asObservable()
       .pipe(map(settings => {
-        if (settings && settings.dockerDaemonSettings && settings.dockerDaemonSettings.url) {
-          if (settings.dockerDaemonSettings.url.endsWith('/')) {
-            settings.dockerDaemonSettings.url.slice(settings.dockerDaemonSettings.url.length - 1);
+        if (settings && settings.dockerClientSettings) {
+          const clientSettings = settings.dockerClientSettings;
+          if (clientSettings.fromEnvironment) {
+            settings.dockerClientSettings = this.getDockerClientConfigFromEnvironment();
+          } else {
+            if (settings.dockerClientSettings.url && settings.dockerClientSettings.url.endsWith('/')) {
+              settings.dockerClientSettings.url.slice(settings.dockerClientSettings.url.length - 1);
+            }
           }
         }
 
@@ -61,7 +68,7 @@ export class SettingsService {
 
   public areDaemonSettingsValid() {
     return this.getSettings()
-      .pipe(map(settings => settings.dockerDaemonSettings))
+      .pipe(map(settings => settings.dockerClientSettings))
       .pipe(map(settings => settings && !!settings.url));
   }
 
@@ -138,5 +145,14 @@ export class SettingsService {
     } else {
       return str;
     }
+  }
+
+  private getDockerClientConfigFromEnvironment(): DockerClientSettings {
+    return {
+      fromEnvironment: true,
+      url: process.env.DOCKER_HOST,
+      tlsVerify: process.env.DOCKER_TLS_VERIFY === '1',
+      certPath: process.env.DOCKER_CERT_PATH,
+    };
   }
 }

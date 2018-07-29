@@ -1,10 +1,13 @@
 export interface ApplicationSettings {
     registries: DockerRegistrySettings[];
+    dockerClientSettings: DockerClientSettings;
+}
 
-    dockerDaemonSettings: {
-        url: string;
-    };
-
+export interface DockerClientSettings {
+    url?: string;
+    tlsVerify?: boolean;
+    certPath?: string;
+    fromEnvironment?: boolean;
 }
 
 export interface DockerRegistrySettings {

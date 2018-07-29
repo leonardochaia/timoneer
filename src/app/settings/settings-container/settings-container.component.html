@@ -84,26 +84,39 @@
       </mat-card>
 
       <mat-card fxFlex.gt-xs="50"
-                [ngClass]="{'bg-invalid': daemonGroup.invalid}"
-                [formGroup]="daemonGroup">
+                [ngClass]="{'bg-invalid': clientGroup.invalid}"
+                [formGroup]="clientGroup">
 
         <h2 class="mat-text-primary">
           <mat-icon>computer</mat-icon>
-          Docker Daemon
+          Docker Client
         </h2>
+
+        <p>
+          <mat-checkbox formControlName="fromEnvironment">
+            Client settings from Environment Variables
+          </mat-checkbox>
+        </p>
 
         <mat-form-field>
           <input type="url"
                  matInput
                  formControlName="url"
-                 placeholder="Docker Daemon URL"
-                 name="daemon-url">
+                 placeholder="Docker Daemon URL">
         </mat-form-field>
 
         <p>
-          Note that you must expose your Daemon's API through HTTP/S for Timoneer to work. Unix Sockets will not work.
+          <mat-checkbox formControlName="tlsVerify">
+            Verify TLS
+          </mat-checkbox>
         </p>
 
+        <mat-form-field>
+          <input type="text"
+                 matInput
+                 formControlName="certPath"
+                 placeholder="Certificate Path">
+        </mat-form-field>
       </mat-card>
 
     </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DockerRegistrySettings } from '../settings.model';
+import { DockerRegistrySettings, DockerClientSettings } from '../settings.model';
 import { SettingsService } from '../settings.service';
 import { MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
@@ -15,12 +15,10 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
 
   public registriesArray = this.fb.array([]);
 
-  public daemonGroup = this.fb.group({
-    'url': ['http://', Validators.compose([Validators.required, Validators.pattern('https?://.+')])],
-  });
+  public clientGroup: FormGroup;
 
   public form = this.fb.group({
-    'dockerDaemonSettings': this.daemonGroup,
+    'dockerClientSettings': this.clientGroup,
     'registries': this.registriesArray
   });
 
@@ -64,11 +62,9 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
     this.settingsService.getSettings()
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(settings => {
-        if (settings.dockerDaemonSettings) {
-          if (settings.dockerDaemonSettings.url) {
-            this.daemonGroup.get('url').setValue(settings.dockerDaemonSettings.url);
-          }
-        }
+
+        this.setClientSettings(settings.dockerClientSettings);
+
         this.registriesArray.controls.splice(0, this.registriesArray.length);
         for (const registrySetting of settings.registries) {
           this.addRegistry(registrySetting);
@@ -94,6 +90,36 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
 
   public getRegistryFromGroup(group: AbstractControl) {
     return (group as FormGroup).getRawValue() as DockerRegistrySettings;
+  }
+
+  private setClientSettings(settings: DockerClientSettings) {
+    this.clientGroup = this.fb.group({
+      'fromEnvironment': [settings.fromEnvironment, Validators.required],
+      'url': [settings.url || 'http://', Validators.compose([Validators.required, Validators.pattern('https|tcp|unix?://.+')])],
+      'tlsVerify': [settings.tlsVerify || true, Validators.required],
+      'certPath': [settings.certPath || ''],
+    });
+
+    const updateDisabledFields = () => {
+      const value = this.clientGroup.get('fromEnvironment').value as boolean;
+      if (value) {
+        this.clientGroup.get('url').disable();
+        this.clientGroup.get('tlsVerify').disable();
+        this.clientGroup.get('certPath').disable();
+      } else {
+        this.clientGroup.get('url').enable();
+        this.clientGroup.get('tlsVerify').enable();
+        this.clientGroup.get('certPath').enable();
+      }
+    };
+
+    this.clientGroup.get('fromEnvironment')
+      .valueChanges
+      .subscribe(() => {
+        updateDisabledFields();
+      });
+
+    updateDisabledFields();
   }
 
   private createRegistryGroup(registrySettings?: DockerRegistrySettings) {

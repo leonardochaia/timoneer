@@ -15,7 +15,7 @@ export class DaemonService {
 
   protected get daemonUrl() {
     return this.settingsService.getSettings()
-      .pipe(map(settings => settings.dockerDaemonSettings.url));
+      .pipe(map(settings => settings.dockerClientSettings.url));
   }
 
   constructor(private settingsService: SettingsService) { }
