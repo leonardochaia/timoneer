@@ -20,10 +20,15 @@
     "!tsconfig.json",
     "!tslint.json"
   ],
+  "nsis": {
+    "allowToChangeInstallationDirectory": true,
+    "oneClick": false
+  },
   "win": {
     "icon": "dist",
     "target": [
-      "portable"
+      "portable",
+      "nsis"
     ]
   },
   "mac": {
