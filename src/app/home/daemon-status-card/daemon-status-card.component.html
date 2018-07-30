@@ -3,7 +3,7 @@
           fxLayoutGap="8px"
           style="margin-bottom: 16px;">
   <mat-icon class="tim-icon-48"
-            [ngClass]="daemonRacheable ? 'tim-text-primary': 'mat-text-warn'">computer</mat-icon>
+            [ngClass]="daemonRacheable ? 'tim-text-primary': 'tim-text-warn'">computer</mat-icon>
   <div fxFlex="grow">
     <ng-container *ngIf="loading; else daemonTemplate">
       <tim-loading [alternative]="true"></tim-loading>
@@ -30,7 +30,7 @@
         Daemon Host: {{settings.dockerClientSettings.url}}
       </p>
       <p *ngIf="daemonError"
-         class="mat-text-warn">
+         class="tim-text-warn">
         Error: {{daemonError}}
       </p>
     </ng-template>

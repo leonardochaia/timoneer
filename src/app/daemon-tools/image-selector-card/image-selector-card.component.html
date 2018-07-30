@@ -50,11 +50,11 @@
 
     <p>
       <span *ngIf="imageNotFound"
-            class="mat-text-warn">
+            class="tim-text-warn">
         Image metadata not available. (Image not found on Daemon. It will be pulled when launching)
       </span>
       <span *ngIf="!imageNotFound && imageError"
-            class="mat-text-warn">
+            class="tim-text-warn">
         Failed to obtain image from Daemon: {{imageError}}
       </span>
 
