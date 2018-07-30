@@ -96,7 +96,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
     this.clientGroup = this.fb.group({
       'fromEnvironment': [settings.fromEnvironment, Validators.required],
       'url': [settings.url || 'http://', Validators.compose([Validators.required, Validators.pattern('https|tcp|unix?://.+')])],
-      'tlsVerify': [settings.tlsVerify || true, Validators.required],
+      'tlsVerify': [settings.tlsVerify, Validators.required],
       'certPath': [settings.certPath || ''],
     });
 

@@ -19,7 +19,11 @@ export class NotificationService {
   constructor(private snackBar: MatSnackBar) { }
 
   public open(message: string, action?: string, config?: NotificationConfig) {
-    return this.snackBar.open(message, action, config || { duration: 3000 });
+    config = config || { duration: 3000 };
+    if (!config.duration) {
+      config.duration = 3000;
+    }
+    return this.snackBar.open(message, action, config);
   }
 
 }

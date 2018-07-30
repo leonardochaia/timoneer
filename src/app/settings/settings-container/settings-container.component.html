@@ -93,8 +93,9 @@
         </h2>
 
         <p>
-          <mat-checkbox formControlName="fromEnvironment">
-            Client settings from Environment Variables
+          <mat-checkbox formControlName="fromEnvironment"
+                        title="Reads DOCKER_HOST and such from environment">
+            From Environment Variables
           </mat-checkbox>
         </p>
 
@@ -102,7 +103,7 @@
           <input type="url"
                  matInput
                  formControlName="url"
-                 placeholder="Docker Daemon URL">
+                 placeholder="Docker Host">
         </mat-form-field>
 
         <p>
@@ -115,6 +116,7 @@
           <input type="text"
                  matInput
                  formControlName="certPath"
+                 title="Path to cert.pem, ca.pem and key.pem"
                  placeholder="Certificates Path">
         </mat-form-field>
       </mat-card>

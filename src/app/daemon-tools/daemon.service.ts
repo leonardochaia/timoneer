@@ -137,7 +137,7 @@ export class DaemonService {
 
         opts.host = split[1];
 
-        if (settings.certPath) {
+        if (settings.certPath && settings.certPath.length) {
           const fs = this.electronService.fs;
           opts.ca = splitca(path.join(settings.certPath, 'ca.pem'));
           opts.cert = fs.readFileSync(path.join(settings.certPath, 'cert.pem'));
