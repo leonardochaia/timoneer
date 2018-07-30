@@ -7,13 +7,16 @@ const path = 'src/tim-version.ts';
 
 let gitBranch, gitCommit;
 if (process.env.TRAVIS) {
-  gitCommit = process.env.TRAVIS_BRANCH;
-  gitBranch = process.env.TRAVIS_COMMIT;
+  gitCommit = process.env.TRAVIS_COMMIT;
+  gitBranch = process.env.TRAVIS_BRANCH;
 } else {
   const git = require('git-rev-sync');
-  gitCommit = git.short();
+  gitCommit = git.long();
   gitBranch = git.branch();
 }
+
+// convert to git "short"
+gitCommit = gitCommit.substr(0, 7);
 const contents = `
 // This file is auto-generated. Do not edit.
 export const timoneerVersion = {
