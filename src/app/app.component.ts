@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { AppThemeService } from './shared/app-theme.service';
 
 @Component({
   selector: 'tim-root',
@@ -8,11 +9,34 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 })
 export class AppComponent {
 
-  public themeClass = 'indigo-theme';
+  protected currentTheme: string;
 
-  constructor(overlayContainer: OverlayContainer) {
-    const classList = overlayContainer.getContainerElement().classList;
-    classList.add(this.themeClass);
-    classList.add('mat-typography');
+  constructor(private overlayContainer: OverlayContainer,
+    private renderer: Renderer2,
+    themeService: AppThemeService) {
+
+    this.addBaseClasses();
+
+    themeService.theme
+      .subscribe(newTheme => {
+        const classList = overlayContainer.getContainerElement().classList;
+        if (this.currentTheme) {
+          classList.remove(this.currentTheme);
+          renderer.removeClass(document.documentElement, this.currentTheme);
+        }
+
+        this.currentTheme = newTheme;
+
+        classList.add(this.currentTheme);
+        renderer.addClass(document.documentElement, this.currentTheme);
+      });
+  }
+
+  private addBaseClasses() {
+    const classList = this.overlayContainer.getContainerElement().classList;
+    const base = 'mat-typography';
+    classList.add(base);
+    this.renderer.addClass(document.documentElement, base);
+    this.renderer.addClass(document.body, 'mat-body-bg');
   }
 }

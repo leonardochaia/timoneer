@@ -1,7 +1,4 @@
-// @import '~app/navigation/sidenav-container/sidenav-container.component-theme';
-// @import '~app/auth/components/login/login.component-theme';
+@import 'src/app/navigation/toolbar-container/toolbar-container.component-theme';
 @mixin app-components-theme($theme) {
-    // @include sidenav-container-component-theme($theme);
-    // @include login-component-theme($theme);
-    // @include theme-selector-component-theme($theme);
+  @include toolbar-container-component-theme($theme);
 }
