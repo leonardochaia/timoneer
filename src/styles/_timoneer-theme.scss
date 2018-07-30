@@ -1,0 +1,6 @@
+@import '~@angular/material/theming';
+$timoneer-theme-primary: mat-palette($mat-indigo);
+$timoneer-theme-accent: mat-palette($mat-teal);
+$timoneer-theme: mat-light-theme($timoneer-theme-primary, $timoneer-theme-accent);
+$timoneer-dark-theme-primary: mat-palette($mat-blue, 700);
+$timoneer-dark-theme: mat-dark-theme($timoneer-dark-theme-primary, $timoneer-theme-accent);

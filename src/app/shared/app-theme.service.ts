@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 const THEMES = [
-  'indigo-dark-theme',
-  'indigo-theme',
+  'timoneer-dark-theme',
+  'timoneer-theme',
 ];
 
 @Injectable({

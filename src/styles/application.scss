@@ -1,6 +1,6 @@
 @import '~xterm/dist/xterm.css';
 @import '~@angular/material/theming';
-@import 'indigo-theme';
+@import 'timoneer-theme';
 @import 'application.variables';
 @import 'app-components';
 @import 'material-helper';
@@ -13,16 +13,16 @@
     Theming Classes
 **/
 
-.indigo-theme {
-  @include angular-material-theme($indigo-theme);
-  @include app-components-theme($indigo-theme);
-  @include expose-material-theme-classes($indigo-theme);
+.timoneer-theme {
+  @include angular-material-theme($timoneer-theme);
+  @include app-components-theme($timoneer-theme);
+  @include expose-material-theme-classes($timoneer-theme);
 }
 
-.indigo-dark-theme {
-  @include angular-material-theme($indigo-dark-theme);
-  @include app-components-theme($indigo-dark-theme);
-  @include expose-material-theme-classes($indigo-dark-theme);
+.timoneer-dark-theme {
+  @include angular-material-theme($timoneer-dark-theme);
+  @include app-components-theme($timoneer-dark-theme);
+  @include expose-material-theme-classes($timoneer-dark-theme);
   .tim-text-title {
     color: whitesmoke;
   }
