@@ -2,7 +2,9 @@
 $indigo-theme-primary: mat-palette($mat-indigo);
 $indigo-theme-accent: mat-palette($mat-teal);
 $indigo-theme: mat-light-theme($indigo-theme-primary, $indigo-theme-accent);
-$indigo-dark-theme: mat-dark-theme($indigo-theme-primary, $indigo-theme-accent);
+
+$indigo-dark-theme-primary: mat-palette($mat-blue, 700);
+$indigo-dark-theme: mat-dark-theme($indigo-dark-theme-primary, $indigo-theme-accent);
 .mat-bg-indigo {
   background-color: mat-color($indigo-theme-primary);
 }

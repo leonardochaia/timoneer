@@ -19,5 +19,5 @@ export class AppThemeService {
 
   protected currentTheme = new Subject<string>();
 
-  private defaultTheme = THEMES[1];
+  private defaultTheme = THEMES[0];
 }

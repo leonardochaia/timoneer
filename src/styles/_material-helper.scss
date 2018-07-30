@@ -24,6 +24,7 @@
   .tim-bg-warn {
     background-color: mat-color($warn);
   }
+  .tim-text-title,
   .tim-text-primary {
     color: mat-color($primary);
   }
@@ -43,6 +44,10 @@
   }
   .tim-dialog-accent .mat-dialog-container {
     background-color: mat-color($accent);
+    color: mat-color($foreground, text);
+  }
+  .tim-body-bg {
+    background-color: mat-color($background, background);
     color: mat-color($foreground, text);
   }
 }

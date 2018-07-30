@@ -1,8 +1,6 @@
 @import '~xterm/dist/xterm.css';
 @import '~@angular/material/theming';
-@import 'blue-theme';
 @import 'indigo-theme';
-@import 'deep-purple-theme';
 @import 'application.variables';
 @import 'app-components';
 @import 'material-helper';
@@ -25,28 +23,11 @@
   @include angular-material-theme($indigo-dark-theme);
   @include app-components-theme($indigo-dark-theme);
   @include expose-material-theme-classes($indigo-dark-theme);
+  .tim-text-title {
+    color: whitesmoke;
+  }
 }
 
-// .blue-theme {
-//   @include angular-material-theme($blue-theme);
-//   @include app-components-theme($blue-theme);
-//   @include expose-material-theme-classes($blue-theme);
-// }
-// .blue-dark-theme {
-//   @include angular-material-theme($blue-dark-theme);
-//   @include app-components-theme($blue-dark-theme);
-//   @include expose-material-theme-classes($blue-dark-theme);
-// }
-// .deep-purple-theme {
-//   @include angular-material-theme($deep-purple-theme);
-//   @include app-components-theme($deep-purple-theme);
-//   @include expose-material-theme-classes($deep-purple-theme);
-// }
-// .deep-purple-dark-theme {
-//   @include angular-material-theme($deep-purple-dark-theme);
-//   @include app-components-theme($deep-purple-dark-theme);
-//   @include expose-material-theme-classes($deep-purple-dark-theme);
-// }
 /** General Classes **/
 
 html,
