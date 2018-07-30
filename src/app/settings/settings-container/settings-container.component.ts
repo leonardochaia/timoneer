@@ -78,7 +78,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.snackBar.open('Settings saved.', null, {
           duration: 2000,
-          panelClass: 'mat-bg-accent'
+          panelClass: 'tim-bg-accent'
         });
       });
   }
