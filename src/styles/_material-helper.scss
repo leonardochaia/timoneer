@@ -1,4 +1,3 @@
-
 .tim-icon-48 {
   font-size: 48px;
   height: 48px !important;
@@ -34,20 +33,16 @@
   .tim-text-warn {
     color: mat-color($warn);
   }
-  .mat-dialog-warn .mat-dialog-container {
+  .tim-dialog-warn .mat-dialog-container {
     background-color: mat-color($warn);
     color: mat-color($foreground, text);
   }
-  .mat-dialog-primary .mat-dialog-container {
+  .tim-dialog-primary .mat-dialog-container {
     background-color: mat-color($primary);
     color: mat-color($foreground, text);
   }
-  .mat-dialog-accent .mat-dialog-container {
+  .tim-dialog-accent .mat-dialog-container {
     background-color: mat-color($accent);
-    color: mat-color($foreground, text);
-  }
-  .mat-body-bg {
-    background-color: mat-color($background, background);
     color: mat-color($foreground, text);
   }
 }
