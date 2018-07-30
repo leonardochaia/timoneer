@@ -13,11 +13,11 @@
   "scripts": {
     "postinstall": "yarn postinstall:electron && npx electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web && yarn gen-ver",
-    "postinstall:electron": "node postinstall && yarn gen-ver",
+    "postinstall:electron": "node postinstall",
     "ng": "ng",
     "gen-ver": "node tim-version-gen",
-    "start": "yarn postinstall:electron && npm-run-all -p ng:serve electron:serve",
-    "build": "yarn postinstall:electron && yarn electron:tsc && ng build",
+    "start": "yarn postinstall:electron && yarn gen-ver && npm-run-all -p ng:serve electron:serve",
+    "build": "yarn postinstall:electron && yarn gen-ver && yarn electron:tsc && ng build",
     "build:dev": "yarn build -c dev",
     "build:prod": "yarn build -c production",
     "ng:serve": "ng serve --configuration hmr",
@@ -28,10 +28,10 @@
     "electron:linux": "yarn build:prod && npx electron-builder build --linux",
     "electron:windows": "yarn build:prod && npx electron-builder build --windows",
     "electron:mac": "yarn build:prod && npx electron-builder build --mac",
-    "electron:build": "yarn build:prod && npx electron-builder build --linux --windows",
     "test": "yarn postinstall:web && ng test",
     "e2e": "yarn postinstall:web && ng e2e",
-    "release": "yarn && yarn build:prod && electron-builder"
+    "electron:build": "yarn build:prod && npx electron-builder build --linux --windows",
+    "release": "yarn build:prod && electron-builder"
   },
   "dependencies": {
     "electron-settings": "^3.2.0"
