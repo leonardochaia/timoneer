@@ -93,7 +93,7 @@ export class ContainerCreateComponent implements OnInit {
     this.availablePorts = this.suggestedPorts || [];
   }
 
-  public addPortBinding(binding: PortBinding) {
+  public addPortBinding(binding: PortBinding = null) {
     binding = binding || {};
     const arr = this.form.get('portBindings') as FormArray;
     const group = this.fb.group({
@@ -116,17 +116,15 @@ export class ContainerCreateComponent implements OnInit {
     group.get('assignRandomPort').valueChanges
       .subscribe(assignRandomPort => {
         if (assignRandomPort) {
-          console.log('clear');
           group.get('hostPort').setValidators([]);
         } else {
-          console.log('set');
           group.get('hostPort').setValidators([Validators.required]);
         }
         group.get('hostPort').updateValueAndValidity();
       });
   }
 
-  public addVolumeBinding(binding: VolumeBinding) {
+  public addVolumeBinding(binding: VolumeBinding = null) {
     binding = binding || {};
     const arr = this.form.get('volumeBindings') as FormArray;
     const group = this.fb.group({
@@ -211,7 +209,6 @@ export class ContainerCreateComponent implements OnInit {
         return from(container.start() as Promise<Container>);
       }))
       .subscribe(container => {
-        console.log(container);
         this.created.emit(container.id);
       });
   }
