@@ -19,7 +19,8 @@ function createWindow() {
     height: size.height,
     webPreferences: {
       experimentalFeatures: true,
-    }
+    },
+    darkTheme: true,
   });
 
   if (serve) {

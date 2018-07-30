@@ -1,20 +1,11 @@
-<div fxLayout="row"
-     fxLayoutAlign="center start"
-     style="margin-top: 16px"
-     *ngIf="application">
+<div *ngIf="application"
+     fxLayout="column"
+     style="padding:16px;">
 
-    <div fxFlex="90"
-         fxFlex.gt-md="60"
-         fxLayout="column"
-         style="padding:16px;">
+    <h1 class="mat-display-1"
+        style="text-align: center; margin-bottom: 32px">
+        Launch application
+    </h1>
 
-        <h1 class="mat-display-1"
-            style="text-align: center; margin-bottom: 32px">
-            Launch application
-        </h1>
-
-        <tim-application-launch [application]="application"></tim-application-launch>
-    </div>
-
-
+    <tim-application-launch [application]="application"></tim-application-launch>
 </div>

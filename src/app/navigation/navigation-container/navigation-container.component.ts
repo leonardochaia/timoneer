@@ -6,11 +6,11 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'tim-toolbar-container',
-  templateUrl: './toolbar-container.component.html',
-  styleUrls: ['./toolbar-container.component.scss']
+  selector: 'tim-navigation-container',
+  templateUrl: './navigation-container.component.html',
+  styleUrls: ['./navigation-container.component.scss']
 })
-export class ToolbarContainerComponent implements OnInit, OnDestroy {
+export class NavigationContainerComponent implements OnInit, OnDestroy {
 
   public settingsValid: boolean;
 

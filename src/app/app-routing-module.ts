@@ -5,7 +5,6 @@ import { NotFoundContainerComponent } from './error-management/not-found-contain
 import { ErrorManagementModule } from './error-management/error-management.module';
 import { HomeModule } from './home/home.module';
 import { NavigationModule } from './navigation/navigation.module';
-import { ToolbarContainerComponent } from './navigation/toolbar-container/toolbar-container.component';
 import { SettingsContainerComponent } from './settings/settings-container/settings-container.component';
 import { SettingsModule } from './settings/settings.module';
 import { ImageListContainerComponent } from './daemon-tools/image-list-container/image-list-container.component';
@@ -19,11 +18,12 @@ import {
 } from './application-templates/application-launch-container/application-launch-container.component';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
 import { ContainerCreateContainerComponent } from './daemon-tools/container-create-container/container-create-container.component';
+import { NavigationContainerComponent } from './navigation/navigation-container/navigation-container.component';
 
 export const routes: Routes = [
     {
         path: '',
-        component: ToolbarContainerComponent,
+        component: NavigationContainerComponent,
         children: [
             {
                 path: '',

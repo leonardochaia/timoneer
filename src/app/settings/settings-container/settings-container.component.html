@@ -1,150 +1,145 @@
-<div fxLayout="row"
-     fxLayoutAlign="center start"
-     style="margin-top: 16px">
-  <form [formGroup]="form"
-        (ngSubmit)="save()"
-        fxLayout="column"
-        fxFlex="90"
-        fxFlex.gt-md="60">
+<form [formGroup]="form"
+      (ngSubmit)="save()"
+      fxLayout="column"
+      style="padding: 16px">
 
-    <mat-card fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="8px"
-              style="margin-bottom: 16px;">
-      <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
-      <div>
-        <h1 class="tim-text-title"
-            style="margin:0">
-          Application settings
-        </h1>
-        <p style="margin:0">
-          These configuration is stored in your browser only!
-        </p>
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;">
+    <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
+    <div>
+      <h1 class="tim-text-title"
+          style="margin:0">
+        Application settings
+      </h1>
+      <p style="margin:0">
+        These configuration is stored in your browser only!
+      </p>
+    </div>
+  </mat-card>
+
+  <div fxLayout="column"
+       fxLayout.gt-xs="row"
+       fxLayoutGap="16px"
+       style="margin-bottom: 16px;">
+
+    <mat-card fxFlex.gt-xs="50">
+
+      <h2 class="tim-text-title">
+        <mat-icon>iso</mat-icon>
+        Registries
+
+        <button type="button"
+                style="float:right"
+                color="primary"
+                [disabled]="!canAddRegistry()"
+                (click)="createRegistry()"
+                mat-raised-button>
+          Add Registry
+        </button>
+      </h2>
+
+      <div style="margin-top: 16px; max-height: 400px; overflow-y:auto;">
+        <mat-card *ngFor="let ctrl of registriesArray.controls"
+                  style="margin: 8px;"
+                  [ngClass]="{'bg-invalid': ctrl.invalid}"
+                  fxLayout="column"
+                  fxLayout.gt-sm="row"
+                  fxLayoutAlign.gt-sm="start center"
+                  fxLayoutGap="8px">
+
+          <ng-container *ngIf="getRegistryFromGroup(ctrl) as registry">
+            <div fxFlex="fill">
+              <h2>
+                {{getRegistryName(registry)}}
+              </h2>
+              <p *ngIf="registry.username">
+                Username:
+                <b>{{registry.username}}</b>
+              </p>
+            </div>
+            <div fxLayout="row"
+                 fxLayoutGap="8px">
+              <button mat-mini-fab
+                      (click)="editRegistry(ctrl)"
+                      type="button">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-mini-fab
+                      *ngIf="registry.editable"
+                      color="warn"
+                      (click)="removeRegistry(registry)"
+                      type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </mat-card>
       </div>
     </mat-card>
 
-    <div fxLayout="column"
-         fxLayout.gt-xs="row"
-         fxLayoutGap="16px"
-         style="margin-bottom: 16px;">
+    <mat-card fxFlex.gt-xs="50"
+              [ngClass]="{'bg-invalid': clientGroup.invalid}"
+              [formGroup]="clientGroup">
 
-      <mat-card fxFlex.gt-xs="50">
+      <h2 class="tim-text-title">
+        <mat-icon>computer</mat-icon>
+        Docker Client
+      </h2>
 
-        <h2 class="tim-text-title">
-          <mat-icon>iso</mat-icon>
-          Registries
+      <p>
+        <mat-checkbox formControlName="fromEnvironment"
+                      title="Reads DOCKER_HOST and such from environment">
+          From Environment Variables
+        </mat-checkbox>
+      </p>
 
-          <button type="button"
-                  style="float:right"
-                  color="primary"
-                  [disabled]="!canAddRegistry()"
-                  (click)="createRegistry()"
-                  mat-raised-button>
-            Add Registry
-          </button>
-        </h2>
+      <mat-form-field>
+        <input type="url"
+               matInput
+               formControlName="url"
+               placeholder="Docker Host">
+      </mat-form-field>
 
-        <div style="margin-top: 16px; max-height: 400px; overflow-y:auto;">
-          <mat-card *ngFor="let ctrl of registriesArray.controls"
-                    style="margin: 8px;"
-                    [ngClass]="{'bg-invalid': ctrl.invalid}"
-                    fxLayout="column"
-                    fxLayout.gt-sm="row"
-                    fxLayoutAlign.gt-sm="start center"
-                    fxLayoutGap="8px">
+      <p>
+        <mat-checkbox formControlName="tlsVerify">
+          Verify TLS
+        </mat-checkbox>
+      </p>
 
-            <ng-container *ngIf="getRegistryFromGroup(ctrl) as registry">
-              <div fxFlex="fill">
-                <h2>
-                  {{getRegistryName(registry)}}
-                </h2>
-                <p *ngIf="registry.username">
-                  Username:
-                  <b>{{registry.username}}</b>
-                </p>
-              </div>
-              <div fxLayout="row"
-                   fxLayoutGap="8px">
-                <button mat-mini-fab
-                        (click)="editRegistry(ctrl)"
-                        type="button">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-mini-fab
-                        *ngIf="registry.editable"
-                        color="warn"
-                        (click)="removeRegistry(registry)"
-                        type="button">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            </ng-container>
-          </mat-card>
-        </div>
-      </mat-card>
+      <mat-form-field>
+        <input type="text"
+               matInput
+               formControlName="certPath"
+               title="Path to cert.pem, ca.pem and key.pem"
+               placeholder="Certificates Path">
+      </mat-form-field>
+    </mat-card>
 
-      <mat-card fxFlex.gt-xs="50"
-                [ngClass]="{'bg-invalid': clientGroup.invalid}"
-                [formGroup]="clientGroup">
+  </div>
 
-        <h2 class="tim-text-title">
-          <mat-icon>computer</mat-icon>
-          Docker Client
-        </h2>
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;">
+    <mat-icon class="tim-icon-48 tim-text-primary">save</mat-icon>
 
-        <p>
-          <mat-checkbox formControlName="fromEnvironment"
-                        title="Reads DOCKER_HOST and such from environment">
-            From Environment Variables
-          </mat-checkbox>
-        </p>
-
-        <mat-form-field>
-          <input type="url"
-                 matInput
-                 formControlName="url"
-                 placeholder="Docker Host">
-        </mat-form-field>
-
-        <p>
-          <mat-checkbox formControlName="tlsVerify">
-            Verify TLS
-          </mat-checkbox>
-        </p>
-
-        <mat-form-field>
-          <input type="text"
-                 matInput
-                 formControlName="certPath"
-                 title="Path to cert.pem, ca.pem and key.pem"
-                 placeholder="Certificates Path">
-        </mat-form-field>
-      </mat-card>
-
+    <div fxFlex="fill">
+      <h3 class="tim-text-title"
+          style="margin:0">
+        Save settings
+      </h3>
     </div>
 
-    <mat-card fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="8px"
-              style="margin-bottom: 16px;">
-      <mat-icon class="tim-icon-48 tim-text-primary">save</mat-icon>
+    <div>
+      <button mat-raised-button
+              [disabled]="form.invalid"
+              color="primary">
+        <mat-icon>save_alt</mat-icon>
+        Save
+      </button>
+    </div>
+  </mat-card>
 
-      <div fxFlex="fill">
-        <h3 class="tim-text-title"
-            style="margin:0">
-          Save settings
-        </h3>
-      </div>
-
-      <div>
-        <button mat-raised-button
-                [disabled]="form.invalid"
-                color="primary">
-          <mat-icon>save_alt</mat-icon>
-          Save
-        </button>
-      </div>
-    </mat-card>
-
-  </form>
-</div>
+</form>

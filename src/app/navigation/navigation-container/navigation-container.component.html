@@ -1,0 +1,28 @@
+<split direction="vertical"
+       gutterSize="4"
+       [disabled]="!settingsValid">
+
+  <split-area size="70">
+
+    <split direction="horizontal"
+           gutterSize="4">
+
+      <!-- Sidenav area -->
+      <split-area size="20">
+        <tim-sidenav-container></tim-sidenav-container>
+      </split-area>
+
+      <!-- Router area -->
+      <split-area size="80">
+        <router-outlet></router-outlet>
+      </split-area>
+    </split>
+  </split-area>
+
+  <!-- Container List Area -->
+  <split-area size="30"
+              *ngIf="settingsValid">
+    <tim-footer-container></tim-footer-container>
+  </split-area>
+
+</split>

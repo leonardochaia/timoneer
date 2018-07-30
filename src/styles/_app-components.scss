@@ -1,4 +1,4 @@
-@import 'src/app/navigation/toolbar-container/toolbar-container.component-theme';
+@import 'src/app/navigation/navigation-container/navigation-container.component-theme';
 @mixin app-components-theme($theme) {
-  @include toolbar-container-component-theme($theme);
+  @include navigation-container-component-theme($theme);
 }
