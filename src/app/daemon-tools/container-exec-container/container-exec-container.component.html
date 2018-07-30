@@ -1,8 +1,12 @@
 <div fxLayout="column"
+     fxLayoutGap="16px"
      style="padding:16px;">
   <div>
     <tim-container-attacher [containerId]="containerId"
                             [stream]="stream$">
     </tim-container-attacher>
+  </div>
+  <div *ngIf="execId">
+    Exec {{execId}}
   </div>
 </div>

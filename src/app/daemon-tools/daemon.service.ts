@@ -73,22 +73,6 @@ export class DaemonService implements OnDestroy {
     });
   }
 
-  public exec(containerId: string) {
-    return this.docker(d => d.getContainer(containerId).exec({
-      Cmd: ['bin/sh'],
-      AttachStdin: true,
-      AttachStdout: true,
-      AttachStderr: true,
-      Tty: true,
-    }))
-      .pipe(
-        switchMap((exec: Exec) => from(exec.start({
-          hijack: true,
-        }))),
-        map(socket => socket.output as TLSSocket)
-      );
-  }
-
   public pullImage(image: string) {
     return this.settingsService.getRegistryAuthForImage(image)
       .pipe(
