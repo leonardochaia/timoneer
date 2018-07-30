@@ -4,10 +4,16 @@ const {
 
 const fs = require('fs');
 const path = 'src/tim-version.ts';
-const git = require('git-rev-sync');
-const gitCommit = git.short();
-const gitBranch = git.branch();
 
+let gitBranch, gitCommit;
+if (process.env.TRAVIS) {
+  gitCommit = process.env.TRAVIS_BRANCH;
+  gitBranch = process.env.TRAVIS_COMMIT;
+} else {
+  const git = require('git-rev-sync');
+  gitCommit = git.short();
+  gitBranch = git.branch();
+}
 const contents = `
 // This file is auto-generated. Do not edit.
 export const timoneerVersion = {
