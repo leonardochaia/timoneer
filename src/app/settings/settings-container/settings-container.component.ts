@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { timoneerVersion } from '../../../tim-version';
 
 @Component({
   selector: 'tim-settings-container',
@@ -18,6 +19,10 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   public clientGroup: FormGroup;
 
   public form: FormGroup;
+
+  public get appVersion() {
+    return timoneerVersion;
+  }
 
   private componetDestroyed = new Subject();
 

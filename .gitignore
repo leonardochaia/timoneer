@@ -6,6 +6,7 @@
 /out-tsc
 /app-builds
 main.js
+src/tim-version.ts
 
 # dependencies
 /node_modules
