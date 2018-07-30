@@ -1,8 +1,4 @@
-mat-form-field.large {
-  font-size: 1.2rem;
-}
-
-.mat-icon-48 {
+.tim-icon-48 {
   font-size: 48px;
   height: 48px !important;
   width: 48px !important;
@@ -19,38 +15,34 @@ mat-form-field.large {
       outline: 1px solid mat-color($primary);
     }
   }
-  .mat-bg-primary {
+  .tim-bg-primary {
     background-color: mat-color($primary);
   }
-  .mat-bg-accent {
+  .tim-bg-accent {
     background-color: mat-color($accent);
   }
-  .mat-bg-warn {
+  .tim-bg-warn {
     background-color: mat-color($warn);
   }
-  .mat-text-primary {
+  .tim-text-primary {
     color: mat-color($primary);
   }
-  .mat-text-accent {
+  .tim-text-accent {
     color: mat-color($accent);
   }
-  .mat-text-warn {
+  .tim-text-warn {
     color: mat-color($warn);
   }
-  .mat-dialog-warn .mat-dialog-container {
+  .tim-dialog-warn .mat-dialog-container {
     background-color: mat-color($warn);
     color: mat-color($foreground, text);
   }
-  .mat-dialog-primary .mat-dialog-container {
+  .tim-dialog-primary .mat-dialog-container {
     background-color: mat-color($primary);
     color: mat-color($foreground, text);
   }
-  .mat-dialog-accent .mat-dialog-container {
+  .tim-dialog-accent .mat-dialog-container {
     background-color: mat-color($accent);
-    color: mat-color($foreground, text);
-  }
-  .mat-body-bg {
-    background-color: mat-color($background, background);
     color: mat-color($foreground, text);
   }
 }

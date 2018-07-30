@@ -2,7 +2,7 @@
           fxLayoutAlign="start center"
           fxLayoutGap="8px"
           style="margin-bottom: 16px;">
-  <mat-icon class="mat-icon-48 mat-text-primary">settings</mat-icon>
+  <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
 
   <div fxFlex="grow">
     <ng-container *ngIf="loading; else settingsTemplate">
@@ -10,7 +10,7 @@
     </ng-container>
     <ng-template #settingsTemplate>
       <h2 style="margin: 0">
-        <span class="mat-text-primary">
+        <span class="tim-text-primary">
           Docker Hub {{valid? '' : 'is not'}} Configured
         </span>
       </h2>

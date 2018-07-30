@@ -7,7 +7,7 @@
   <p *ngFor="let log of logs; trackBy: trackByFn">
 
     {{log.id ? '[' + log.id + ']' : ''}}
-    <span [ngClass]="log.error ? 'mat-text-warn': 'mat-text-primary'">
+    <span [ngClass]="log.error ? 'tim-text-warn': 'tim-text-primary'">
       {{log.status || log.error}}
     </span>
     <span *ngIf="log.progressDetail?.current; else iconTemplate">
@@ -18,7 +18,7 @@
                         style="margin-top:8px;"></mat-progress-bar>
     </span>
     <ng-template #iconTemplate>
-      <mat-icon [ngClass]="log.error ? 'mat-text-warn': 'mat-text-primary'">{{log.error ? 'highlight_off' : 'check_circle_outline' }}</mat-icon>
+      <mat-icon [ngClass]="log.error ? 'tim-text-warn': 'tim-text-primary'">{{log.error ? 'highlight_off' : 'check_circle_outline' }}</mat-icon>
     </ng-template>
   </p>
 </div>

@@ -11,12 +11,6 @@
 **/
 
 @include mat-core();
-/** Default Theme **/
-
-// $default-theme: $indigo-theme;
-// @include angular-material-theme($default-theme);
-// @include app-components-theme($default-theme);
-// @include expose-material-theme-classes($default-theme);
 /**
     Theming Classes
 **/
@@ -33,30 +27,26 @@
   @include expose-material-theme-classes($indigo-dark-theme);
 }
 
-.blue-theme {
-  @include angular-material-theme($blue-theme);
-  @include app-components-theme($blue-theme);
-  @include expose-material-theme-classes($blue-theme);
-}
-
-.blue-dark-theme {
-  @include angular-material-theme($blue-dark-theme);
-  @include app-components-theme($blue-dark-theme);
-  @include expose-material-theme-classes($blue-dark-theme);
-}
-
-.deep-purple-theme {
-  @include angular-material-theme($deep-purple-theme);
-  @include app-components-theme($deep-purple-theme);
-  @include expose-material-theme-classes($deep-purple-theme);
-}
-
-.deep-purple-dark-theme {
-  @include angular-material-theme($deep-purple-dark-theme);
-  @include app-components-theme($deep-purple-dark-theme);
-  @include expose-material-theme-classes($deep-purple-dark-theme);
-}
-
+// .blue-theme {
+//   @include angular-material-theme($blue-theme);
+//   @include app-components-theme($blue-theme);
+//   @include expose-material-theme-classes($blue-theme);
+// }
+// .blue-dark-theme {
+//   @include angular-material-theme($blue-dark-theme);
+//   @include app-components-theme($blue-dark-theme);
+//   @include expose-material-theme-classes($blue-dark-theme);
+// }
+// .deep-purple-theme {
+//   @include angular-material-theme($deep-purple-theme);
+//   @include app-components-theme($deep-purple-theme);
+//   @include expose-material-theme-classes($deep-purple-theme);
+// }
+// .deep-purple-dark-theme {
+//   @include angular-material-theme($deep-purple-dark-theme);
+//   @include app-components-theme($deep-purple-dark-theme);
+//   @include expose-material-theme-classes($deep-purple-dark-theme);
+// }
 /** General Classes **/
 
 html,
@@ -83,12 +73,6 @@ a:hover {
 
 .text-nowrap {
   white-space: nowrap;
-}
-
-.title-text {
-  text-transform: uppercase;
-  color: #006ee2;
-  font-weight: bold !important;
 }
 
 .material-icons,

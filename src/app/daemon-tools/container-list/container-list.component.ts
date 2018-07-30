@@ -62,7 +62,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
       }, e => {
         this.loading = false;
         this.notificationService.open('Error ocurred while obtaining containers!', null, {
-          panelClass: 'mat-bg-warn'
+          panelClass: 'tim-bg-warn'
         });
         this.containers = [];
         console.error(e);
