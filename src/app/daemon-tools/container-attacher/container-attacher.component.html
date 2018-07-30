@@ -1,16 +1,19 @@
-<tim-loading *ngIf="attaching">
+<tim-loading *ngIf="attaching; else attachedTemplate">
 </tim-loading>
 
-<h2 *ngIf="connected; else offlineTemplate"
-    class="tim-text-title">
-    <mat-icon>check_circle_outline</mat-icon>
-    Connected
-</h2>
-<ng-template #offlineTemplate>
-    <h2 class="tim-text-warn">
-        <mat-icon>highlight_off</mat-icon>
-        Offline
+<ng-template #attachedTemplate>
+    <h2 *ngIf="connected; else offlineTemplate">
+        <mat-icon class="tim-text-primary">check_circle_outline</mat-icon>
+        <span class="tim-text-title">
+            Connected to {{containerId | slice:0:12}}
+        </span>
     </h2>
+    <ng-template #offlineTemplate>
+        <h2 class="tim-text-warn">
+            <mat-icon>highlight_off</mat-icon>
+            Offline
+        </h2>
+    </ng-template>
 </ng-template>
 
 <div #terminalContainer></div>

@@ -1,23 +1,26 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { DaemonService } from '../daemon.service';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
+import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'tim-container-attacher',
   templateUrl: './container-attacher.component.html',
   styleUrls: ['./container-attacher.component.scss']
 })
-export class ContainerAttacherComponent implements OnInit, OnDestroy {
+export class ContainerAttacherComponent implements OnChanges, OnDestroy {
 
   @Input()
   public containerId: string;
 
+  @Input()
+  public stream: Observable<EventEmitter>;
+
   @ViewChild('terminalContainer')
   public terminalContainer: ElementRef;
-  public socket: WebSocket;
 
   public attaching: boolean;
   public connected: boolean;
@@ -28,45 +31,49 @@ export class ContainerAttacherComponent implements OnInit, OnDestroy {
 
   constructor(private daemonService: DaemonService) { }
 
-  public ngOnInit() {
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes['stream']) {
+      if (this.stream) {
+        this.attaching = true;
+        this.stream
+          .pipe(takeUntil(this.componetDestroyed))
+          .pipe(takeUntil(this.componetDestroyed))
+          .subscribe(str => {
+            this.connected = true;
+            this.attaching = false;
 
-    this.connected = false;
-    this.attaching = true;
+            this.setupTerminal();
 
-    this.daemonService.docker(d => d.getContainer(this.containerId).attach({
-      stream: true,
-      hijack: true,
-      stdin: true,
-      stdout: true,
-      stderr: true,
-      logs: true
-    }))
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe(str => {
-        const stream = <any>str as NodeJS.WritableStream;
-        this.connected = true;
-        this.attaching = false;
+            this.daemonService.streamToObservable<Buffer>(str)
+              .pipe(
+                map(chunk => chunk.toString()),
+            )
+              .subscribe(chunk => {
+                this.terminal.write(chunk);
+              }, null, () => {
+                this.connected = false;
+              });
 
-        this.setupTerminal();
+            const writeable = str as NodeJS.WritableStream;
+            this.terminal.on('key', k => {
+              if (writeable.writable) {
+                writeable.write(k);
+              } else {
+                console.warn('Attempted to write to non writeable stream');
+              }
+            });
 
-        this.daemonService.streamToObservable(str)
-          .subscribe(line => {
-            this.terminal.write(line.toString());
           }, e => {
-            console.error(e);
-          }, () => {
+            this.error = e.message;
+            this.attaching = false;
             this.connected = false;
           });
 
-        this.terminal.on('key', k => {
-          stream.write(k);
-        });
-
-      }, e => {
-        this.error = e.message;
-        this.attaching = false;
+      } else {
         this.connected = false;
-      });
+        this.attaching = true;
+      }
+    }
   }
 
   public ngOnDestroy() {
@@ -80,6 +87,10 @@ export class ContainerAttacherComponent implements OnInit, OnDestroy {
   private setupTerminal() {
     this.terminal = new Terminal({
       cursorBlink: true,
+      allowTransparency: true,
+      theme: {
+        background: 'rgba(0,0,0, 0.3)',
+      }
     });
     this.terminal.open(this.terminalContainer.nativeElement);
     this.terminal.focus();

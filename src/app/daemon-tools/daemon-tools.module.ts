@@ -27,7 +27,6 @@ import { RouterModule } from '@angular/router';
 import { ImagePullModalComponent } from './image-pull-modal/image-pull-modal.component';
 import { ImagePullLogsComponent } from './image-pull-logs/image-pull-logs.component';
 import { ContainerExecContainerComponent } from './container-exec-container/container-exec-container.component';
-import { ContainerExecComponent } from './container-exec/container-exec.component';
 import { ContainerCreateComponent } from './container-create/container-create.component';
 import { ImageSelectorCardComponent } from './image-selector-card/image-selector-card.component';
 import { ContainerCreateContainerComponent } from './container-create-container/container-create-container.component';
@@ -70,7 +69,6 @@ import { DaemonEventsService } from './daemon-events.service';
     ImagePullLogsComponent,
     ImagePullModalComponent,
     ContainerExecContainerComponent,
-    ContainerExecComponent,
     ContainerCreateComponent,
     ImageSelectorCardComponent,
     ContainerCreateContainerComponent,
@@ -84,7 +82,6 @@ import { DaemonEventsService } from './daemon-events.service';
     ContainerAttacherContainerComponent,
     ImagePullLogsComponent,
     ContainerCreateComponent,
-    ContainerExecComponent,
     ImageSelectorCardComponent,
   ],
   providers: [

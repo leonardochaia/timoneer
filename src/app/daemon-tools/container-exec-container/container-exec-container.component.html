@@ -1,11 +1,8 @@
 <div fxLayout="column"
      style="padding:16px;">
-
-  <h1 class="mat-display-1"
-      style="text-align: center">
-    Exec commands into {{containerId | slice:0:12}}
-  </h1>
   <div>
-    <tim-container-exec [containerId]="containerId"></tim-container-exec>
+    <tim-container-attacher [containerId]="containerId"
+                            [stream]="stream$">
+    </tim-container-attacher>
   </div>
 </div>
