@@ -129,7 +129,7 @@ export class SettingsService {
   }
 
   public getRegistryName(settings: DockerRegistrySettings) {
-    return settings.url.replace('https://', '').replace('http://', '');
+    return settings.url ? settings.url.replace('https://', '').replace('http://', '') : 'Docker Hub';
   }
 
   public getDockerIOSettings() {

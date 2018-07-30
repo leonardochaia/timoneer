@@ -92,6 +92,10 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
     return (group as FormGroup).getRawValue() as DockerRegistrySettings;
   }
 
+  public getRegistryName(registry: DockerRegistrySettings) {
+    return this.settingsService.getRegistryName(registry);
+  }
+
   private setClientSettings(settings: DockerClientSettings) {
     this.clientGroup = this.fb.group({
       'fromEnvironment': [settings.fromEnvironment, Validators.required],

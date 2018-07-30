@@ -189,11 +189,15 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
     forkJoin([
       inspect.pipe(take(1)),
       this.loadImageTags().pipe(take(1)),
-    ]).subscribe(() => {
-      this.loadingImageData = false;
-    }, () => {
-      this.loadingImageData = false;
-    });
+    ])
+      .pipe(catchError((e) => {
+        this.imageError = e.message;
+        this.loadingImageData = false;
+        return throwError(e);
+      }))
+      .subscribe(() => {
+        this.loadingImageData = false;
+      });
   }
 
 }
