@@ -2,7 +2,8 @@
      style="padding:16px;">
     <div>
         <tim-container-attacher [containerId]="containerId"
-                                [stream]="stream$">
+                                [stream]="stream$"
+                                (resize)="onResized($event)">
         </tim-container-attacher>
     </div>
 </div>

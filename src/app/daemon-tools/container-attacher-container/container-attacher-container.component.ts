@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Observable } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil, map, take } from 'rxjs/operators';
 import { DaemonService } from '../daemon.service';
 import { EventEmitter } from 'stream';
+import { TerminalMeasures } from '../container-attacher/container-attacher.component';
 
 @Component({
   selector: 'tim-container-attacher-container',
@@ -40,6 +41,14 @@ export class ContainerAttacherContainerComponent implements OnInit, OnDestroy {
         }));
 
       });
+  }
+
+  public onResized(measures: TerminalMeasures) {
+    this.daemonService.docker(d => d.getContainer(this.containerId).resize({
+      w: measures.charWidth,
+      h: measures.charHeight
+    }))
+      .subscribe();
   }
 
   public ngOnDestroy() {

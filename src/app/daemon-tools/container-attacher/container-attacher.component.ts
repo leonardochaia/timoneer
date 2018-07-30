@@ -1,10 +1,22 @@
-import { Component, Input, ElementRef, ViewChild, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component, Input, ElementRef,
+  ViewChild, OnDestroy, OnChanges,
+  SimpleChanges, HostListener,
+  EventEmitter, Output
+} from '@angular/core';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { Subject, Observable } from 'rxjs';
 import { DaemonService } from '../daemon.service';
-import { takeUntil, map } from 'rxjs/operators';
-import { EventEmitter } from 'stream';
+import { takeUntil, map, debounceTime } from 'rxjs/operators';
+import { EventEmitter as StreamEventEmitter } from 'stream';
+
+export interface TerminalMeasures {
+  pixelWidth: number;
+  pixelHeight: number;
+  charWidth: number;
+  charHeight: number;
+}
 
 @Component({
   selector: 'tim-container-attacher',
@@ -17,7 +29,10 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
   public containerId: string;
 
   @Input()
-  public stream: Observable<EventEmitter>;
+  public stream: Observable<StreamEventEmitter>;
+
+  @Output()
+  public resize = new EventEmitter<TerminalMeasures>();
 
   @ViewChild('terminalContainer')
   public terminalContainer: ElementRef;
@@ -28,8 +43,25 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
 
   private componetDestroyed = new Subject();
   private terminal: Terminal;
+  private windowSize = new Subject<{ width: number, height: number }>();
 
-  constructor(private daemonService: DaemonService) { }
+  constructor(private daemonService: DaemonService) {
+
+    this.windowSize.asObservable()
+      .pipe(
+        debounceTime(500)
+      ).subscribe(measures => {
+        if (this.terminal) {
+          const { charHeight, charWidth } = this.resizeTerminal(measures.width);
+          this.resize.emit({
+            charHeight: charHeight,
+            charWidth: charWidth,
+            pixelHeight: measures.height,
+            pixelWidth: measures.width
+          });
+        }
+      });
+  }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['stream']) {
@@ -84,6 +116,14 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  public onResize(event) {
+    this.windowSize.next({
+      width: this.terminalContainer.nativeElement.offsetWidth,
+      height: this.terminalContainer.nativeElement.offsetHeight
+    });
+  }
+
   private setupTerminal() {
     this.terminal = new Terminal({
       cursorBlink: true,
@@ -94,6 +134,17 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
     });
     this.terminal.open(this.terminalContainer.nativeElement);
     this.terminal.focus();
+    this.resizeTerminal(this.terminalContainer.nativeElement.offsetWidth);
+  }
+
+  private resizeTerminal(width: number) {
+    const charHeight = 25;
+    const charWidth = Math.floor((width - 20) / 8.39);
+    this.terminal.resize(charWidth, charHeight);
     fit(this.terminal);
+    return {
+      charHeight,
+      charWidth
+    };
   }
 }

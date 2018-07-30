@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Observable, from } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil, map, switchMap } from 'rxjs/operators';
+import { takeUntil, map, switchMap, take } from 'rxjs/operators';
 import { EventEmitter } from 'stream';
 import { DaemonService } from '../daemon.service';
 import { Exec } from 'dockerode';
 import { TLSSocket } from 'tls';
+import { TerminalMeasures } from '../container-attacher/container-attacher.component';
 
 @Component({
   selector: 'tim-container-exec-container',
@@ -53,6 +54,15 @@ export class ContainerExecContainerComponent implements OnInit, OnDestroy {
             map(socket => socket.output as TLSSocket)
           );
       });
+  }
+
+  public onResized(measures: TerminalMeasures) {
+    if (this.exec) {
+      this.exec.resize({
+        w: measures.charWidth,
+        h: measures.charHeight
+      });
+    }
   }
 
   public ngOnDestroy() {
