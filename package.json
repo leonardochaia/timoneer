@@ -27,6 +27,7 @@
     "electron:linux": "yarn build:prod && npx electron-builder build --linux",
     "electron:windows": "yarn build:prod && npx electron-builder build --windows",
     "electron:mac": "yarn build:prod && npx electron-builder build --mac",
+    "electron:build": "yarn build:prod && npx electron-builder build --linux --windows",
     "test": "yarn postinstall:web && ng test",
     "e2e": "yarn postinstall:web && ng e2e",
     "release": "yarn && yarn build:prod && electron-builder"
