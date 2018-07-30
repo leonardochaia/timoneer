@@ -1300,4 +1300,59 @@ declare module 'dockerode' {
          */
         Value?: string;
     }
+
+    export interface DockerEvent {
+        /**
+         * The type of object emitting the event
+         * @type {string}
+         * @memberof DockerEvent
+         */
+        Type?: string;
+        /**
+         * The type of event
+         * @type {string}
+         * @memberof DockerEvent
+         */
+        Action?: string;
+        /**
+         *
+         * @type {DockerEventActor}
+         * @memberof DockerEvent
+         */
+        Actor?: DockerEventActor;
+        /**
+         * Timestamp of event
+         * @type {number}
+         * @memberof DockerEvent
+         */
+        time?: number;
+        /**
+         * Timestamp of event, with nanosecond accuracy
+         * @type {number}
+         * @memberof DockerEvent
+         */
+        timeNano?: number;
+    }
+
+    /**
+     *
+     * @export
+     * @interface DockerEventActor
+     */
+    export interface DockerEventActor {
+        /**
+         * The ID of the object emitting the event
+         * @type {string}
+         * @memberof DockerEventActor
+         */
+        ID?: string;
+        /**
+         * Various key/value attributes of the object, depending on its type
+         * @type {{ [key: string]: string; }}
+         * @memberof DockerEventActor
+         */
+        Attributes?: {
+            [key: string]: string;
+        };
+    }
 }

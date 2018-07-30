@@ -1,7 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { SettingsService } from '../settings/settings.service';
-import { map, switchMap } from 'rxjs/operators';
-import { from, Observable, BehaviorSubject } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { from, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { DockerStreamResponse } from './docker-client.model';
 import { ElectronService } from '../electron-tools/electron.service';
 import { IncomingMessage } from 'http';
@@ -13,10 +13,8 @@ import { DockerClientSettings } from '../settings/settings.model';
 import * as path from 'path';
 import * as splitca from 'split-ca';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class DaemonService {
+@Injectable()
+export class DaemonService implements OnDestroy {
 
   protected get daemonUrl() {
     return this.settingsService.getSettings()
@@ -25,12 +23,17 @@ export class DaemonService {
 
   protected dockerSubject = new BehaviorSubject<Dockerode>(null);
 
+  private disposed = new Subject();
+
   constructor(private settingsService: SettingsService,
     private zone: NgZone,
     private electronService: ElectronService) {
 
     settingsService.getSettings()
-      .pipe(map(settings => settings.dockerClientSettings))
+      .pipe(
+        map(settings => settings.dockerClientSettings),
+        takeUntil(this.disposed)
+      )
       .subscribe(settings => {
         if (settings.fromEnvironment) {
           this.dockerSubject.next(new Dockerode());
@@ -112,6 +115,11 @@ export class DaemonService {
           modem.followProgress(msg.message, onFinished, onProgress);
         }))
       );
+  }
+
+  public ngOnDestroy() {
+    this.disposed.next();
+    this.disposed.unsubscribe();
   }
 
   private getDockerodeConfigFromSettings(settings: DockerClientSettings) {

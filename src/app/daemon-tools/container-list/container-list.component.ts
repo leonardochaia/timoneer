@@ -6,6 +6,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { MatBottomSheet } from '@angular/material';
 import { ContainerActionsSheetComponent } from '../container-actions-sheet/container-actions-sheet.component';
 import { ContainerInfo } from 'dockerode';
+import { DaemonEventsService } from '../daemon-events.service';
 
 @Component({
   selector: 'tim-container-list',
@@ -20,27 +21,21 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   private componetDestroyed = new Subject();
 
   constructor(private daemonService: DaemonService,
+    private daemonEvents: DaemonEventsService,
     private notificationService: NotificationService,
     private bottomSheet: MatBottomSheet) { }
 
   public ngOnInit() {
-    this.loading = true;
 
-    this.daemonService
-      .docker(d => d.listContainers())
+    this.daemonEvents.bindAll(['destroy', 'start', 'stop', 'pause', 'unpause', 'restart', 'update'])
       .pipe(
-        takeUntil(this.componetDestroyed),
-    ).subscribe(containers => {
-      this.loading = false;
-      this.containers = containers;
-    }, e => {
-      this.loading = false;
-      this.notificationService.open('Error ocurred while obtaining containers!', null, {
-        panelClass: 'mat-bg-warn'
+        takeUntil(this.componetDestroyed)
+      )
+      .subscribe(() => {
+        this.reload();
       });
-      this.containers = [];
-      console.error(e);
-    });
+
+    this.reload();
   }
 
   public openContainerMenu(container: ContainerInfo) {
@@ -52,5 +47,25 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+  }
+
+  private reload() {
+    this.loading = true;
+
+    this.daemonService
+      .docker(d => d.listContainers())
+      .pipe(
+        takeUntil(this.componetDestroyed)
+      ).subscribe(containers => {
+        this.loading = false;
+        this.containers = containers;
+      }, e => {
+        this.loading = false;
+        this.notificationService.open('Error ocurred while obtaining containers!', null, {
+          panelClass: 'mat-bg-warn'
+        });
+        this.containers = [];
+        console.error(e);
+      });
   }
 }
