@@ -34,7 +34,8 @@
     "release": "yarn build:prod && electron-builder"
   },
   "dependencies": {
-    "electron-settings": "^3.2.0"
+    "electron-settings": "^3.2.0",
+    "electron-updater": "^3.0.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.7.1",

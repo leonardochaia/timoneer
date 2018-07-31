@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DockerRegistrySettings, DockerClientSettings } from '../settings.model';
-import { SettingsService } from '../settings.service';
+import { SettingsService, TIM_LOGO } from '../settings.service';
 import { MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { timoneerVersion } from '../../../tim-version';
+import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.service';
 
 @Component({
   selector: 'tim-settings-container',
@@ -14,20 +15,35 @@ import { timoneerVersion } from '../../../tim-version';
 })
 export class SettingsContainerComponent implements OnInit, OnDestroy {
 
+  public UpdaterStatus = UpdaterStatus;
+
   public registriesArray = this.fb.array([]);
 
   public clientGroup: FormGroup;
 
   public form: FormGroup;
 
+  public get timoneerLogo() {
+    return TIM_LOGO;
+  }
+
   public get appVersion() {
     return timoneerVersion;
+  }
+
+  public get updateStatus() {
+    return this.updater.status;
+  }
+
+  public get updateDownloadProgress() {
+    return this.updater.currentDownloadProgress;
   }
 
   private componetDestroyed = new Subject();
 
   constructor(private settingsService: SettingsService,
     private snackBar: MatSnackBar,
+    private updater: UpdaterService,
     private fb: FormBuilder) {
   }
 
@@ -86,6 +102,14 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
           panelClass: 'tim-bg-accent'
         });
       });
+  }
+
+  public checkForUpdates() {
+    this.updater.checkForUpdates();
+  }
+
+  public downloadLatestUpdate() {
+    this.updater.downloadLatestUpdate();
   }
 
   public ngOnDestroy() {

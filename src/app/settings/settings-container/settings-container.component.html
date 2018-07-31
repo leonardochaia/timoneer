@@ -7,16 +7,59 @@
             fxLayoutAlign="start center"
             fxLayoutGap="8px"
             style="margin-bottom: 16px;">
-    <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
-    <div>
+
+    <img class="logo"
+         [src]="timoneerLogo"
+         style="height:48px; vertical-align: middle; margin-top:-8px; margin-left:-8px;">
+
+    <div fxFlex="fill">
       <h1 class="tim-text-title"
           style="margin:0">
-        Application settings
+        Timoneer v{{appVersion.version}}
       </h1>
-      <p style="margin:0">
-        These configuration is stored in your browser only!
+      <p>
+        <small>
+          {{appVersion.git.short}} ({{appVersion.git.branch}})
+        </small>
       </p>
     </div>
+
+    <ng-container [ngSwitch]="updateStatus">
+      <div *ngSwitchCase="UpdaterStatus.UpToDate">
+        <button type="button"
+                mat-raised-button
+                (click)="checkForUpdates()"
+                color="accent">
+          Check for updates
+        </button>
+      </div>
+
+      <div *ngSwitchCase="UpdaterStatus.Outdated">
+        <button type="button"
+                mat-raised-button
+                (click)="downloadLatestUpdate()"
+                color="primary">
+          Download Update
+        </button>
+      </div>
+
+      <div *ngSwitchCase="UpdaterStatus.CheckingForUpdate"
+           style="min-width: 100px">
+        <tim-loading [alternative]="true"></tim-loading>
+      </div>
+
+      <div *ngSwitchCase="UpdaterStatus.Downloading"
+           style="min-width: 100px">
+        <h3 class="tim-text-title">
+          Downloading {{updateDownloadProgress.transferred}} / {{updateDownloadProgress.total}}
+          <span>
+            ({{updateDownloadProgress.bytesPerSecond}} b/s)
+          </span>
+        </h3>
+        <mat-progress-bar [value]="updateDownloadProgress.percent"></mat-progress-bar>
+      </div>
+    </ng-container>
+
   </mat-card>
 
   <div fxLayout="column"
@@ -130,12 +173,6 @@
           style="margin:0">
         Save settings
       </h3>
-      <p>
-        Timoneer v{{appVersion.version}}
-        <small>
-          {{appVersion.git.short}} ({{appVersion.git.branch}})
-        </small>
-      </p>
     </div>
 
     <div>
