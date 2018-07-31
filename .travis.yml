@@ -5,7 +5,7 @@ matrix:
       language: node_js
       node_js: "10"
       script:
-        - yarn commitlint-travis
+        - yarn travis-pre-build
         - yarn release
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
@@ -16,7 +16,6 @@ matrix:
       language: generic
       if: branch = master
       script:
-        - yarn commitlint-travis
         - |
           docker run --rm \
             --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
@@ -24,14 +23,13 @@ matrix:
             -v ~/.cache/electron:/root/.cache/electron \
             -v ~/.cache/electron-builder:/root/.cache/electron-builder \
             electronuserland/builder:wine \
-            /bin/bash -c 'yarn --link-duplicates --pure-lockfile && yarn release --linux --win'
+            /bin/bash -c 'yarn travis-pre-build && yarn release --linux --win'
 
     - os: linux
       services: docker
       language: generic
       if: branch != master
       script:
-        - yarn commitlint-travis
         - |
           docker run --rm \
             --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
@@ -39,7 +37,7 @@ matrix:
             -v ~/.cache/electron:/root/.cache/electron \
             -v ~/.cache/electron-builder:/root/.cache/electron-builder \
             electronuserland/builder:wine \
-            /bin/bash -c 'yarn --link-duplicates --pure-lockfile && yarn electron:build'
+            /bin/bash -c 'yarn travis-pre-build && yarn electron:build'
 
 cache:
   directories:

@@ -32,7 +32,7 @@
     "electron:build": "yarn build:prod && npx electron-builder build --linux --windows",
     "release": "yarn build:prod && electron-builder",
     "commitmsg": "commitlint -E GIT_PARAMS",
-    "commitlint-travis": "commitlint-travis"
+    "travis-pre-build": "yarn install && commitlint-travis"
   },
   "dependencies": {
     "electron-settings": "^3.2.0",
