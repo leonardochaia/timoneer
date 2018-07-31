@@ -44,13 +44,15 @@
 
     <a mat-list-item
        routerLink="/settings"
-       *ngIf="updateStatus === UpdaterStatus.Outdated">
+       *ngIf="updateStatus === UpdaterStatus.Outdated || updateStatus === UpdaterStatus.PendingInstall">
       <h4 mat-line>
         <span class="tim-bg-primary"
               style="padding:4px; font-weight: bold; margin-right: 6px;">
           NEW
         </span>
-        {{updateStatusText}}
+        <small>
+          {{updateStatusText}}
+        </small>
       </h4>
     </a>
 

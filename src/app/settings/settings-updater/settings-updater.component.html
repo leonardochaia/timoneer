@@ -1,0 +1,51 @@
+<ng-container [ngSwitch]="updateStatus">
+  <div *ngSwitchCase="UpdaterStatus.UpToDate">
+    <button type="button"
+            mat-raised-button
+            (click)="checkForUpdates()"
+            color="accent">
+      Check for updates
+    </button>
+  </div>
+
+  <div *ngSwitchCase="UpdaterStatus.Outdated">
+    <button type="button"
+            mat-raised-button
+            (click)="downloadLatestUpdate()"
+            color="primary">
+      Download Update
+    </button>
+  </div>
+
+  <div *ngSwitchCase="UpdaterStatus.PendingInstall">
+    <h3>
+      Timoneer v{{currentUpdate.version}} is ready to install.
+    </h3>
+    <button type="button"
+            mat-raised-button
+            (click)="quitAndInstallUpdate()"
+            color="primary">
+      Restart and Install
+    </button>
+  </div>
+
+  <div *ngSwitchCase="UpdaterStatus.CheckingForUpdate">
+    <tim-loading [alternative]="true"></tim-loading>
+  </div>
+
+  <div *ngSwitchCase="UpdaterStatus.Downloading">
+    <h3 class="tim-text-title">
+      Downloading Timoneer v{{currentUpdate.version}}
+    </h3>
+    <ng-container *ngIf="updateDownloadProgress">
+      <span class="text-nowrap">
+        {{updateDownloadProgress.transferred | bytes}} / {{updateDownloadProgress.total | bytes}}
+        <small>
+          ({{updateDownloadProgress.bytesPerSecond | bytes}}/s)
+        </small>
+      </span>
+      <mat-progress-bar mode="determinate"
+                        [value]="updateDownloadProgress.percent"></mat-progress-bar>
+    </ng-container>
+  </div>
+</ng-container>
