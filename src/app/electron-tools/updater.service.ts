@@ -24,6 +24,10 @@ export class UpdaterService implements OnDestroy {
 
   public currentDownloadProgress: any;
 
+  public get currentVersion() {
+    return this.autoUpdater.currentVersion;
+  }
+
   protected currentDownloadCancellationToken: CancellationToken;
 
   private get autoUpdater() {

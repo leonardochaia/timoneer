@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { UpdaterService } from '../../electron-tools/updater.service';
 import { timoneerVersion } from '../../../tim-version';
 
 @Component({
@@ -25,12 +26,17 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   }
 
   public get appVersion() {
-    return timoneerVersion;
+    return this.updater.currentVersion;
+  }
+
+  public get appGitVersion() {
+    return timoneerVersion.git;
   }
 
   private componetDestroyed = new Subject();
 
   constructor(private settingsService: SettingsService,
+    private updater: UpdaterService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder) {
   }

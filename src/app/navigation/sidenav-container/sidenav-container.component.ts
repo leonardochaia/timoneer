@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { timoneerVersion } from '../../../tim-version';
 import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.service';
 import { TIM_LOGO } from '../../settings/settings.service';
 
@@ -17,7 +16,7 @@ export class SidenavContainerComponent {
     }
 
     public get appVersion() {
-        return timoneerVersion.version;
+        return this.updater.currentVersion;
     }
 
     public get updateStatusText() {
