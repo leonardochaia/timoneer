@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { SharedModule } from '../shared/shared.module';
-import { NgPipesModule } from 'angular-pipes';
+import { NgMathPipesModule } from 'angular-pipes';
 import { SettingsUpdaterComponent } from './settings-updater/settings-updater.component';
 
 @NgModule({
@@ -30,7 +30,7 @@ import { SettingsUpdaterComponent } from './settings-updater/settings-updater.co
     MatExpansionModule,
     MatDialogModule,
     MatProgressBarModule,
-    NgPipesModule,
+    NgMathPipesModule,
 
     SharedModule,
   ],

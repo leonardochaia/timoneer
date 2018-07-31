@@ -19,6 +19,7 @@ import {
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
 import { ContainerCreateContainerComponent } from './daemon-tools/container-create-container/container-create-container.component';
 import { NavigationContainerComponent } from './navigation/navigation-container/navigation-container.component';
+import { SystemContainerComponent } from './daemon-tools/system-container/system-container.component';
 
 export const routes: Routes = [
     {
@@ -57,6 +58,10 @@ export const routes: Routes = [
             {
                 path: 'docker/containers/:containerId/exec',
                 component: ContainerExecContainerComponent,
+            },
+            {
+                path: 'docker/system',
+                component: SystemContainerComponent,
             },
 
             {
