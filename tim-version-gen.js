@@ -25,8 +25,7 @@ export const timoneerVersion = {
 };
 `;
 
-console.info(`About to save ${path}`);
-console.log(contents);
+console.info(`Saving ${path}. Commit: ${gitCommit} (${gitBranch})`);
 
 fs.writeFile(path, contents, {
   flag: 'w'
