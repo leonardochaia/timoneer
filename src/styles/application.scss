@@ -17,6 +17,9 @@
   @include angular-material-theme($timoneer-theme);
   @include app-components-theme($timoneer-theme);
   @include expose-material-theme-classes($timoneer-theme);
+  .bg-invalid {
+    background-color: rgb(251, 217, 214) !important;
+  }
 }
 
 .timoneer-dark-theme {
@@ -25,6 +28,9 @@
   @include expose-material-theme-classes($timoneer-dark-theme);
   .tim-text-title {
     color: whitesmoke;
+  }
+  .bg-invalid {
+    background-color: #6d0a02 !important;
   }
 }
 
@@ -70,8 +76,4 @@ a:hover {
   &.full-height {
     height: 60vh;
   }
-}
-
-.bg-invalid {
-  background-color: rgb(251, 217, 214) !important;
 }

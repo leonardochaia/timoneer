@@ -14,8 +14,7 @@
     <!-- Port Mappings -->
     <mat-card fxFlex.gt-xs="50">
 
-      <h2 class="tim-text-title"
-          style="margin:0">
+      <h2 class="tim-text-title">
         <mat-icon>network_wifi</mat-icon>
         Ports Mapping
       </h2>
@@ -25,6 +24,7 @@
 
         <button mat-raised-button
                 type="button"
+                color="accent"
                 [disabled]="!canAddPortBinding()"
                 (click)="addPortBinding()">
           Add Port Mapping
@@ -82,8 +82,7 @@
     <!-- Volume Mappings -->
     <mat-card fxFlex.gt-xs="50">
 
-      <h2 class="tim-text-title"
-          style="margin:0">
+      <h2 class="tim-text-title">
         <mat-icon>storage</mat-icon>
         Volume Mapping
       </h2>
@@ -93,6 +92,7 @@
 
         <button mat-raised-button
                 [disabled]="!canAddVolumeBinding()"
+                color="accent"
                 type="button"
                 (click)="addVolumeBinding()">
           Add Volume Mapping
