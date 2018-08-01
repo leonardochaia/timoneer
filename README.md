@@ -5,7 +5,7 @@
 master:
 [![Build Status](https://travis-ci.org/leonardochaia/timoneer.svg?branch=master)](https://travis-ci.org/leonardochaia/timoneer)
 develop:
-[![Build Status](https://travis-ci.org/leonardochaia/timoneer.svg?branch=develop)](https://travis-ci.org/leonardochaia/timoneer)
+[![Build Status](https://travis-ci.org/leonardochaia/timoneer.svg?branch=develop)](https://travis-ci.org/leonardochaia/timoneer) [![Greenkeeper badge](https://badges.greenkeeper.io/leonardochaia/timoneer.svg)](https://greenkeeper.io/)
 
 Multiplatform Docker Client with Material Design UI (**Still on early development**)
 
