@@ -40,8 +40,8 @@ export class RegistryService {
     };
     return this.settingsService.getSettings()
       .pipe(
-        map(settings => settings.registries),
-        switchMap(registries => registries.length ? forkJoin(registries.filter(r => r.allowsCatalog).map(r => getRepos(r))) : of())
+        map(settings => settings.registries.filter(r => r.allowsCatalog)),
+        switchMap(registries => registries.length ? forkJoin(registries.map(r => getRepos(r))) : of([]))
       );
   }
 

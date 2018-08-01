@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, forwardRef } from '@angular/core';
 import { map, switchMap, debounceTime, catchError, take } from 'rxjs/operators';
 import { Subject, Observable, of, throwError, forkJoin } from 'rxjs';
-import { DaemonService } from '../daemon.service';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { RegistryService } from '../../registry/registry.service';
 import { SettingsService } from '../../settings/settings.service';
 import { DaemonModalService } from '../daemon-modal.service';
 import { ImageInspectInfo } from 'dockerode';
+import { DockerImageService } from '../docker-image.service';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -48,7 +48,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
   private componetDestroyed = new Subject();
   private onChanges: (image: string) => void;
 
-  constructor(private daemonService: DaemonService,
+  constructor(private imageService: DockerImageService,
     private settingsService: SettingsService,
     private modalService: DaemonModalService,
     private registryService: RegistryService) { }
@@ -123,8 +123,9 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
       this.onChanges(this.image);
     }
   }
+
   private getDameonImages() {
-    return this.daemonService.docker(d => d.listImages())
+    return this.imageService.imageList()
       .pipe(
         map(images => [{
           name: 'Docker Daemon',
@@ -170,7 +171,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
     }
 
     this.loadingImageData = true;
-    const inspect = this.daemonService.docker(d => d.getImage(encodeURI(this.image)).inspect())
+    const inspect = this.imageService.inspectImage(this.image)
       .pipe(
         map(image => {
           this.imageData = image;
@@ -182,7 +183,8 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
             this.imageNotFound = true;
           }
           this.imageError = e.reason;
-          return throwError(e);
+          // dont throw an error.
+          return this.imageError;
         })
       );
 

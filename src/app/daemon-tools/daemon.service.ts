@@ -1,15 +1,14 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { SettingsService } from '../settings/settings.service';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
-import { from, Observable, BehaviorSubject, Subject } from 'rxjs';
-import { DockerStreamResponse } from './docker-client.model';
+import { map, switchMap, takeUntil, take } from 'rxjs/operators';
+import { from, BehaviorSubject, Subject } from 'rxjs';
 import { ElectronService } from '../electron-tools/electron.service';
-import { IncomingMessage } from 'http';
 import * as Dockerode from 'dockerode';
 import { DockerClientSettings } from '../settings/settings.model';
 
 import * as path from 'path';
 import * as splitca from 'split-ca';
+import { Modem } from 'docker-modem';
 
 @Injectable()
 export class DaemonService implements OnDestroy {
@@ -24,7 +23,6 @@ export class DaemonService implements OnDestroy {
   private disposed = new Subject();
 
   constructor(private settingsService: SettingsService,
-    private zone: NgZone,
     private electronService: ElectronService) {
 
     settingsService.getSettings()
@@ -42,38 +40,15 @@ export class DaemonService implements OnDestroy {
       });
   }
 
+  public modem() {
+    return this.docker(d => Promise.resolve(d.modem as Modem))
+      .pipe(take(1));
+  }
+
   public docker<T>(fn: (api: Dockerode) => Promise<T>) {
     return this.dockerSubject
       .pipe(
         switchMap(docker => from(fn(docker)))
-      );
-  }
-
-  public pullImage(image: string) {
-    return this.settingsService.getRegistryAuthForImage(image)
-      .pipe(
-        switchMap(auth =>
-          this.docker(d => d.pull(image, { 'authconfig': { key: auth } }))
-        ),
-        map(r => <IncomingMessage>r),
-        switchMap(r => this.docker(d => Promise.resolve(d.modem)).pipe(map(m => ({ message: r, modem: m })))),
-        switchMap(msg => new Observable<DockerStreamResponse>(observer => {
-          const modem = msg.modem as any;
-
-          const onFinished = () => {
-            this.zone.run(() => {
-              observer.complete();
-            });
-            // output is an array with output json parsed objects
-          };
-
-          const onProgress = (event: DockerStreamResponse) => {
-            this.zone.run(() => {
-              observer.next(event);
-            });
-          };
-          modem.followProgress(msg.message, onFinished, onProgress);
-        }))
       );
   }
 

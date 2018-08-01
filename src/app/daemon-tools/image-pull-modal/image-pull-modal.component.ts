@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { DaemonService } from '../daemon.service';
 import { finalize } from 'rxjs/operators';
 import { DockerStreamResponse } from '../docker-client.model';
 import { Observable } from 'rxjs';
+import { DockerImageService } from '../docker-image.service';
 
 @Component({
   selector: 'tim-image-pull-modal',
@@ -19,7 +19,7 @@ export class ImagePullModalComponent implements OnInit {
 
   public finished: boolean;
 
-  constructor(private daemonService: DaemonService,
+  constructor(private imageService: DockerImageService,
     private dialogRef: MatDialogRef<ImagePullModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     data: { image: string }) {
@@ -29,7 +29,7 @@ export class ImagePullModalComponent implements OnInit {
   public ngOnInit() {
     this.title = `Pulling ${this.image}`;
     this.finished = false;
-    this.imageLogs$ = this.daemonService.pullImage(this.image)
+    this.imageLogs$ = this.imageService.pullImage(this.image)
       .pipe(
         finalize(() => {
           this.title = `Finished pulling ${this.image}`;
