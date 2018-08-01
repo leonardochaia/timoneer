@@ -1,0 +1,37 @@
+appId: timoneer
+productName: Timoneer
+directories:
+  output: app-builds
+releaseInfo:
+  releaseNotesFile: CHANGELOG.md
+files:
+- "**/*"
+- "!*.ts"
+- "!*.code-workspace"
+- "!LICENSE.md"
+- "!package.json"
+- "!package-lock.json"
+- "!src/"
+- "!e2e/"
+- "!hooks/"
+- "!.angular-cli.json"
+- "!_config.yml"
+- "!karma.conf.js"
+- "!tsconfig.json"
+- "!tslint.json"
+nsis:
+  allowToChangeInstallationDirectory: true
+  oneClick: false
+win:
+  icon: dist
+  target:
+  - portable
+  - nsis
+mac:
+  icon: dist
+  target:
+  - dmg
+linux:
+  icon: dist
+  target:
+  - AppImage

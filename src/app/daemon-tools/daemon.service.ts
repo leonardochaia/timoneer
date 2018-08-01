@@ -6,8 +6,6 @@ import { DockerStreamResponse } from './docker-client.model';
 import { ElectronService } from '../electron-tools/electron.service';
 import { IncomingMessage } from 'http';
 import * as Dockerode from 'dockerode';
-import { Exec } from 'dockerode';
-import { TLSSocket } from 'tls';
 import { DockerClientSettings } from '../settings/settings.model';
 
 import * as path from 'path';

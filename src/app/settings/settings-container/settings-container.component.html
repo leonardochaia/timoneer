@@ -15,51 +15,17 @@
     <div fxFlex="fill">
       <h1 class="tim-text-title"
           style="margin:0">
-        Timoneer v{{appVersion.version}}
+        Timoneer v{{appVersion}}
       </h1>
       <p>
         <small>
-          {{appVersion.git.short}} ({{appVersion.git.branch}})
+          {{appGitVersion.short}} ({{appGitVersion.branch}})
         </small>
       </p>
     </div>
 
-    <ng-container [ngSwitch]="updateStatus">
-      <div *ngSwitchCase="UpdaterStatus.UpToDate">
-        <button type="button"
-                mat-raised-button
-                (click)="checkForUpdates()"
-                color="accent">
-          Check for updates
-        </button>
-      </div>
-
-      <div *ngSwitchCase="UpdaterStatus.Outdated">
-        <button type="button"
-                mat-raised-button
-                (click)="downloadLatestUpdate()"
-                color="primary">
-          Download Update
-        </button>
-      </div>
-
-      <div *ngSwitchCase="UpdaterStatus.CheckingForUpdate"
-           style="min-width: 100px">
-        <tim-loading [alternative]="true"></tim-loading>
-      </div>
-
-      <div *ngSwitchCase="UpdaterStatus.Downloading"
-           style="min-width: 100px">
-        <h3 class="tim-text-title">
-          Downloading {{updateDownloadProgress.transferred}} / {{updateDownloadProgress.total}}
-          <span>
-            ({{updateDownloadProgress.bytesPerSecond}} b/s)
-          </span>
-        </h3>
-        <mat-progress-bar [value]="updateDownloadProgress.percent"></mat-progress-bar>
-      </div>
-    </ng-container>
-
+    <tim-settings-updater fxFlex="grow"
+                          style="text-align: right"></tim-settings-updater>
   </mat-card>
 
   <div fxLayout="column"

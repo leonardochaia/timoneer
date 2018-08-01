@@ -10,6 +10,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { SharedModule } from '../shared/shared.module';
+import { NgMathPipesModule } from 'angular-pipes';
+import { SettingsUpdaterComponent } from './settings-updater/settings-updater.component';
 
 @NgModule({
   imports: [
@@ -28,12 +30,14 @@ import { SharedModule } from '../shared/shared.module';
     MatExpansionModule,
     MatDialogModule,
     MatProgressBarModule,
+    NgMathPipesModule,
 
     SharedModule,
   ],
   declarations: [
     SettingsContainerComponent,
     RegistrySettingsModalComponent,
+    SettingsUpdaterComponent,
   ],
   entryComponents: [
     RegistrySettingsModalComponent,

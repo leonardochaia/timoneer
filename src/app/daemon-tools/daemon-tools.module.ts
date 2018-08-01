@@ -13,13 +13,14 @@ import {
   MatAutocompleteModule,
   MatChipsModule,
   MatListModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatDividerModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
 import { ImageListComponent } from './image-list/image-list.component';
 import { ImageListContainerComponent } from './image-list-container/image-list-container.component';
-import { NgMathPipesModule } from 'angular-pipes';
+import { NgMathPipesModule, NgObjectPipesModule } from 'angular-pipes';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContainerAttacherComponent } from './container-attacher/container-attacher.component';
 import { ContainerAttacherContainerComponent } from './container-attacher-container/container-attacher-container.component';
@@ -33,6 +34,7 @@ import { ContainerCreateContainerComponent } from './container-create-container/
 import { ContainerActionsSheetComponent } from './container-actions-sheet/container-actions-sheet.component';
 import { DaemonService } from './daemon.service';
 import { DaemonEventsService } from './daemon-events.service';
+import { SystemContainerComponent } from './system-container/system-container.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -54,11 +56,13 @@ import { DaemonEventsService } from './daemon-events.service';
     MatChipsModule,
     MatListModule,
     MatBottomSheetModule,
+    MatDividerModule,
 
     SharedModule,
     SettingsModule,
 
-    NgMathPipesModule
+    NgMathPipesModule,
+    NgObjectPipesModule,
   ],
   declarations: [
     ContainerListComponent,
@@ -73,6 +77,7 @@ import { DaemonEventsService } from './daemon-events.service';
     ImageSelectorCardComponent,
     ContainerCreateContainerComponent,
     ContainerActionsSheetComponent,
+    SystemContainerComponent,
   ],
   exports: [
     ContainerListComponent,
