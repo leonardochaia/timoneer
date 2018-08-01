@@ -72,10 +72,21 @@
       <ng-container *ngSwitchCase="VolumeBindingType.Volume">
         <!-- Volume name -->
         <mat-form-field style="display: block">
-          <input type="string"
+          <input type="text"
                  matInput
+                 autocomplete="off"
                  formControlName="volumeName"
-                 placeholder="Volume Name">
+                 placeholder="Volume"
+                 [matAutocomplete]="autoGroup"
+                 #trigger="matAutocompleteTrigger"
+                 (click)="trigger.openPanel()">
+          <mat-autocomplete #autoGroup="matAutocomplete">
+            <mat-option *ngFor="let volume of availableVolumes$ | async"
+                        [value]="volume.Name">
+              {{volume.Name}}
+            </mat-option>
+          </mat-autocomplete>
+
         </mat-form-field>
 
       </ng-container>

@@ -1,14 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { VolumeBinding, ContainerCreationSuggestedVolume, VolumeBindingType } from '../docker-client.model';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, takeUntil, debounceTime, switchMap, startWith } from 'rxjs/operators';
+import { DockerVolumeService } from '../docker-volume.service';
+import { VolumeInfo } from 'dockerode';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'tim-container-create-volume-mapping',
   templateUrl: './container-create-volume-mapping.component.html',
   styleUrls: ['./container-create-volume-mapping.component.scss']
 })
-export class ContainerCreateVolumeMappingComponent {
+export class ContainerCreateVolumeMappingComponent implements OnDestroy {
 
   public VolumeBindingType = VolumeBindingType;
 
@@ -27,7 +30,12 @@ export class ContainerCreateVolumeMappingComponent {
     }
   }
 
-  constructor(private fb: FormBuilder) { }
+  public availableVolumes$: Observable<VolumeInfo[]>;
+
+  private componetDestroyed = new Subject();
+
+  constructor(private fb: FormBuilder,
+    private volumeService: DockerVolumeService) { }
 
   public addVolumeBinding(binding: Partial<VolumeBinding> = null) {
     binding = binding || {};
@@ -50,6 +58,16 @@ export class ContainerCreateVolumeMappingComponent {
       .subscribe(containerPath => {
         group.get('hostPath').setValue(containerPath);
       });
+
+    // suggest volume names when input changes
+    this.availableVolumes$ = group.get('volumeName')
+      .valueChanges
+      .pipe(
+        startWith(''),
+        debounceTime(500),
+        switchMap(term => this.volumeService.list({ filter: term ? `Name=${term}` : '' })),
+        takeUntil(this.componetDestroyed)
+      );
 
     const updateForm = (type: VolumeBindingType) => {
       switch (type) {
@@ -84,5 +102,10 @@ export class ContainerCreateVolumeMappingComponent {
 
   public canAddVolumeBinding() {
     return !this.volumeBindingsArray.length || !this.volumeBindingsArray.controls.some(c => c.invalid);
+  }
+
+  public ngOnDestroy() {
+    this.componetDestroyed.next();
+    this.componetDestroyed.unsubscribe();
   }
 }
