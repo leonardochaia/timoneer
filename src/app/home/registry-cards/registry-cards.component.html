@@ -1,0 +1,47 @@
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          *ngIf="loading || !registries.length"
+          style="margin-bottom: 16px;">
+  <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+  <div fxFlex="grow">
+
+    <ng-container *ngIf="loading">
+      <tim-loading [alternative]="true"></tim-loading>
+    </ng-container>
+
+    <h2 style="margin: 0"
+        *ngIf="registries && !registries.length">
+      <span class="tim-text-title">
+        Add Registries
+      </span>
+      <br>
+      <small>
+        You can add your custom registry so we can list your images.
+      </small>
+    </h2>
+  </div>
+
+  <a fxFlex
+     *ngIf="!loading"
+     mat-raised-button
+     [routerLink]="['/settings/']">
+    Add
+  </a>
+</mat-card>
+
+<ng-container *ngIf="registries && registries.length">
+  <div *ngFor="let registry of registries">
+    <h2>
+      {{registry.name}}
+      <small>
+        <a [routerLink]="['/registry', registry.name]"
+           style="float:right">
+          View all
+        </a>
+      </small>
+    </h2>
+    <tim-registry-list [registryUrl]="registry.url"
+                       [amount]="2"></tim-registry-list>
+  </div>
+</ng-container>

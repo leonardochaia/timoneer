@@ -11,47 +11,7 @@
 
     <tim-hub-settings-card></tim-hub-settings-card>
 
-    <mat-card fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="8px"
-              *ngIf="!registries.length"
-              style="margin-bottom: 16px;">
-      <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
-      <div fxFlex="grow">
-        <h2 style="margin: 0">
-          <span class="tim-text-title">
-            Add Registries
-          </span>
-          <br>
-          <small>
-            You can add your custom registry so we can list your images.
-          </small>
-        </h2>
-      </div>
-
-      <a fxFlex
-         mat-raised-button
-         [routerLink]="['/settings/']">
-        Add
-      </a>
-    </mat-card>
-
-    <ng-container *ngIf="registries">
-      <div *ngFor="let registry of registries">
-        <h2>
-          {{registry.name}}
-          <small>
-            <a [routerLink]="['/registry', registry.name]"
-               style="float:right">
-              View all
-            </a>
-          </small>
-        </h2>
-        <tim-registry-list [registryUrl]="registry.url"
-                           [amount]="2"></tim-registry-list>
-      </div>
-    </ng-container>
-
+    <tim-registry-cards></tim-registry-cards>
   </div>
 
   <div fxFlex.gt-sm="50">

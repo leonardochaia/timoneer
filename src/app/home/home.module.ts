@@ -9,6 +9,7 @@ import { ApplicationTemplatesModule } from '../application-templates/application
 import { DaemonStatusCardComponent } from './daemon-status-card/daemon-status-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { HubSettingsCardComponent } from './hub-settings-card/hub-settings-card.component';
+import { RegistryCardsComponent } from './registry-cards/registry-cards.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { HubSettingsCardComponent } from './hub-settings-card/hub-settings-card.
   declarations: [
     HomeContainerComponent,
     DaemonStatusCardComponent,
-    HubSettingsCardComponent
+    HubSettingsCardComponent,
+    RegistryCardsComponent
   ]
 })
 export class HomeModule { }
