@@ -14,7 +14,8 @@ import {
   MatChipsModule,
   MatListModule,
   MatBottomSheetModule,
-  MatDividerModule
+  MatDividerModule,
+  MatRadioModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
@@ -63,6 +64,7 @@ import { ContainerCreateVolumeMappingComponent } from './container-create-volume
     MatListModule,
     MatBottomSheetModule,
     MatDividerModule,
+    MatRadioModule,
 
     SharedModule,
     SettingsModule,

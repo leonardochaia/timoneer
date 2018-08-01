@@ -2,12 +2,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
-import { ContainerCreateOptions, ImageInspectInfo, Container } from 'dockerode';
+import { ImageInspectInfo, Container, ContainerCreateBody } from 'dockerode';
 import { from } from 'rxjs';
 import { DockerContainerService } from '../docker-container.service';
 import {
   ContainerCreationSuggestedPort, PortBinding,
-  ContainerCreationSuggestedVolume, VolumeBinding
+  ContainerCreationSuggestedVolume, VolumeBinding, VolumeBindingType
 } from '../docker-client.model';
 
 @Component({
@@ -73,12 +73,13 @@ export class ContainerCreateComponent implements OnInit {
   }
 
   public launch() {
-    const data: ContainerCreateOptions = {
+    const data: ContainerCreateBody = {
       Image: this.form.getRawValue().image,
       Tty: this.form.value.launchConfig.tty,
       HostConfig: {
         PortBindings: {},
         Binds: [],
+        Mounts: []
       },
       // Required so that attach works.
       OpenStdin: true,
@@ -91,7 +92,12 @@ export class ContainerCreateComponent implements OnInit {
     }
 
     for (const volumeMapping of this.volumeBindingsArray.controls.map(c => c.value as VolumeBinding)) {
-      data.HostConfig.Binds.push(`${volumeMapping.hostPath}:${volumeMapping.containerPath}:${volumeMapping.readonly ? 'ro' : 'rw'}`);
+      data.HostConfig.Mounts.push({
+        Target: volumeMapping.containerPath,
+        Source: volumeMapping.type === VolumeBindingType.Volume ? volumeMapping.volumeName : volumeMapping.hostPath,
+        Type: volumeMapping.type.toString(),
+        ReadOnly: volumeMapping.readonly
+      });
     }
 
     const launchConfig = this.form.get('launchConfig').value;

@@ -29,6 +29,13 @@ export interface PortBinding {
 export interface VolumeBinding {
     containerPath?: string;
     hostPath?: string;
+    volumeName?: string;
     description?: string;
     readonly?: boolean;
+    type?: VolumeBindingType;
+}
+
+export enum VolumeBindingType {
+    Bind = 'bind',
+    Volume = 'volume'
 }

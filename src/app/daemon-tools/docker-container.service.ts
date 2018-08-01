@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DockerService } from './docker.service';
 import { map, take, switchMap } from 'rxjs/operators';
-import { ContainerCreateOptions, Container, ExecConfig, Exec } from 'dockerode';
+import { Container, ExecConfig, Exec, ContainerCreateBody } from 'dockerode';
 import { from } from 'rxjs';
 import { TLSSocket } from 'tls';
 
@@ -43,8 +43,8 @@ export class DockerContainerService {
       .pipe(take(1));
   }
 
-  public create(options: ContainerCreateOptions) {
-    return this.daemon.docker(d => d.createContainer(options))
+  public create(options: ContainerCreateBody) {
+    return this.daemon.docker(d => d.createContainer(options as any))
       .pipe(take(1));
   }
 

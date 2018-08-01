@@ -9,6 +9,7 @@
     Add Volume Mapping
   </button>
 
+  <!-- Suggested volumes -->
   <mat-chip-list multiple="false"
                  *ngIf="filteredVolumes && filteredVolumes.length">
     <mat-chip *ngFor="let volume of filteredVolumes"
@@ -18,17 +19,18 @@
   </mat-chip-list>
 </div>
 
-
 <div style="max-height: 400px; overflow:auto; margin-top: 8px">
   <mat-card *ngFor="let mapping of volumeBindingsArray.controls"
             [formGroup]="mapping"
             [ngClass]="{'bg-invalid': mapping.invalid}"
             style="margin:16px">
 
+    <!-- Description -->
     <p *ngIf="mapping.value.description">
       {{mapping.value.description}}
     </p>
 
+    <!-- Container Path -->
     <mat-form-field style="display: block">
       <input type="string"
              matInput
@@ -36,13 +38,50 @@
              placeholder="Container Path">
     </mat-form-field>
 
-    <mat-form-field style="display: block">
-      <input type="string"
-             matInput
-             formControlName="hostPath"
-             placeholder="Host Path">
-    </mat-form-field>
+    <div fxLayout="column"
+         fxLayout.gt-md="row"
+         fxLayoutGap="8px"
+         style="margin-bottom: 6px">
+      <div>
+        Map to
+      </div>
+      <mat-radio-group formControlName="type">
+        <mat-radio-button value="bind">
+          Host Directory
+        </mat-radio-button>
+        <mat-radio-button value="volume">
+          Docker Volume
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
 
+    <ng-container [ngSwitch]="mapping.value.type">
+      <!-- Directory binding -->
+      <ng-container *ngSwitchCase="VolumeBindingType.Bind">
+        <!-- Host Path -->
+        <mat-form-field style="display: block">
+          <input type="string"
+                 matInput
+                 formControlName="hostPath"
+                 placeholder="Host Path">
+        </mat-form-field>
+
+      </ng-container>
+
+      <!-- Volume mapping -->
+      <ng-container *ngSwitchCase="VolumeBindingType.Volume">
+        <!-- Volume name -->
+        <mat-form-field style="display: block">
+          <input type="string"
+                 matInput
+                 formControlName="volumeName"
+                 placeholder="Volume Name">
+        </mat-form-field>
+
+      </ng-container>
+    </ng-container>
+
+    <!-- Read Only -->
     <mat-checkbox formControlName="readonly">
       Read-only
     </mat-checkbox>
@@ -54,5 +93,6 @@
             mat-raised-button>
       Remove
     </button>
+    <div style="clear: both"></div>
   </mat-card>
 </div>

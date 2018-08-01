@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormArray, Validators, AbstractControl } from '@angular/forms';
-import { VolumeBinding, ContainerCreationSuggestedVolume } from '../docker-client.model';
+import { VolumeBinding, ContainerCreationSuggestedVolume, VolumeBindingType } from '../docker-client.model';
 import { takeWhile } from 'rxjs/operators';
 
 @Component({
@@ -8,7 +8,9 @@ import { takeWhile } from 'rxjs/operators';
   templateUrl: './container-create-volume-mapping.component.html',
   styleUrls: ['./container-create-volume-mapping.component.scss']
 })
-export class ContainerCreateVolumeMappingComponent implements OnInit {
+export class ContainerCreateVolumeMappingComponent {
+
+  public VolumeBindingType = VolumeBindingType;
 
   @Input()
   public volumeBindingsArray: FormArray;
@@ -27,16 +29,15 @@ export class ContainerCreateVolumeMappingComponent implements OnInit {
 
   constructor(private fb: FormBuilder) { }
 
-  public ngOnInit() {
-  }
-
   public addVolumeBinding(binding: Partial<VolumeBinding> = null) {
     binding = binding || {};
     const group = this.fb.group({
       'containerPath': [binding.containerPath, Validators.required],
-      'hostPath': [binding.hostPath, Validators.required],
       'description': [binding.description],
-      'readonly': [binding.readonly || false, Validators.required]
+      'type': [binding.type || VolumeBindingType.Bind, Validators.required],
+      'readonly': [binding.readonly || false],
+      'hostPath': [binding.hostPath],
+      'volumeName': [binding.volumeName],
     });
 
     this.volumeBindingsArray.push(group);
@@ -49,6 +50,32 @@ export class ContainerCreateVolumeMappingComponent implements OnInit {
       .subscribe(containerPath => {
         group.get('hostPath').setValue(containerPath);
       });
+
+    const updateForm = (type: VolumeBindingType) => {
+      switch (type) {
+        case VolumeBindingType.Volume:
+          group.get('hostPath').setValidators([]);
+          group.get('hostPath').disable();
+
+          group.get('volumeName').setValidators([Validators.required]);
+          group.get('volumeName').enable();
+          break;
+
+        case VolumeBindingType.Bind:
+          group.get('hostPath').setValidators([Validators.required]);
+          group.get('hostPath').enable();
+
+          group.get('volumeName').setValidators([]);
+          group.get('volumeName').disable();
+          break;
+      }
+      group.get('hostPath').updateValueAndValidity();
+    };
+
+    updateForm(group.get('type').value);
+
+    // update form when type changes
+    group.get('type').valueChanges.subscribe(updateForm);
   }
 
   public removeVolumeBinding(control: AbstractControl) {

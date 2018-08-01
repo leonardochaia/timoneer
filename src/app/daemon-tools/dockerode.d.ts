@@ -153,7 +153,7 @@ declare module 'dockerode' {
          * @type {string}
          * @memberof Mount
          */
-        Type: Mount.TypeEnum;
+        Type: string;
         /**
          * Whether the mount should be read-only.
          * @type {boolean}
@@ -253,21 +253,6 @@ declare module 'dockerode' {
         Options: {
             [key: string]: string;
         };
-    }
-    /**
-     * @export
-     * @namespace Mount
-     */
-    export namespace Mount {
-        /**
-         * @export
-         * @enum {string}
-         */
-        enum TypeEnum {
-            Bind,
-            Volume,
-            Tmpfs,
-        }
     }
 
     /**
@@ -443,7 +428,7 @@ declare module 'dockerode' {
          * @type {string}
          * @memberof SystemInfo
          */
-        CgroupDriver?: SystemInfo.CgroupDriverEnum;
+        CgroupDriver?: string;
         /**
          * Number of event listeners subscribed.
          * @type {number}
@@ -589,7 +574,7 @@ declare module 'dockerode' {
          * @type {string}
          * @memberof SystemInfo
          */
-        Isolation?: SystemInfo.IsolationEnum;
+        Isolation?: string;
         /**
          * Name and, optional, path of the the `docker-init` binary.  If the path is omitted, the daemon searches the host's `$PATH` for the binary and uses the first result.
          * @type {string}
@@ -768,26 +753,11 @@ declare module 'dockerode' {
         Addr?: string;
     }
 
-
     /**
-     * Current local status of this node.
-     * @export
-     * @enum {string}
-     */
-    export enum LocalNodeState {
-        Empty,
-        Inactive,
-        Pending,
-        Active,
-        Error,
-        Locked,
-    }
-
-    /**
-     * Represents generic information about swarm.
-     * @export
-     * @interface SwarmInfo
-     */
+         * Represents generic information about swarm.
+         * @export
+         * @interface SwarmInfo
+         */
     export interface SwarmInfo {
         /**
          * Unique identifier of for this node in the swarm.
@@ -806,7 +776,7 @@ declare module 'dockerode' {
          * @type {LocalNodeState}
          * @memberof SwarmInfo
          */
-        LocalNodeState?: LocalNodeState;
+        LocalNodeState?: string;
         /**
          *
          * @type {boolean}
@@ -1041,7 +1011,7 @@ declare module 'dockerode' {
          * @type {string}
          * @memberof SwarmSpecCAConfigExternalCAs
          */
-        Protocol?: SwarmSpecCAConfigExternalCAs.ProtocolEnum;
+        Protocol?: string;
         /**
          * URL where certificate signing requests should be sent.
          * @type {string}
@@ -1062,19 +1032,6 @@ declare module 'dockerode' {
          * @memberof SwarmSpecCAConfigExternalCAs
          */
         CACert?: string;
-    }
-    /**
-     * @export
-     * @namespace SwarmSpecCAConfigExternalCAs
-     */
-    export namespace SwarmSpecCAConfigExternalCAs {
-        /**
-         * @export
-         * @enum {string}
-         */
-        enum ProtocolEnum {
-            Cfssl,
-        }
     }
     /**
      * Dispatcher configuration.
@@ -1186,32 +1143,6 @@ declare module 'dockerode' {
             [key: string]: string;
         };
     }
-
-
-    /**
-     * @export
-     * @namespace SystemInfo
-     */
-    export namespace SystemInfo {
-        /**
-         * @export
-         * @enum {string}
-         */
-        enum CgroupDriverEnum {
-            Cgroupfs,
-            Systemd,
-        }
-        /**
-         * @export
-         * @enum {string}
-         */
-        enum IsolationEnum {
-            Default,
-            Hyperv,
-            Process,
-        }
-    }
-
 
     /**
      * Runtime describes an [OCI compliant](https://github.com/opencontainers/runtime-spec) runtime.  The runtime is invoked by the daemon via the `containerd` daemon. OCI runtimes act as an interface to the Linux kernel namespaces, cgroups, and SELinux.
@@ -1511,7 +1442,7 @@ declare module 'dockerode' {
          * @type {string}
          * @memberof VolumeInfo
          */
-        Scope: VolumeInfo.ScopeEnum;
+        Scope: string;
         /**
          * The driver specific options used when creating the volume.
          * @type {{ [key: string]: string; }}
@@ -1526,21 +1457,6 @@ declare module 'dockerode' {
          * @memberof VolumeInfo
          */
         UsageData?: VolumeUsageData;
-    }
-
-    /**
-     * @export
-     * @namespace Volume
-     */
-    export namespace VolumeInfo {
-        /**
-         * @export
-         * @enum {string}
-         */
-        enum ScopeEnum {
-            Local,
-            Global,
-        }
     }
 
     /**
@@ -1623,5 +1539,965 @@ declare module 'dockerode' {
          * @memberof ExecConfig
          */
         User?: string;
+    }
+
+    /**
+     *
+     * @export
+     * @interface ContainerCreateBody
+     */
+    export interface ContainerCreateBody {
+        /**
+         * The hostname to use for the container, as a valid RFC 1123 hostname.
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        Hostname?: string;
+        /**
+         * The domain name to use for the container.
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        Domainname?: string;
+        /**
+         * The user that commands are run as inside the container.
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        User?: string;
+        /**
+         * Whether to attach to `stdin`.
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        AttachStdin?: boolean;
+        /**
+         * Whether to attach to `stdout`.
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        AttachStdout?: boolean;
+        /**
+         * Whether to attach to `stderr`.
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        AttachStderr?: boolean;
+        /**
+         * An object mapping ports to an empty object in the form:  `{\"<port>/<tcp|udp>\": {}}`
+         * @type {{ [key: string]: any; }}
+         * @memberof ContainerCreateBody
+         */
+        ExposedPorts?: {
+            [key: string]: any;
+        };
+        /**
+         * Attach standard streams to a TTY, including `stdin` if it is not closed.
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        Tty?: boolean;
+        /**
+         * Open `stdin`
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        OpenStdin?: boolean;
+        /**
+         * Close `stdin` after one attached client disconnects
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        StdinOnce?: boolean;
+        /**
+         * A list of environment variables to set inside the container in the form `[\"VAR=value\", ...]`. A variable without `=` is removed from the environment, rather than to have an empty value.
+         * @type {Array&lt;string&gt;}
+         * @memberof ContainerCreateBody
+         */
+        Env?: Array<string>;
+        /**
+         * Command to run specified as a string or an array of strings.
+         * @type {Array&lt;string&gt;}
+         * @memberof ContainerCreateBody
+         */
+        Cmd?: Array<string>;
+        /**
+         *
+         * @type {HealthConfig}
+         * @memberof ContainerCreateBody
+         */
+        Healthcheck?: HealthConfig;
+        /**
+         * Command is already escaped (Windows only)
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        ArgsEscaped?: boolean;
+        /**
+         * The name of the image to use when creating the container
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        Image?: string;
+        /**
+         *
+         * @type {ContainerConfigVolumes}
+         * @memberof ContainerCreateBody
+         */
+        Volumes?: ContainerConfigVolumes;
+        /**
+         * The working directory for commands to run in.
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        WorkingDir?: string;
+        /**
+         * The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (`[\"\"]`) then the entry point is reset to system default (i.e., the entry point used by docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+         * @type {Array&lt;string&gt;}
+         * @memberof ContainerCreateBody
+         */
+        Entrypoint?: Array<string>;
+        /**
+         * Disable networking for the container.
+         * @type {boolean}
+         * @memberof ContainerCreateBody
+         */
+        NetworkDisabled?: boolean;
+        /**
+         * MAC address of the container.
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        MacAddress?: string;
+        /**
+         * `ONBUILD` metadata that were defined in the image's `Dockerfile`.
+         * @type {Array&lt;string&gt;}
+         * @memberof ContainerCreateBody
+         */
+        OnBuild?: Array<string>;
+        /**
+         * User-defined key/value metadata.
+         * @type {{ [key: string]: string; }}
+         * @memberof ContainerCreateBody
+         */
+        Labels?: {
+            [key: string]: string;
+        };
+        /**
+         * Signal to stop a container as a string or unsigned integer.
+         * @type {string}
+         * @memberof ContainerCreateBody
+         */
+        StopSignal?: string;
+        /**
+         * Timeout to stop a container in seconds.
+         * @type {number}
+         * @memberof ContainerCreateBody
+         */
+        StopTimeout?: number;
+        /**
+         * Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
+         * @type {Array&lt;string&gt;}
+         * @memberof ContainerCreateBody
+         */
+        Shell?: Array<string>;
+        /**
+         *
+         * @type {HostConfig}
+         * @memberof ContainerCreateBody
+         */
+        HostConfig?: ContainerCreateBodyHostConfig;
+        /**
+         *
+         * @type {ContainerCreateBodyNetworkingConfig}
+         * @memberof ContainerCreateBody
+         */
+        NetworkingConfig?: ContainerCreateBodyNetworkingConfig;
+
+        /** Container Name */
+        name?: string
+    }
+
+    /**
+     * An object mapping mount point paths inside the container to empty objects.
+     * @export
+     * @interface ContainerConfigVolumes
+     */
+    export interface ContainerConfigVolumes {
+        /**
+         *
+         * @type {any}
+         * @memberof ContainerConfigVolumes
+         */
+        additionalProperties?: any;
+    }
+
+    /**
+     * A test to perform to check that the container is healthy.
+     * @export
+     * @interface HealthConfig
+     */
+    export interface HealthConfig {
+        /**
+         * The test to perform. Possible values are:  - `[]` inherit healthcheck from image or parent image - `[\"NONE\"]` disable healthcheck - `[\"CMD\", args...]` exec arguments directly - `[\"CMD-SHELL\", command]` run command with system's default shell
+         * @type {Array&lt;string&gt;}
+         * @memberof HealthConfig
+         */
+        Test?: Array<string>;
+        /**
+         * The time to wait between checks in nanoseconds. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+         * @type {number}
+         * @memberof HealthConfig
+         */
+        Interval?: number;
+        /**
+         * The time to wait before considering the check to have hung. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+         * @type {number}
+         * @memberof HealthConfig
+         */
+        Timeout?: number;
+        /**
+         * The number of consecutive failures needed to consider a container as unhealthy. 0 means inherit.
+         * @type {number}
+         * @memberof HealthConfig
+         */
+        Retries?: number;
+        /**
+         * Start period for the container to initialize before starting health-retries countdown in nanoseconds. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+         * @type {number}
+         * @memberof HealthConfig
+         */
+        StartPeriod?: number;
+    }
+
+    /**
+     * This container's networking configuration.
+     * @export
+     * @interface ContainerCreateBodyNetworkingConfig
+     */
+    export interface ContainerCreateBodyNetworkingConfig {
+        /**
+         * A mapping of network name to endpoint configuration for that network.
+         * @type {{ [key: string]: EndpointSettings; }}
+         * @memberof ContainerCreateBodyNetworkingConfig
+         */
+        EndpointsConfig?: {
+            [key: string]: EndpointSettings;
+        };
+    }
+
+    /**
+     * Configuration for a network endpoint.
+     * @export
+     * @interface EndpointSettings
+     */
+    export interface EndpointSettings {
+        /**
+         *
+         * @type {EndpointIPAMConfig}
+         * @memberof EndpointSettings
+         */
+        IPAMConfig?: EndpointIPAMConfig;
+        /**
+         *
+         * @type {Array&lt;string&gt;}
+         * @memberof EndpointSettings
+         */
+        Links?: Array<string>;
+        /**
+         *
+         * @type {Array&lt;string&gt;}
+         * @memberof EndpointSettings
+         */
+        Aliases?: Array<string>;
+        /**
+         * Unique ID of the network.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        NetworkID?: string;
+        /**
+         * Unique ID for the service endpoint in a Sandbox.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        EndpointID?: string;
+        /**
+         * Gateway address for this network.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        Gateway?: string;
+        /**
+         * IPv4 address.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        IPAddress?: string;
+        /**
+         * Mask length of the IPv4 address.
+         * @type {number}
+         * @memberof EndpointSettings
+         */
+        IPPrefixLen?: number;
+        /**
+         * IPv6 gateway address.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        IPv6Gateway?: string;
+        /**
+         * Global IPv6 address.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        GlobalIPv6Address?: string;
+        /**
+         * Mask length of the global IPv6 address.
+         * @type {number}
+         * @memberof EndpointSettings
+         */
+        GlobalIPv6PrefixLen?: number;
+        /**
+         * MAC address for the endpoint on this network.
+         * @type {string}
+         * @memberof EndpointSettings
+         */
+        MacAddress?: string;
+        /**
+         * DriverOpts is a mapping of driver options and values. These options are passed directly to the driver and are driver specific.
+         * @type {{ [key: string]: string; }}
+         * @memberof EndpointSettings
+         */
+        DriverOpts?: {
+            [key: string]: string;
+        };
+    }
+
+    /**
+     * Container configuration that depends on the host we are running on
+     * @export
+     * @interface HostConfig
+     */
+    export interface ContainerCreateBodyHostConfig {
+        /**
+         * An integer value representing this container's relative CPU weight versus other containers.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuShares?: number;
+        /**
+         * Memory limit in bytes.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        Memory?: number;
+        /**
+         * Path to `cgroups` under which the container's `cgroup` is created. If the path is not absolute, the path is considered to be relative to the `cgroups` path of the init process. Cgroups are created if they do not already exist.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        CgroupParent?: string;
+        /**
+         * Block IO weight (relative weight).
+         * @type {number}
+         * @memberof HostConfig
+         */
+        BlkioWeight?: number;
+        /**
+         * Block IO weight (relative device weight) in the form `[{\"Path\": \"device_path\", \"Weight\": weight}]`.
+         * @type {Array&lt;ResourcesBlkioWeightDevice&gt;}
+         * @memberof HostConfig
+         */
+        BlkioWeightDevice?: Array<ResourcesBlkioWeightDevice>;
+        /**
+         * Limit read rate (bytes per second) from a device, in the form `[{\"Path\": \"device_path\", \"Rate\": rate}]`.
+         * @type {Array&lt;ThrottleDevice&gt;}
+         * @memberof HostConfig
+         */
+        BlkioDeviceReadBps?: Array<ThrottleDevice>;
+        /**
+         * Limit write rate (bytes per second) to a device, in the form `[{\"Path\": \"device_path\", \"Rate\": rate}]`.
+         * @type {Array&lt;ThrottleDevice&gt;}
+         * @memberof HostConfig
+         */
+        BlkioDeviceWriteBps?: Array<ThrottleDevice>;
+        /**
+         * Limit read rate (IO per second) from a device, in the form `[{\"Path\": \"device_path\", \"Rate\": rate}]`.
+         * @type {Array&lt;ThrottleDevice&gt;}
+         * @memberof HostConfig
+         */
+        BlkioDeviceReadIOps?: Array<ThrottleDevice>;
+        /**
+         * Limit write rate (IO per second) to a device, in the form `[{\"Path\": \"device_path\", \"Rate\": rate}]`.
+         * @type {Array&lt;ThrottleDevice&gt;}
+         * @memberof HostConfig
+         */
+        BlkioDeviceWriteIOps?: Array<ThrottleDevice>;
+        /**
+         * The length of a CPU period in microseconds.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuPeriod?: number;
+        /**
+         * Microseconds of CPU time that the container can get in a CPU period.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuQuota?: number;
+        /**
+         * The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuRealtimePeriod?: number;
+        /**
+         * The length of a CPU real-time runtime in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuRealtimeRuntime?: number;
+        /**
+         * CPUs in which to allow execution (e.g., `0-3`, `0,1`)
+         * @type {string}
+         * @memberof HostConfig
+         */
+        CpusetCpus?: string;
+        /**
+         * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        CpusetMems?: string;
+        /**
+         * A list of devices to add to the container.
+         * @type {Array&lt;DeviceMapping&gt;}
+         * @memberof HostConfig
+         */
+        Devices?: Array<DeviceMapping>;
+        /**
+         * a list of cgroup rules to apply to the container
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        DeviceCgroupRules?: Array<string>;
+        /**
+         * Disk limit (in bytes).
+         * @type {number}
+         * @memberof HostConfig
+         */
+        DiskQuota?: number;
+        /**
+         * Kernel memory limit in bytes.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        KernelMemory?: number;
+        /**
+         * Memory soft limit in bytes.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        MemoryReservation?: number;
+        /**
+         * Total memory limit (memory + swap). Set as `-1` to enable unlimited swap.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        MemorySwap?: number;
+        /**
+         * Tune a container's memory swappiness behavior. Accepts an integer between 0 and 100.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        MemorySwappiness?: number;
+        /**
+         * CPU quota in units of 10<sup>-9</sup> CPUs.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        NanoCPUs?: number;
+        /**
+         * Disable OOM Killer for the container.
+         * @type {boolean}
+         * @memberof HostConfig
+         */
+        OomKillDisable?: boolean;
+        /**
+         * Tune a container's pids limit. Set -1 for unlimited.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        PidsLimit?: number;
+        /**
+         * A list of resource limits to set in the container. For example: `{\"Name\": \"nofile\", \"Soft\": 1024, \"Hard\": 2048}`\"
+         * @type {Array&lt;ResourcesUlimits&gt;}
+         * @memberof HostConfig
+         */
+        Ulimits?: Array<ResourcesUlimits>;
+        /**
+         * The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuCount?: number;
+        /**
+         * The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        CpuPercent?: number;
+        /**
+         * Maximum IOps for the container system drive (Windows only)
+         * @type {number}
+         * @memberof HostConfig
+         */
+        IOMaximumIOps?: number;
+        /**
+         * Maximum IO in bytes per second for the container system drive (Windows only)
+         * @type {number}
+         * @memberof HostConfig
+         */
+        IOMaximumBandwidth?: number;
+        /**
+         * A list of volume bindings for this container. Each volume binding is a string in one of these forms:  
+         * - `host-src:container-dest` to bind-mount a host path into the container. 
+         * Both `host-src`, and `container-dest` must be an _absolute_ path. - `host-src:container-dest:ro` 
+         * to make the bind mount read-only inside the container. Both `host-src`, and `container-dest` 
+         * must be an _absolute_ path. - `volume-name:container-dest` to bind-mount a volume managed by 
+         * a volume driver into the container. `container-dest` must be an _absolute_ path.
+         *  - `volume-name:container-dest:ro` to mount the volume read-only inside the container. 
+         *  `container-dest` must be an _absolute_ path.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        Binds?: Array<string>;
+        /**
+         * Path to a file where the container ID is written
+         * @type {string}
+         * @memberof HostConfig
+         */
+        ContainerIDFile?: string;
+        /**
+         *
+         * @type {HostConfigLogConfig}
+         * @memberof HostConfig
+         */
+        LogConfig?: HostConfigLogConfig;
+        /**
+         * Network mode to use for this container. Supported standard values are: `bridge`, `host`, 
+         * `none`, and `container:<name|id>`. Any other value is taken as a custom network's 
+         * name to which this container should connect to.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        NetworkMode?: string;
+        /**
+         * A map of exposed container ports and the host port they should map to.
+         * @type {{ [key: string]: HostConfigPortBindings; }}
+         * @memberof HostConfig
+         */
+        PortBindings?: {
+            [key: string]: HostConfigPortBindings;
+        };
+        /**
+         *
+         * @type {RestartPolicy}
+         * @memberof HostConfig
+         */
+        RestartPolicy?: RestartPolicy;
+        /**
+         * Automatically remove the container when the container's process exits. This has no effect if `RestartPolicy` is set.
+         * @type {boolean}
+         * @memberof HostConfig
+         */
+        AutoRemove?: boolean;
+        /**
+         * Driver that this container uses to mount volumes.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        VolumeDriver?: string;
+        /**
+         * A list of volumes to inherit from another container, specified in the form `<container name>[:<ro|rw>]`.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        VolumesFrom?: Array<string>;
+        /**
+         * Specification for mounts to be added to the container.
+         * @type {Array&lt;Mount&gt;}
+         * @memberof HostConfig
+         */
+        Mounts?: Array<ContainerCreateBodyMount>;
+        /**
+         * A list of kernel capabilities to add to the container.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        CapAdd?: Array<string>;
+        /**
+         * A list of kernel capabilities to drop from the container.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        CapDrop?: Array<string>;
+        /**
+         * A list of DNS servers for the container to use.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        Dns?: Array<string>;
+        /**
+         * A list of DNS options.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        DnsOptions?: Array<string>;
+        /**
+         * A list of DNS search domains.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        DnsSearch?: Array<string>;
+        /**
+         * A list of hostnames/IP mappings to add to the container's `/etc/hosts` file. Specified in the form `[\"hostname:IP\"]`.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        ExtraHosts?: Array<string>;
+        /**
+         * A list of additional groups that the container process will run as.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        GroupAdd?: Array<string>;
+        /**
+         * IPC sharing mode for the container. Possible values are:  - `\"none\"`: own private IPC namespace, with /dev/shm not mounted - `\"private\"`: own private IPC namespace - `\"shareable\"`: own private IPC namespace, with a possibility to share it with other containers - `\"container:<name|id>\"`: join another (shareable) container's IPC namespace - `\"host\"`: use the host system's IPC namespace  If not specified, daemon default is used, which can either be `\"private\"` or `\"shareable\"`, depending on daemon version and configuration.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        IpcMode?: string;
+        /**
+         * Cgroup to use for the container.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        Cgroup?: string;
+        /**
+         * A list of links for the container in the form `container_name:alias`.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        Links?: Array<string>;
+        /**
+         * An integer value containing the score given to the container in order to tune OOM killer preferences.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        OomScoreAdj?: number;
+        /**
+         * Set the PID (Process) Namespace mode for the container. It can be either:  - `\"container:<name|id>\"`: joins another container's PID namespace - `\"host\"`: use the host's PID namespace inside the container
+         * @type {string}
+         * @memberof HostConfig
+         */
+        PidMode?: string;
+        /**
+         * Gives the container full access to the host.
+         * @type {boolean}
+         * @memberof HostConfig
+         */
+        Privileged?: boolean;
+        /**
+         * Allocates a random host port for all of a container's exposed ports.
+         * @type {boolean}
+         * @memberof HostConfig
+         */
+        PublishAllPorts?: boolean;
+        /**
+         * Mount the container's root filesystem as read only.
+         * @type {boolean}
+         * @memberof HostConfig
+         */
+        ReadonlyRootfs?: boolean;
+        /**
+         * A list of string values to customize labels for MLS systems, such as SELinux.
+         * @type {Array&lt;string&gt;}
+         * @memberof HostConfig
+         */
+        SecurityOpt?: Array<string>;
+        /**
+         * Storage driver options for this container, in the form `{\"size\": \"120G\"}`.
+         * @type {{ [key: string]: string; }}
+         * @memberof HostConfig
+         */
+        StorageOpt?: {
+            [key: string]: string;
+        };
+        /**
+         * A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: `{ \"/run\": \"rw,noexec,nosuid,size=65536k\" }`.
+         * @type {{ [key: string]: string; }}
+         * @memberof HostConfig
+         */
+        Tmpfs?: {
+            [key: string]: string;
+        };
+        /**
+         * UTS namespace to use for the container.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        UTSMode?: string;
+        /**
+         * Sets the usernamespace mode for the container when usernamespace remapping option is enabled.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        UsernsMode?: string;
+        /**
+         * Size of `/dev/shm` in bytes. If omitted, the system uses 64MB.
+         * @type {number}
+         * @memberof HostConfig
+         */
+        ShmSize?: number;
+        /**
+         * A list of kernel parameters (sysctls) to set in the container. For example: `{\"net.ipv4.ip_forward\": \"1\"}`
+         * @type {{ [key: string]: string; }}
+         * @memberof HostConfig
+         */
+        Sysctls?: {
+            [key: string]: string;
+        };
+        /**
+         * Runtime to use with this container.
+         * @type {string}
+         * @memberof HostConfig
+         */
+        Runtime?: string;
+        /**
+         * Initial console size, as an `[height, width]` array. (Windows only)
+         * @type {Array&lt;number&gt;}
+         * @memberof HostConfig
+         */
+        ConsoleSize?: Array<number>;
+        /**
+         * Isolation technology of the container. (Windows only)
+         * @type {string}
+         * @memberof HostConfig
+         */
+        Isolation?: string;
+    }
+    /**
+     *
+     * @export
+     * @interface ResourcesBlkioWeightDevice
+     */
+    export interface ResourcesBlkioWeightDevice {
+        /**
+         *
+         * @type {string}
+         * @memberof ResourcesBlkioWeightDevice
+         */
+        Path?: string;
+        /**
+         *
+         * @type {number}
+         * @memberof ResourcesBlkioWeightDevice
+         */
+        Weight?: number;
+    }
+
+
+    /**
+     *
+     * @export
+     * @interface ThrottleDevice
+     */
+    export interface ThrottleDevice {
+        /**
+         * Device path
+         * @type {string}
+         * @memberof ThrottleDevice
+         */
+        Path?: string;
+        /**
+         * Rate
+         * @type {number}
+         * @memberof ThrottleDevice
+         */
+        Rate?: number;
+    }
+
+
+    /**
+     * A device mapping between the host and container
+     * @export
+     * @interface DeviceMapping
+     */
+    export interface DeviceMapping {
+        /**
+         *
+         * @type {string}
+         * @memberof DeviceMapping
+         */
+        PathOnHost?: string;
+        /**
+         *
+         * @type {string}
+         * @memberof DeviceMapping
+         */
+        PathInContainer?: string;
+        /**
+         *
+         * @type {string}
+         * @memberof DeviceMapping
+         */
+        CgroupPermissions?: string;
+    }
+
+    /**
+     * The logging configuration for this container
+     * @export
+     * @interface HostConfigLogConfig
+     */
+    export interface HostConfigLogConfig {
+        /**
+         *
+         * @type {string}
+         * @memberof HostConfigLogConfig
+         */
+        Type?: string;
+        /**
+         *
+         * @type {{ [key: string]: string; }}
+         * @memberof HostConfigLogConfig
+         */
+        Config?: {
+            [key: string]: string;
+        };
+    }
+
+
+    /**
+     * The behavior to apply when the container exits. The default is not to restart.  An ever increasing delay (double the previous delay, starting at 100ms) is added before each restart to prevent flooding the server.
+     * @export
+     * @interface RestartPolicy
+     */
+    export interface RestartPolicy {
+        /**
+         * - Empty string means not to restart - `always` Always restart - `unless-stopped` Restart always except when the user has manually stopped the container - `on-failure` Restart only when the container exit code is non-zero
+         * @type {string}
+         * @memberof RestartPolicy
+         */
+        Name?: string;
+        /**
+         * If `on-failure` is used, the number of times to retry before giving up
+         * @type {number}
+         * @memberof RestartPolicy
+         */
+        MaximumRetryCount?: number;
+    }
+
+    /**
+     *
+     * @export
+     * @interface HostConfigPortBindings
+     */
+    export interface HostConfigPortBindings {
+        /**
+         * The host IP address
+         * @type {string}
+         * @memberof HostConfigPortBindings
+         */
+        HostIp?: string;
+        /**
+         * The host port number, as a string
+         * @type {string}
+         * @memberof HostConfigPortBindings
+         */
+        HostPort?: string;
+    }
+
+    /**
+     *
+     * @export
+     * @interface ResourcesUlimits
+     */
+    export interface ResourcesUlimits {
+        /**
+         * Name of ulimit
+         * @type {string}
+         * @memberof ResourcesUlimits
+         */
+        Name?: string;
+        /**
+         * Soft limit
+         * @type {number}
+         * @memberof ResourcesUlimits
+         */
+        Soft?: number;
+        /**
+         * Hard limit
+         * @type {number}
+         * @memberof ResourcesUlimits
+         */
+        Hard?: number;
+    }
+
+    /**
+     *
+     * @export
+     * @interface Mount
+     */
+    export interface ContainerCreateBodyMount {
+        /**
+         * Container path.
+         * @type {string}
+         * @memberof Mount
+         */
+        Target?: string;
+        /**
+         * Mount source (e.g. a volume name, a host path).
+         * @type {string}
+         * @memberof Mount
+         */
+        Source?: string;
+        /**
+         * The mount type. Available types:  - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container. - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
+         * @type {string}
+         * @memberof Mount
+         */
+        Type?: string;
+        /**
+         * Whether the mount should be read-only.
+         * @type {boolean}
+         * @memberof Mount
+         */
+        ReadOnly?: boolean;
+        /**
+         * The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.
+         * @type {string}
+         * @memberof Mount
+         */
+        Consistency?: string;
+        /**
+         * Optional configuration for the `bind` type.
+         * @type {any}
+         * @memberof Mount
+         */
+        BindOptions?: any;
+        /**
+         *
+         * @type {MountVolumeOptions}
+         * @memberof Mount
+         */
+        VolumeOptions?: MountVolumeOptions;
+        /**
+         *
+         * @type {MountTmpfsOptions}
+         * @memberof Mount
+         */
+        TmpfsOptions?: MountTmpfsOptions;
     }
 }
