@@ -54,10 +54,9 @@ matrix:
             electronuserland/builder:wine \
             /bin/bash -c 'yarn travis-pre-build && yarn electron:build --linux --win'
 
-# Disabled until next release since some commits don't comply        
-# before_script:
-#   - yarn global add @commitlint/travis-cli @commitlint/config-angular
-#   - commitlint-travis
+before_script:
+  - yarn global add @commitlint/travis-cli @commitlint/config-angular
+  - commitlint-travis
 
 cache:
   directories:
