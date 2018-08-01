@@ -5,13 +5,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { ContainerCreateOptions, ImageInspectInfo, Container } from 'dockerode';
 import { from } from 'rxjs';
 import { DockerContainerService } from '../docker-container.service';
-
-interface PortBinding {
-  containerPort?: number;
-  hostPort?: number;
-  description?: string;
-  assignRandomPort?: boolean;
-}
+import { ContainerCreationSuggestedPort, PortBinding } from '../docker-client.model';
 
 interface VolumeBinding {
   containerPath?: string;
@@ -34,7 +28,7 @@ export class ContainerCreateComponent implements OnInit {
   public disableImage = false;
 
   @Input()
-  public suggestedPorts: { containerPort: number, description?: string }[];
+  public suggestedPorts: ContainerCreationSuggestedPort[];
 
   @Input()
   public suggestedVolumes: { containerPath: string, description?: string }[];
@@ -63,10 +57,6 @@ export class ContainerCreateComponent implements OnInit {
 
   public imageData: ImageInspectInfo;
 
-  public get filteredPorts() {
-    return this.availablePorts.filter(p => !this.portBindingsArray.controls.some(c => c.value.containerPort === p.containerPort));
-  }
-
   public get filteredVolumes() {
     if (this.suggestedVolumes) {
       return this.suggestedVolumes.filter(p => !this.volumeBindingsArray.controls.some(c => c.value.containerPath === p.containerPath));
@@ -74,8 +64,6 @@ export class ContainerCreateComponent implements OnInit {
       return [];
     }
   }
-
-  private availablePorts: { containerPort: number, description?: string }[];
 
   constructor(private containerService: DockerContainerService,
     private notification: NotificationService,
@@ -90,38 +78,6 @@ export class ContainerCreateComponent implements OnInit {
         imgCtrl.disable();
       }
     }
-    this.availablePorts = this.suggestedPorts || [];
-  }
-
-  public addPortBinding(binding: PortBinding = null) {
-    binding = binding || {};
-    const arr = this.form.get('portBindings') as FormArray;
-    const group = this.fb.group({
-      'containerPort': [binding.containerPort, Validators.required],
-      'hostPort': [binding.hostPort || binding.containerPort, Validators.required],
-      'description': [binding.description],
-      'assignRandomPort': [binding.assignRandomPort || false, Validators.required]
-    });
-    arr.push(group);
-
-    // Update hostPort with containerPort value
-    // while hostPort is dirty.
-    group.get('containerPort').valueChanges
-      .pipe(takeWhile(() => group.get('hostPort').pristine))
-      .subscribe(containerPort => {
-        group.get('hostPort').setValue(containerPort);
-      });
-
-    // Update hostPort validators chen assignRandomPort changes.
-    group.get('assignRandomPort').valueChanges
-      .subscribe(assignRandomPort => {
-        if (assignRandomPort) {
-          group.get('hostPort').setValidators([]);
-        } else {
-          group.get('hostPort').setValidators([Validators.required]);
-        }
-        group.get('hostPort').updateValueAndValidity();
-      });
   }
 
   public addVolumeBinding(binding: VolumeBinding = null) {
@@ -135,13 +91,13 @@ export class ContainerCreateComponent implements OnInit {
     });
     arr.push(group);
 
-    // Update hostPath with containerPort value
+    // Update hostPath with containerPath value
     // while hostPath is dirty
     group.get('containerPath')
       .valueChanges
       .pipe(takeWhile(() => group.get('hostPath').pristine))
-      .subscribe(containerPort => {
-        group.get('hostPath').setValue(containerPort);
+      .subscribe(containerPath => {
+        group.get('hostPath').setValue(containerPath);
       });
   }
 
@@ -149,29 +105,12 @@ export class ContainerCreateComponent implements OnInit {
     this.volumeBindingsArray.removeAt(this.volumeBindingsArray.controls.indexOf(control));
   }
 
-  public removePortBinding(control: AbstractControl) {
-    this.portBindingsArray.removeAt(this.portBindingsArray.controls.indexOf(control));
+  public canAddVolumeBinding() {
+    return !this.volumeBindingsArray.length || !this.volumeBindingsArray.controls.some(c => c.invalid);
   }
 
   public imageSelected(image: ImageInspectInfo) {
-    this.portBindingsArray.controls.splice(0, this.portBindingsArray.length);
     this.imageData = image;
-    if (image) {
-
-      const exposedPorts = Object.keys(this.imageData.Config.ExposedPorts || {})
-        .map(k => parseInt(k.split('/')[0], 10));
-
-      const out = this.suggestedPorts || [];
-      this.availablePorts = out.concat(exposedPorts.filter(p => !out.some(o => o.containerPort === p)).map(p => ({ containerPort: p })));
-    }
-  }
-
-  public canAddPortBinding() {
-    return !this.portBindingsArray.length || !this.portBindingsArray.controls.some(c => c.invalid);
-  }
-
-  public canAddVolumeBinding() {
-    return !this.volumeBindingsArray.length || !this.volumeBindingsArray.controls.some(c => c.invalid);
   }
 
   public launch() {

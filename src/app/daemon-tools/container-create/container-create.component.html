@@ -18,65 +18,10 @@
         <mat-icon>network_wifi</mat-icon>
         Ports Mapping
       </h2>
-
-      <div fxLayout="row"
-           fxLayoutGap="16px">
-
-        <button mat-raised-button
-                type="button"
-                color="accent"
-                [disabled]="!canAddPortBinding()"
-                (click)="addPortBinding()">
-          Add Port Mapping
-        </button>
-
-        <mat-chip-list multiple="false"
-                       *ngIf="filteredPorts && filteredPorts.length">
-          <mat-chip *ngFor="let port of filteredPorts"
-                    class="cursor-pointer"
-                    [title]="port.description"
-                    (click)="addPortBinding(port)">{{port.containerPort}}</mat-chip>
-        </mat-chip-list>
-      </div>
-
-      <div style="max-height: 400px; overflow:auto; margin-top: 8px">
-        <mat-card *ngFor="let mapping of portBindingsArray.controls"
-                  [formGroup]="mapping"
-                  [ngClass]="{'bg-invalid': mapping.invalid}"
-                  style="margin:16px">
-
-          <p *ngIf="mapping.value.description">
-            {{mapping.value.description}}
-          </p>
-
-          <mat-form-field style="display: block">
-            <input type="number"
-                   matInput
-                   formControlName="containerPort"
-                   placeholder="Container Port">
-          </mat-form-field>
-
-          <mat-form-field *ngIf="!mapping.value.assignRandomPort"
-                          style="display: block">
-            <input type="number"
-                   matInput
-                   formControlName="hostPort"
-                   placeholder="Host Port">
-          </mat-form-field>
-
-          <mat-checkbox formControlName="assignRandomPort">
-            Random Host Port
-          </mat-checkbox>
-
-          <button type="button"
-                  style="float:right"
-                  color="warn"
-                  (click)="removePortBinding(mapping)"
-                  mat-raised-button>
-            Remove
-          </button>
-        </mat-card>
-      </div>
+      <tim-container-create-port-mapping [image]="imageData"
+                                         [portBindingsArray]="portBindingsArray"
+                                         [suggestedPorts]="suggestedPorts">
+      </tim-container-create-port-mapping>
     </mat-card>
 
     <!-- Volume Mappings -->

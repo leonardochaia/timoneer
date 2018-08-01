@@ -38,6 +38,8 @@ import { SystemContainerComponent } from './system-container/system-container.co
 import { DockerImageService } from './docker-image.service';
 import { DockerSystemService } from './docker-system.service';
 import { DockerContainerService } from './docker-container.service';
+import { ContainerCreatePortMappingComponent } from './container-create-port-mapping/container-create-port-mapping.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -81,6 +83,7 @@ import { DockerContainerService } from './docker-container.service';
     ContainerCreateContainerComponent,
     ContainerActionsSheetComponent,
     SystemContainerComponent,
+    ContainerCreatePortMappingComponent,
   ],
   exports: [
     ContainerListComponent,
