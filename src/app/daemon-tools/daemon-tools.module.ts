@@ -36,6 +36,7 @@ import { DaemonService } from './daemon.service';
 import { DaemonEventsService } from './daemon-events.service';
 import { SystemContainerComponent } from './system-container/system-container.component';
 import { DockerImageService } from './docker-image.service';
+import { DockerSystemService } from './docker-system.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -94,6 +95,7 @@ import { DockerImageService } from './docker-image.service';
     DaemonService,
     DaemonEventsService,
     DockerImageService,
+    DockerSystemService,
   ],
   entryComponents: [
     ImagePullModalComponent,

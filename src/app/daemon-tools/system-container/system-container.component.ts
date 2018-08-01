@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DaemonService } from '../daemon.service';
 import { SystemDfResponse } from 'dockerode';
+import { DockerSystemService } from '../docker-system.service';
 
 @Component({
   selector: 'tim-system-container',
@@ -16,20 +16,21 @@ export class SystemContainerComponent implements OnInit {
   public volumeSize: number;
   public systemInfo: any;
 
-  constructor(private daemonService: DaemonService) { }
+  constructor(private systemService: DockerSystemService) { }
 
   public ngOnInit() {
-    this.daemonService.docker(d => d.info())
+    this.systemService.info()
       .subscribe(info => {
         this.systemInfo = info;
       });
-    this.daemonService.docker(d => d.df())
-      .subscribe((info: SystemDfResponse) => {
-        this.dataUsage = info;
-        this.imageSize = info.Images.map(i => i.Size).reduce((p, c) => p + c, 0);
-        this.imageSize -= info.Images.map(i => i.SharedSize).reduce((p, c) => p + c, 0);
-        this.containerSize = info.Containers.map(i => i.SizeRootFs).reduce((p, c) => p + c, 0);
-        this.volumeSize = info.Volumes.map(i => i.UsageData.Size).reduce((p, c) => p + c, 0);
+    this.systemService.df()
+      .subscribe((dataUsage) => {
+        this.dataUsage = dataUsage;
+
+        this.imageSize = dataUsage.Images.map(i => i.Size).reduce((p, c) => p + c, 0);
+        this.imageSize -= dataUsage.Images.map(i => i.SharedSize).reduce((p, c) => p + c, 0);
+        this.containerSize = dataUsage.Containers.map(i => i.SizeRootFs).reduce((p, c) => p + c, 0);
+        this.volumeSize = dataUsage.Volumes.map(i => i.UsageData.Size).reduce((p, c) => p + c, 0);
       });
   }
 

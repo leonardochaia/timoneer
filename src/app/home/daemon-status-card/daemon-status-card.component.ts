@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SystemInfo } from 'dockerode';
 import { ApplicationSettings } from '../../settings/settings.model';
 import { SettingsService } from '../../settings/settings.service';
-import { DaemonService } from '../../daemon-tools/daemon.service';
+import { DockerSystemService } from '../../daemon-tools/docker-system.service';
 
 @Component({
   selector: 'tim-daemon-status-card',
@@ -19,7 +19,7 @@ export class DaemonStatusCardComponent implements OnInit {
   public settings: ApplicationSettings;
 
   constructor(private settingsService: SettingsService,
-    private daemonService: DaemonService) { }
+    private systemService: DockerSystemService) { }
 
   public ngOnInit() {
     this.settingsService.areDaemonSettingsValid()
@@ -36,8 +36,8 @@ export class DaemonStatusCardComponent implements OnInit {
       });
 
     this.loading = true;
-    this.daemonService.docker(d => d.info())
-      .subscribe((info: SystemInfo) => {
+    this.systemService.info()
+      .subscribe((info) => {
         this.daemonInfo = info;
         this.daemonRacheable = true;
         this.loading = false;
@@ -47,5 +47,4 @@ export class DaemonStatusCardComponent implements OnInit {
         this.loading = false;
       });
   }
-
 }
