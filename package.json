@@ -72,7 +72,7 @@
     "angular-split-ng6": "^1.0.0-rc.5",
     "codelyzer": "^4.4.2",
     "commitlint": "^7.0.0",
-    "conventional-changelog": "^2.0.1",
+    "conventional-changelog-cli": "^2.0.1",
     "conventional-recommended-bump": "^4.0.0",
     "core-js": "^2.5.7",
     "dockerode": "^2.5.5",
