@@ -2,6 +2,8 @@ appId: timoneer
 productName: Timoneer
 directories:
   output: app-builds
+releaseInfo:
+  releaseNotesFile: CHANGELOG.md
 files:
 - "**/*"
 - "!*.ts"
