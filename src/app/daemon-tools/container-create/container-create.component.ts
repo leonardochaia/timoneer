@@ -192,8 +192,8 @@ export class ContainerCreateComponent implements OnInit {
       }] as any;
     }
 
-    for (const portMapping of this.volumeBindingsArray.controls.map(c => c.value as VolumeBinding)) {
-      data.HostConfig.Binds.push(`${portMapping.hostPath}:${portMapping.containerPath}:${portMapping.readonly ? 'ro' : 'rw'}`);
+    for (const volumeMapping of this.volumeBindingsArray.controls.map(c => c.value as VolumeBinding)) {
+      data.HostConfig.Binds.push(`${volumeMapping.hostPath}:${volumeMapping.containerPath}:${volumeMapping.readonly ? 'ro' : 'rw'}`);
     }
 
     const launchConfig = this.form.get('launchConfig').value;
