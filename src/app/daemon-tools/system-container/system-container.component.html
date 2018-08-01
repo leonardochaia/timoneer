@@ -5,140 +5,144 @@
     Docker System
   </h1>
 
+  <ng-template #loadingTemplate>
+    <tim-loading></tim-loading>
+  </ng-template>
+  <ng-container *ngIf="!loading; else loadingTemplate">
+    <!-- Server Info -->
+    <div *ngIf="systemInfo"
+         fxLayout="row wrap"
+         fxLayoutGap="16px">
 
-  <!-- Server Info -->
-  <div *ngIf="systemInfo"
-       fxLayout="row wrap"
-       fxLayoutGap="16px">
-
-    <mat-card>
-      <h2 style="margin:0">
-        Server {{systemInfo.Name}}
-      </h2>
-      <ul>
-        <li>
-          Docker Version: {{systemInfo.ServerVersion}}
-        </li>
-        <li>
-          Kernel Version: {{systemInfo.KernelVersion}}
-        </li>
-        <li>
-          OS: {{systemInfo.OSType}} {{systemInfo.Architecture}} {{systemInfo.OperatingSystem}}
-        </li>
-      </ul>
-    </mat-card>
-
-    <mat-card>
-      <ul>
-        <li>
-          Experimental: {{systemInfo.ExperimentalBuild}}
-        </li>
-        <li>
-          Debug: {{systemInfo.ExperimentalBuild}}
-        </li>
-        <li>
-          Docker Root Dir: {{systemInfo.DockerRootDir}}
-        </li>
-        <li>
-          Logging Driver: {{systemInfo.LoggingDriver}}
-        </li>
-        <li>
-          Ram: {{systemInfo.MemTotal | bytes}} CPUs: {{systemInfo.NCPU}}
-        </li>
-      </ul>
-    </mat-card>
-
-    <mat-card>
-      <h2 style="margin:0">
-        Storage Driver
-      </h2>
-      <h3 style="margin:0">
-        {{systemInfo.driver}}
-      </h3>
-
-      <div>
+      <mat-card>
+        <h2 style="margin:0">
+          Server {{systemInfo.Name}}
+        </h2>
         <ul>
-          <li *ngFor="let status of systemInfo.DriverStatus">
-            <b>{{status[0]}}</b>: {{status[1]}}
+          <li>
+            Docker Version: {{systemInfo.ServerVersion}}
+          </li>
+          <li>
+            Kernel Version: {{systemInfo.KernelVersion}}
+          </li>
+          <li>
+            OS: {{systemInfo.OSType}} {{systemInfo.Architecture}} {{systemInfo.OperatingSystem}}
           </li>
         </ul>
-      </div>
-    </mat-card>
+      </mat-card>
 
-    <mat-card>
-      <h2 style="margin:0">
-        Plugins
-      </h2>
-      <div>
+      <mat-card>
         <ul>
-          <li *ngFor="let plguinType of systemInfo.Plugins | keys">
-            <b>{{plguinType}}</b>:
-            <span *ngIf="systemInfo.Plugins[plguinType]">
-              <span *ngFor="let plugin of systemInfo.Plugins[plguinType]">
-                {{plugin}}
+          <li>
+            Experimental: {{systemInfo.ExperimentalBuild}}
+          </li>
+          <li>
+            Debug: {{systemInfo.ExperimentalBuild}}
+          </li>
+          <li>
+            Docker Root Dir: {{systemInfo.DockerRootDir}}
+          </li>
+          <li>
+            Logging Driver: {{systemInfo.LoggingDriver}}
+          </li>
+          <li>
+            Ram: {{systemInfo.MemTotal | bytes}} CPUs: {{systemInfo.NCPU}}
+          </li>
+        </ul>
+      </mat-card>
+
+      <mat-card>
+        <h2 style="margin:0">
+          Storage Driver
+        </h2>
+        <h3 style="margin:0">
+          {{systemInfo.driver}}
+        </h3>
+
+        <div>
+          <ul>
+            <li *ngFor="let status of systemInfo.DriverStatus">
+              <b>{{status[0]}}</b>: {{status[1]}}
+            </li>
+          </ul>
+        </div>
+      </mat-card>
+
+      <mat-card>
+        <h2 style="margin:0">
+          Plugins
+        </h2>
+        <div>
+          <ul>
+            <li *ngFor="let plguinType of systemInfo.Plugins | keys">
+              <b>{{plguinType}}</b>:
+              <span *ngIf="systemInfo.Plugins[plguinType]">
+                <span *ngFor="let plugin of systemInfo.Plugins[plguinType]">
+                  {{plugin}}
+                </span>
               </span>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </mat-card>
+            </li>
+          </ul>
+        </div>
+      </mat-card>
 
-  </div>
+    </div>
 
-  <mat-divider style="margin-top: 16px"></mat-divider>
+    <mat-divider style="margin-top: 16px"></mat-divider>
 
-  <div fxLayout="row"
-       fxLayoutGap="16px"
-       *ngIf="dataUsage">
-    <mat-card fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="16px">
-      <div>
-        <h1 class="mat-display-1 tim-text-primary"
-            style="margin:0; font-weight: bold;">
-          {{dataUsage.Images.length}}
-        </h1>
-      </div>
-      <div>
-        <h2 style="margin:0">Images</h2>
-        <h3 style="margin:0">
-          {{imageSize | bytes}}
-        </h3>
-      </div>
-    </mat-card>
+    <div fxLayout="row"
+         fxLayoutGap="16px"
+         *ngIf="dataUsage">
+      <mat-card fxLayout="row"
+                fxLayoutAlign="start center"
+                fxLayoutGap="16px">
+        <div>
+          <h1 class="mat-display-1 tim-text-primary"
+              style="margin:0; font-weight: bold;">
+            {{dataUsage.Images.length}}
+          </h1>
+        </div>
+        <div>
+          <h2 style="margin:0">Images</h2>
+          <h3 style="margin:0">
+            {{imageSize | bytes}}
+          </h3>
+        </div>
+      </mat-card>
 
-    <mat-card fxLayout="row"
-              fxLayoutGap="16px">
-      <div>
-        <h1 class="mat-display-1 tim-text-primary"
-            style="margin:0; font-weight: bold;">
-          {{dataUsage.Containers.length}}
-        </h1>
-      </div>
-      <div fxFlexAlign="center">
-        <h2 style="margin:0">Containers</h2>
-        <h3 style="margin:0">
-          {{containerSize | bytes}}
-        </h3>
-      </div>
-    </mat-card>
+      <mat-card fxLayout="row"
+                fxLayoutGap="16px">
+        <div>
+          <h1 class="mat-display-1 tim-text-primary"
+              style="margin:0; font-weight: bold;">
+            {{dataUsage.Containers.length}}
+          </h1>
+        </div>
+        <div fxFlexAlign="center">
+          <h2 style="margin:0">Containers</h2>
+          <h3 style="margin:0">
+            {{containerSize | bytes}}
+          </h3>
+        </div>
+      </mat-card>
 
 
-    <mat-card fxLayout="row"
-              fxLayoutGap="16px">
-      <div>
-        <h1 class="mat-display-1 tim-text-primary"
-            style="margin:0; font-weight: bold;">
-          {{dataUsage.Volumes.length}}
-        </h1>
-      </div>
-      <div fxFlexAlign="center">
-        <h2 style="margin:0">Volumes</h2>
-        <h3 style="margin:0">
-          {{volumeSize | bytes}}
-        </h3>
-      </div>
-    </mat-card>
+      <mat-card fxLayout="row"
+                fxLayoutGap="16px">
+        <div>
+          <h1 class="mat-display-1 tim-text-primary"
+              style="margin:0; font-weight: bold;">
+            {{dataUsage.Volumes.length}}
+          </h1>
+        </div>
+        <div fxFlexAlign="center">
+          <h2 style="margin:0">Volumes</h2>
+          <h3 style="margin:0">
+            {{volumeSize | bytes}}
+          </h3>
+        </div>
+      </mat-card>
 
-  </div>
+    </div>
+  </ng-container>
 </div>
