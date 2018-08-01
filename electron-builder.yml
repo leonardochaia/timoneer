@@ -3,7 +3,7 @@ productName: Timoneer
 directories:
   output: app-builds
 releaseInfo:
-  releaseNotesFile: CHANGELOG.md
+  releaseNotesFile: release-notes.md
 files:
 - "**/*"
 - "!*.ts"
