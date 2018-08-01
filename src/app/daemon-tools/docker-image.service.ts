@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { DaemonService } from './daemon.service';
+import { DockerService } from './docker.service';
 import { SettingsService } from '../settings/settings.service';
 import { switchMap, map, take } from 'rxjs/operators';
 import { IncomingMessage } from 'http';
@@ -9,7 +9,7 @@ import { DockerStreamResponse } from './docker-client.model';
 @Injectable()
 export class DockerImageService {
 
-  constructor(private daemon: DaemonService,
+  constructor(private daemon: DockerService,
     private ngZone: NgZone,
     private settingsService: SettingsService) { }
 

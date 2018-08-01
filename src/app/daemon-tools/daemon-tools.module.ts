@@ -32,7 +32,7 @@ import { ContainerCreateComponent } from './container-create/container-create.co
 import { ImageSelectorCardComponent } from './image-selector-card/image-selector-card.component';
 import { ContainerCreateContainerComponent } from './container-create-container/container-create-container.component';
 import { ContainerActionsSheetComponent } from './container-actions-sheet/container-actions-sheet.component';
-import { DaemonService } from './daemon.service';
+import { DockerService } from './docker.service';
 import { DockerEventsService } from './docker-events.service';
 import { SystemContainerComponent } from './system-container/system-container.component';
 import { DockerImageService } from './docker-image.service';
@@ -93,7 +93,7 @@ import { DockerContainerService } from './docker-container.service';
     ImageSelectorCardComponent,
   ],
   providers: [
-    DaemonService,
+    DockerService,
     DockerEventsService,
     DockerImageService,
     DockerSystemService,

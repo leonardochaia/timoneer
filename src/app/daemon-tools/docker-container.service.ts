@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { DaemonService } from './daemon.service';
+import { DockerService } from './docker.service';
 import { map, take } from 'rxjs/operators';
 import { ContainerCreateOptions, Container } from 'dockerode';
 
 @Injectable()
 export class DockerContainerService {
 
-  constructor(private daemon: DaemonService) { }
+  constructor(private daemon: DockerService) { }
 
   public inspect(id: string) {
     return this.getContainer(id, c => c.inspect());

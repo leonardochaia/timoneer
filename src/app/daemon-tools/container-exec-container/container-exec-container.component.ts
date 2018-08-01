@@ -3,7 +3,7 @@ import { Subject, Observable, from } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil, map, switchMap, take } from 'rxjs/operators';
 import { EventEmitter } from 'stream';
-import { DaemonService } from '../daemon.service';
+import { DockerService } from '../docker.service';
 import { Exec } from 'dockerode';
 import { TLSSocket } from 'tls';
 import { TerminalMeasures } from '../container-attacher/container-attacher.component';
@@ -28,7 +28,7 @@ export class ContainerExecContainerComponent implements OnInit, OnDestroy {
   private exec: Exec;
 
   constructor(private activatedRoute: ActivatedRoute,
-    private daemonService: DaemonService) { }
+    private dockerService: DockerService) { }
 
   public ngOnInit() {
     this.activatedRoute.paramMap
@@ -39,7 +39,7 @@ export class ContainerExecContainerComponent implements OnInit, OnDestroy {
       .subscribe(containerId => {
         this.containerId = containerId;
 
-        this.stream$ = this.daemonService.docker(d => d.getContainer(containerId).exec({
+        this.stream$ = this.dockerService.docker(d => d.getContainer(containerId).exec({
           Cmd: ['bin/sh'],
           AttachStdin: true,
           AttachStdout: true,

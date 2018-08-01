@@ -11,7 +11,7 @@ import * as splitca from 'split-ca';
 import { Modem } from 'docker-modem';
 
 @Injectable()
-export class DaemonService implements OnDestroy {
+export class DockerService implements OnDestroy {
 
   protected get daemonUrl() {
     return this.settingsService.getSettings()
