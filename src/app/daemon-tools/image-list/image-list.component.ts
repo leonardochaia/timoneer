@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DaemonService } from '../daemon.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImageInfo } from 'dockerode';
+import { DockerImageService } from '../docker-image.service';
 
 @Component({
   selector: 'tim-image-list',
@@ -27,7 +27,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   private componetDestroyed = new Subject();
 
-  constructor(private daemonService: DaemonService,
+  constructor(private imageService: DockerImageService,
     private fb: FormBuilder) {
 
     this.filterForm = this.fb.group({
@@ -57,10 +57,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   private reload() {
-    this.daemonService.docker(d => d.listImages())
-      .pipe(
-        takeUntil(this.componetDestroyed)
-      )
+    this.imageService.imageList()
+      .pipe(takeUntil(this.componetDestroyed))
       .subscribe(images => {
         this.originalImages = this.images = images;
         this.danglingAmount = this.originalImages.filter(i => this.isImageDangling(i)).length;
@@ -77,5 +75,4 @@ export class ImageListComponent implements OnInit, OnDestroy {
       this.images = this.images.filter(i => i.Id.includes(term) || i.RepoTags.some(t => t.includes(term)));
     }
   }
-
 }

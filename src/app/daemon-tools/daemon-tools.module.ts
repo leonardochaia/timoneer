@@ -35,6 +35,7 @@ import { ContainerActionsSheetComponent } from './container-actions-sheet/contai
 import { DaemonService } from './daemon.service';
 import { DaemonEventsService } from './daemon-events.service';
 import { SystemContainerComponent } from './system-container/system-container.component';
+import { DockerImageService } from './docker-image.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -92,6 +93,7 @@ import { SystemContainerComponent } from './system-container/system-container.co
   providers: [
     DaemonService,
     DaemonEventsService,
+    DockerImageService,
   ],
   entryComponents: [
     ImagePullModalComponent,
