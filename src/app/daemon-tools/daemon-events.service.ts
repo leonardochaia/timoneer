@@ -3,6 +3,7 @@ import { Subject, combineLatest } from 'rxjs';
 import { DockerEvent } from 'dockerode';
 import { switchMap, takeUntil, startWith } from 'rxjs/operators';
 import { DaemonService } from './daemon.service';
+import { streamToObservable } from './stream-to-observable';
 
 @Injectable()
 export class DaemonEventsService implements OnDestroy {
@@ -13,7 +14,7 @@ export class DaemonEventsService implements OnDestroy {
   constructor(private daemonService: DaemonService) {
     this.daemonService.docker(d => d.getEvents())
       .pipe(
-        switchMap(stream => this.daemonService.streamToObservable<Buffer>(stream)),
+        switchMap(stream => streamToObservable<Buffer>(stream)),
         takeUntil(this.disposed)
       )
       .subscribe(chunk => {

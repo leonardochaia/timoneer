@@ -10,6 +10,7 @@ import { Subject, Observable } from 'rxjs';
 import { DaemonService } from '../daemon.service';
 import { takeUntil, map, debounceTime } from 'rxjs/operators';
 import { EventEmitter as StreamEventEmitter } from 'stream';
+import { streamToObservable } from '../stream-to-observable';
 
 export interface TerminalMeasures {
   pixelWidth: number;
@@ -76,10 +77,8 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
 
             this.setupTerminal();
 
-            this.daemonService.streamToObservable<Buffer>(str)
-              .pipe(
-                map(chunk => chunk.toString()),
-            )
+            streamToObservable<Buffer>(str)
+              .pipe(map(chunk => chunk.toString()))
               .subscribe(chunk => {
                 this.terminal.write(chunk);
               }, null, () => {
