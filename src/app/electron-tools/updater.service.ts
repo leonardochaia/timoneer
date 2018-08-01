@@ -8,6 +8,7 @@ export enum UpdaterStatus {
   Outdated,
   UpToDate,
   Downloading,
+  PendingInstall
 }
 
 @Injectable({
@@ -22,6 +23,10 @@ export class UpdaterService implements OnDestroy {
   public latestVersion: UpdateInfo;
 
   public currentDownloadProgress: any;
+
+  public get currentVersion() {
+    return this.autoUpdater.currentVersion;
+  }
 
   protected currentDownloadCancellationToken: CancellationToken;
 
@@ -110,6 +115,10 @@ export class UpdaterService implements OnDestroy {
     this.autoUpdater.removeAllListeners();
   }
 
+  public quitAndInstall() {
+    this.autoUpdater.quitAndInstall();
+  }
+
   protected onCheckingForUpdates() {
     this.statusText = 'Checking for updates..';
     this.status = UpdaterStatus.CheckingForUpdate;
@@ -131,19 +140,25 @@ export class UpdaterService implements OnDestroy {
     this.statusText = `Error while checking for updates: ${error.message}`;
   }
 
-  protected onDownloadProgress(progress: any) {
+  protected onDownloadProgress(progress: {
+    progress: any, percent: number,
+    bytesPerSecond: number, total: number, transferred: number
+  }) {
+    this.status = UpdaterStatus.Downloading;
     this.currentDownloadProgress = progress;
-    console.log(progress);
+    this.statusText = `Downloading.. %${progress.percent}`;
   }
 
   protected onUpdateDownloaded(info: UpdateInfo) {
     this.currentDownloadProgress = null;
     this.currentDownloadCancellationToken = null;
+    this.status = UpdaterStatus.PendingInstall;
+    this.statusText = `v${info.version} is ready to be installed.`;
 
     this.notificationService.open(`Timoneer v${info.version} finished downloading. Restart to install`, 'Restart', {
       duration: -1
     }).onAction().subscribe(() => {
-      this.autoUpdater.quitAndInstall();
+      this.quitAndInstall();
     });
   }
 }

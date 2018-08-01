@@ -1355,4 +1355,212 @@ declare module 'dockerode' {
             [key: string]: string;
         };
     }
+
+    export interface SystemDfResponse {
+        /**
+         *
+         * @type {number}
+         * @memberof SystemDfResponse
+         */
+        LayersSize?: number;
+        /**
+         *
+         * @type {Array&lt;ImageSummary&gt;}
+         * @memberof SystemDfResponse
+         */
+        Images?: Array<ImageSummary>;
+        /**
+         *
+         * @type {Array&lt;ContainerSummary&gt;}
+         * @memberof SystemDfResponse
+         */
+        Containers?: Array<ContainerInfo>;
+        /**
+         *
+         * @type {Array&lt;Volume&gt;}
+         * @memberof SystemDfResponse
+         */
+        Volumes?: Array<VolumeInfo>;
+        /**
+         *
+         * @type {number}
+         * @memberof SystemDfResponse
+         */
+        BuilderSize?: number;
+    }
+
+
+    /**
+     *
+     * @export
+     * @interface ImageSummary
+     */
+    export interface ImageSummary {
+        /**
+         *
+         * @type {string}
+         * @memberof ImageSummary
+         */
+        Id: string;
+        /**
+         *
+         * @type {string}
+         * @memberof ImageSummary
+         */
+        ParentId: string;
+        /**
+         *
+         * @type {Array&lt;string&gt;}
+         * @memberof ImageSummary
+         */
+        RepoTags: Array<string>;
+        /**
+         *
+         * @type {Array&lt;string&gt;}
+         * @memberof ImageSummary
+         */
+        RepoDigests: Array<string>;
+        /**
+         *
+         * @type {number}
+         * @memberof ImageSummary
+         */
+        Created: number;
+        /**
+         *
+         * @type {number}
+         * @memberof ImageSummary
+         */
+        Size: number;
+        /**
+         *
+         * @type {number}
+         * @memberof ImageSummary
+         */
+        SharedSize: number;
+        /**
+         *
+         * @type {number}
+         * @memberof ImageSummary
+         */
+        VirtualSize: number;
+        /**
+         *
+         * @type {{ [key: string]: string; }}
+         * @memberof ImageSummary
+         */
+        Labels: {
+            [key: string]: string;
+        };
+        /**
+         *
+         * @type {number}
+         * @memberof ImageSummary
+         */
+        Containers: number;
+    }
+
+
+    /**
+     *
+     * @export
+     * @interface VolumeInfo
+     */
+    export interface VolumeInfo {
+        /**
+         * Name of the volume.
+         * @type {string}
+         * @memberof VolumeInfo
+         */
+        Name: string;
+        /**
+         * Name of the volume driver used by the volume.
+         * @type {string}
+         * @memberof VolumeInfo
+         */
+        Driver: string;
+        /**
+         * Mount path of the volume on the host.
+         * @type {string}
+         * @memberof VolumeInfo
+         */
+        Mountpoint: string;
+        /**
+         * Date/Time the volume was created.
+         * @type {string}
+         * @memberof VolumeInfo
+         */
+        CreatedAt?: string;
+        /**
+         * Low-level details about the volume, provided by the volume driver. Details are returned as a map with key/value pairs: `{\"key\":\"value\",\"key2\":\"value2\"}`.  The `Status` field is optional, and is omitted if the volume driver does not support this feature.
+         * @type {{ [key: string]: any; }}
+         * @memberof VolumeInfo
+         */
+        Status?: {
+            [key: string]: any;
+        };
+        /**
+         * User-defined key/value metadata.
+         * @type {{ [key: string]: string; }}
+         * @memberof VolumeInfo
+         */
+        Labels: {
+            [key: string]: string;
+        };
+        /**
+         * The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
+         * @type {string}
+         * @memberof VolumeInfo
+         */
+        Scope: VolumeInfo.ScopeEnum;
+        /**
+         * The driver specific options used when creating the volume.
+         * @type {{ [key: string]: string; }}
+         * @memberof VolumeInfo
+         */
+        Options: {
+            [key: string]: string;
+        };
+        /**
+         *
+         * @type {VolumeUsageData}
+         * @memberof VolumeInfo
+         */
+        UsageData?: VolumeUsageData;
+    }
+
+    /**
+     * @export
+     * @namespace Volume
+     */
+    export namespace VolumeInfo {
+        /**
+         * @export
+         * @enum {string}
+         */
+        enum ScopeEnum {
+            Local,
+            Global,
+        }
+    }
+
+    /**
+     * Usage details about the volume. This information is used by the `GET /system/df` endpoint, and omitted in other endpoints.
+     * @export
+     * @interface VolumeUsageData
+     */
+    export interface VolumeUsageData {
+        /**
+         * Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the `\"local\"` volume driver. For volumes created with other volume drivers, this field is set to `-1` (\"not available\")
+         * @type {number}
+         * @memberof VolumeUsageData
+         */
+        Size: number;
+        /**
+         * The number of containers referencing this volume. This field is set to `-1` if the reference-count is not available.
+         * @type {number}
+         * @memberof VolumeUsageData
+         */
+        RefCount: number;
+    }
 }

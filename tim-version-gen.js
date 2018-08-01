@@ -1,7 +1,3 @@
-const {
-  version
-} = require('./package.json');
-
 const fs = require('fs');
 const path = 'src/tim-version.ts';
 
@@ -20,8 +16,6 @@ gitCommit = gitCommit.substr(0, 7);
 const contents = `
 // This file is auto-generated. Do not edit.
 export const timoneerVersion = {
-  /** ${version} */
-  version: '${version}',
   git: {
     /** ${gitCommit} */
     short: '${gitCommit}',
@@ -31,8 +25,7 @@ export const timoneerVersion = {
 };
 `;
 
-console.info(`About to save ${path}`);
-console.log(contents);
+console.info(`Saving ${path}. Commit: ${gitCommit} (${gitBranch})`);
 
 fs.writeFile(path, contents, {
   flag: 'w'

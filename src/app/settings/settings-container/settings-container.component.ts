@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { UpdaterService } from '../../electron-tools/updater.service';
 import { timoneerVersion } from '../../../tim-version';
-import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.service';
 
 @Component({
   selector: 'tim-settings-container',
@@ -14,8 +14,6 @@ import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.serv
   styleUrls: ['./settings-container.component.scss']
 })
 export class SettingsContainerComponent implements OnInit, OnDestroy {
-
-  public UpdaterStatus = UpdaterStatus;
 
   public registriesArray = this.fb.array([]);
 
@@ -28,22 +26,18 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   }
 
   public get appVersion() {
-    return timoneerVersion;
+    return this.updater.currentVersion;
   }
 
-  public get updateStatus() {
-    return this.updater.status;
-  }
-
-  public get updateDownloadProgress() {
-    return this.updater.currentDownloadProgress;
+  public get appGitVersion() {
+    return timoneerVersion.git;
   }
 
   private componetDestroyed = new Subject();
 
   constructor(private settingsService: SettingsService,
-    private snackBar: MatSnackBar,
     private updater: UpdaterService,
+    private snackBar: MatSnackBar,
     private fb: FormBuilder) {
   }
 
@@ -102,14 +96,6 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
           panelClass: 'tim-bg-accent'
         });
       });
-  }
-
-  public checkForUpdates() {
-    this.updater.checkForUpdates();
-  }
-
-  public downloadLatestUpdate() {
-    this.updater.downloadLatestUpdate();
   }
 
   public ngOnDestroy() {
