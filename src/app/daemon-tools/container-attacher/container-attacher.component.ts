@@ -2,12 +2,11 @@ import {
   Component, Input, ElementRef,
   ViewChild, OnDestroy, OnChanges,
   SimpleChanges, HostListener,
-  EventEmitter, Output
+  EventEmitter, Output, NgZone
 } from '@angular/core';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { Subject, Observable } from 'rxjs';
-import { DaemonService } from '../daemon.service';
 import { takeUntil, map, debounceTime } from 'rxjs/operators';
 import { EventEmitter as StreamEventEmitter } from 'stream';
 import { streamToObservable } from '../stream-to-observable';
@@ -46,7 +45,7 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
   private terminal: Terminal;
   private windowSize = new Subject<{ width: number, height: number }>();
 
-  constructor(private daemonService: DaemonService) {
+  constructor(private ngZone: NgZone) {
 
     this.windowSize.asObservable()
       .pipe(
@@ -77,7 +76,7 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
 
             this.setupTerminal();
 
-            streamToObservable<Buffer>(str)
+            streamToObservable<Buffer>(str, this.ngZone)
               .pipe(map(chunk => chunk.toString()))
               .subscribe(chunk => {
                 this.terminal.write(chunk);
@@ -116,7 +115,7 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
   }
 
   @HostListener('window:resize', ['$event'])
-  public onResize(event) {
+  public onResize() {
     this.windowSize.next({
       width: this.terminalContainer.nativeElement.offsetWidth,
       height: this.terminalContainer.nativeElement.offsetHeight

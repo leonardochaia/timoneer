@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material';
-import { DaemonService } from '../daemon.service';
 import { NotificationService } from '../../shared/notification.service';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { ContainerInfo } from 'dockerode';
+import { DockerContainerService } from '../docker-container.service';
 
 @Component({
   selector: 'tim-container-actions-sheet',
@@ -22,16 +22,14 @@ export class ContainerActionsSheetComponent {
     public container: ContainerInfo,
     private bottomSheetRef: MatBottomSheetRef<ContainerActionsSheetComponent>,
     private notificationService: NotificationService,
-    private daemonService: DaemonService) { }
+    private containerService: DockerContainerService) { }
 
   public dismiss() {
     this.bottomSheetRef.dismiss();
   }
 
   public stop() {
-    this.loading = true;
-    this.bindLoading(
-      this.daemonService.docker(d => d.getContainer(this.container.Id).stop()))
+    this.bindLoading(this.containerService.stop(this.container.Id))
       .subscribe(() => {
         this.dismiss();
         this.notificationService.open(`Container stopped.`);
@@ -39,8 +37,7 @@ export class ContainerActionsSheetComponent {
   }
 
   public remove() {
-    this.bindLoading(
-      this.daemonService.docker(d => d.getContainer(this.container.Id).remove({ force: true })))
+    this.bindLoading(this.containerService.remove(this.container.Id, { force: true }))
       .subscribe(() => {
         this.dismiss();
         this.notificationService.open(`Container removed.`);
@@ -48,6 +45,7 @@ export class ContainerActionsSheetComponent {
   }
 
   private bindLoading(obs: Observable<any>) {
+    this.loading = true;
     return obs.pipe(catchError((e) => {
       this.loading = false;
       this.error = e.message;

@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil, map, take } from 'rxjs/operators';
-import { DaemonService } from '../daemon.service';
 import { EventEmitter } from 'stream';
 import { TerminalMeasures } from '../container-attacher/container-attacher.component';
+import { DockerContainerService } from '../docker-container.service';
 
 @Component({
   selector: 'tim-container-attacher-container',
@@ -20,7 +20,7 @@ export class ContainerAttacherContainerComponent implements OnInit, OnDestroy {
   private componetDestroyed = new Subject();
 
   constructor(private activatedRoute: ActivatedRoute,
-    private daemonService: DaemonService) { }
+    private containerService: DockerContainerService) { }
 
   public ngOnInit() {
     this.activatedRoute.paramMap
@@ -31,23 +31,23 @@ export class ContainerAttacherContainerComponent implements OnInit, OnDestroy {
       .subscribe(containerId => {
         this.containerId = containerId;
 
-        this.stream$ = this.daemonService.docker(d => d.getContainer(containerId).attach({
+        this.stream$ = this.containerService.attach(this.containerId, {
           stream: true,
           hijack: true,
           stdin: true,
           stdout: true,
           stderr: true,
           logs: true
-        }));
+        });
 
       });
   }
 
   public onResized(measures: TerminalMeasures) {
-    this.daemonService.docker(d => d.getContainer(this.containerId).resize({
+    this.containerService.resize(this.containerId, {
       w: measures.charWidth,
       h: measures.charHeight
-    }))
+    })
       .subscribe();
   }
 

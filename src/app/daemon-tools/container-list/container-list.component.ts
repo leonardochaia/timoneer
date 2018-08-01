@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DaemonService } from '../daemon.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
@@ -7,6 +6,7 @@ import { MatBottomSheet } from '@angular/material';
 import { ContainerActionsSheetComponent } from '../container-actions-sheet/container-actions-sheet.component';
 import { ContainerInfo } from 'dockerode';
 import { DockerEventsService } from '../docker-events.service';
+import { DockerContainerService } from '../docker-container.service';
 
 @Component({
   selector: 'tim-container-list',
@@ -20,7 +20,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
 
   private componetDestroyed = new Subject();
 
-  constructor(private daemonService: DaemonService,
+  constructor(private containerService: DockerContainerService,
     private daemonEvents: DockerEventsService,
     private notificationService: NotificationService,
     private bottomSheet: MatBottomSheet) { }
@@ -28,9 +28,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   public ngOnInit() {
 
     this.daemonEvents.bindAll(['destroy', 'start', 'stop', 'pause', 'unpause', 'restart', 'update'])
-      .pipe(
-        takeUntil(this.componetDestroyed)
-      )
+      .pipe(takeUntil(this.componetDestroyed))
       .subscribe(() => {
         this.reload();
       });
@@ -52,11 +50,9 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   private reload() {
     this.loading = true;
 
-    this.daemonService
-      .docker(d => d.listContainers())
-      .pipe(
-        takeUntil(this.componetDestroyed)
-      ).subscribe(containers => {
+    this.containerService.list()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe(containers => {
         this.loading = false;
         this.containers = containers;
       }, e => {

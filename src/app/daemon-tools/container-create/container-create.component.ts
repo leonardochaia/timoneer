@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { DaemonService } from '../daemon.service';
-import { switchMap, map, filter, takeWhile } from 'rxjs/operators';
+import { switchMap, takeWhile } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 import { ContainerCreateOptions, ImageInspectInfo, Container } from 'dockerode';
 import { from } from 'rxjs';
+import { DockerContainerService } from '../docker-container.service';
 
 interface PortBinding {
   containerPort?: number;
@@ -77,7 +77,7 @@ export class ContainerCreateComponent implements OnInit {
 
   private availablePorts: { containerPort: number, description?: string }[];
 
-  constructor(private daemonService: DaemonService,
+  constructor(private containerService: DockerContainerService,
     private notification: NotificationService,
     private fb: FormBuilder) {
   }
@@ -203,7 +203,7 @@ export class ContainerCreateComponent implements OnInit {
 
     data.name = launchConfig.containerName;
 
-    this.daemonService.docker(d => d.createContainer(data))
+    this.containerService.create(data)
       .pipe(switchMap(container => {
         this.notification.open(`Container Created. Starting.. ${container.id}`);
         return from(container.start() as Promise<Container>);

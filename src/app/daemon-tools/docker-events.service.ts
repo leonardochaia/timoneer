@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { Subject, combineLatest } from 'rxjs';
 import { DockerEvent } from 'dockerode';
 import { switchMap, takeUntil, startWith } from 'rxjs/operators';
@@ -12,10 +12,12 @@ export class DockerEventsService implements OnDestroy {
 
   private disposed = new Subject();
 
-  constructor(private daemonService: DaemonService) {
-    this.daemonService.docker(d => d.getEvents())
+  constructor(daemonService: DaemonService,
+    ngZone: NgZone) {
+
+    daemonService.docker(d => d.getEvents())
       .pipe(
-        switchMap(stream => streamToObservable<Buffer>(stream)),
+        switchMap(stream => streamToObservable<Buffer>(stream, ngZone)),
         takeUntil(this.disposed)
       )
       .subscribe(chunk => {

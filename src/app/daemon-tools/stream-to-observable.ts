@@ -1,21 +1,22 @@
 import { Observable } from 'rxjs';
+import { NgZone } from '@angular/core';
 
-export function streamToObservable<T>(stream: NodeJS.EventEmitter) {
+export function streamToObservable<T>(stream: NodeJS.EventEmitter, zone: NgZone) {
     return new Observable<T>(observer => {
         stream.on('data', (data) => {
-            this.zone.run(() => {
+            zone.run(() => {
                 observer.next(data);
             });
         });
 
         stream.on('error', (data) => {
-            this.zone.run(() => {
+            zone.run(() => {
                 observer.error(data);
             });
         });
 
         stream.on('end', () => {
-            this.zone.run(() => {
+            zone.run(() => {
                 observer.complete();
             });
         });
