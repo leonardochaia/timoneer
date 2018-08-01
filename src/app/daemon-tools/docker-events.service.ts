@@ -6,8 +6,9 @@ import { DaemonService } from './daemon.service';
 import { streamToObservable } from './stream-to-observable';
 
 @Injectable()
-export class DaemonEventsService implements OnDestroy {
-  protected dic = new Map<string, Subject<DockerEvent>>();
+export class DockerEventsService implements OnDestroy {
+
+  protected events = new Map<string, Subject<DockerEvent>>();
 
   private disposed = new Subject();
 
@@ -19,8 +20,8 @@ export class DaemonEventsService implements OnDestroy {
       )
       .subscribe(chunk => {
         const decoded = JSON.parse(chunk.toString('utf8')) as DockerEvent;
-        if (this.dic.has(decoded.Action)) {
-          this.dic.get(decoded.Action).next(decoded);
+        if (this.events.has(decoded.Action)) {
+          this.events.get(decoded.Action).next(decoded);
         }
       });
   }
@@ -31,11 +32,11 @@ export class DaemonEventsService implements OnDestroy {
   }
 
   public bind(event: string) {
-    if (this.dic.has(event)) {
-      return this.dic.get(event).asObservable();
+    if (this.events.has(event)) {
+      return this.events.get(event).asObservable();
     } else {
       const subject = new Subject<DockerEvent>();
-      this.dic.set(event, subject);
+      this.events.set(event, subject);
       return subject.asObservable();
     }
   }

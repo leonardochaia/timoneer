@@ -6,7 +6,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { MatBottomSheet } from '@angular/material';
 import { ContainerActionsSheetComponent } from '../container-actions-sheet/container-actions-sheet.component';
 import { ContainerInfo } from 'dockerode';
-import { DaemonEventsService } from '../daemon-events.service';
+import { DockerEventsService } from '../docker-events.service';
 
 @Component({
   selector: 'tim-container-list',
@@ -21,7 +21,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   private componetDestroyed = new Subject();
 
   constructor(private daemonService: DaemonService,
-    private daemonEvents: DaemonEventsService,
+    private daemonEvents: DockerEventsService,
     private notificationService: NotificationService,
     private bottomSheet: MatBottomSheet) { }
 
