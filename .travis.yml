@@ -4,6 +4,7 @@ matrix:
       osx_image: xcode9.4
       language: node_js
       node_js: "10"
+      if: tag IS present
       script:
         - yarn travis-pre-build
         - yarn release
@@ -11,10 +12,22 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
+    - os: osx
+      osx_image: xcode9.4
+      language: node_js
+      node_js: "10"
+      if: tag IS NOT present
+      script:
+        - yarn travis-pre-build
+        - yarn electron:build
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
     - os: linux
       services: docker
       language: generic
-      if: branch = master
+      if: tag IS present
       script:
         - |
           docker run --rm \
@@ -28,7 +41,7 @@ matrix:
     - os: linux
       services: docker
       language: generic
-      if: branch != master
+      if: tag IS NOT present
       script:
         - |
           docker run --rm \
