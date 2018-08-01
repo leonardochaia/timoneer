@@ -53,7 +53,7 @@ matrix:
             /bin/bash -c 'yarn travis-pre-build && yarn electron:build --linux --win'
             
 before_script:
-  - yarn add global @commitlint/travis-cli
+  - yarn global add @commitlint/travis-cli
   - commitlint-travis
 
 cache:
