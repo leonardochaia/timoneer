@@ -98,7 +98,7 @@ export class ContainerCreateComponent implements OnInit {
     const arr = this.form.get('portBindings') as FormArray;
     const group = this.fb.group({
       'containerPort': [binding.containerPort, Validators.required],
-      'hostPort': [binding.hostPort, Validators.required],
+      'hostPort': [binding.hostPort || binding.containerPort, Validators.required],
       'description': [binding.description],
       'assignRandomPort': [binding.assignRandomPort || false, Validators.required]
     });
