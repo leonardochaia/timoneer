@@ -53,8 +53,8 @@ matrix:
             /bin/bash -c 'yarn travis-pre-build && yarn electron:build --linux --win'
             
 before_script:
-  - git config --global user.name "Travis CI"
-  - git config --global user.email "user@example.com"
+  - yarn add global @commitlint/travis-cli
+  - commitlint-travis
 
 cache:
   directories:

@@ -33,7 +33,7 @@
     "electron:build": "yarn build:prod && npx electron-builder build --publish never",
     "release": "yarn build:prod && electron-builder",
     "commitmsg": "commitlint -E GIT_PARAMS",
-    "travis-pre-build": "yarn install && commitlint-travis",
+    "travis-pre-build": "yarn install",
     "bump-version": "node bump-version && yarn gen-changelog"
   },
   "dependencies": {
@@ -60,7 +60,6 @@
     "@angularclass/hmr": "^2.1.3",
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-angular": "^7.0.1",
-    "@commitlint/travis-cli": "^7.0.0",
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "3.0.1",
     "@types/dockerode": "^2.5.5",
