@@ -30,10 +30,11 @@
     "electron:mac": "yarn build:prod && npx electron-builder build --mac",
     "test": "yarn postinstall:web && ng test",
     "e2e": "yarn postinstall:web && ng e2e",
-    "electron:build": "yarn build:prod && npx electron-builder build --linux --windows",
+    "electron:build": "yarn build:prod && npx electron-builder build --publish never",
     "release": "yarn build:prod && electron-builder",
     "commitmsg": "commitlint -E GIT_PARAMS",
-    "travis-pre-build": "yarn install && commitlint-travis"
+    "travis-pre-build": "yarn install && commitlint-travis",
+    "bump-version": "node bump-version && yarn gen-changelog"
   },
   "dependencies": {
     "electron-settings": "^3.2.0",
