@@ -51,7 +51,11 @@ matrix:
             -v ~/.cache/electron-builder:/root/.cache/electron-builder \
             electronuserland/builder:wine \
             /bin/bash -c 'yarn travis-pre-build && yarn electron:build --linux --win'
-
+            
+before_install:
+  - git config --global user.name "Travis CI"
+  - git config --global user.email "user@example.com"
+  
 cache:
   directories:
   - node_modules
