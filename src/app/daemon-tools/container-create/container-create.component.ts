@@ -1,18 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { switchMap, takeWhile } from 'rxjs/operators';
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
+import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 import { ContainerCreateOptions, ImageInspectInfo, Container } from 'dockerode';
 import { from } from 'rxjs';
 import { DockerContainerService } from '../docker-container.service';
-import { ContainerCreationSuggestedPort, PortBinding } from '../docker-client.model';
-
-interface VolumeBinding {
-  containerPath?: string;
-  hostPath?: string;
-  description?: string;
-  readonly?: boolean;
-}
+import {
+  ContainerCreationSuggestedPort, PortBinding,
+  ContainerCreationSuggestedVolume, VolumeBinding
+} from '../docker-client.model';
 
 @Component({
   selector: 'tim-container-create',
@@ -31,7 +27,7 @@ export class ContainerCreateComponent implements OnInit {
   public suggestedPorts: ContainerCreationSuggestedPort[];
 
   @Input()
-  public suggestedVolumes: { containerPath: string, description?: string }[];
+  public suggestedVolumes: ContainerCreationSuggestedVolume[];
 
   @Output()
   public created = new EventEmitter<string>();
@@ -57,14 +53,6 @@ export class ContainerCreateComponent implements OnInit {
 
   public imageData: ImageInspectInfo;
 
-  public get filteredVolumes() {
-    if (this.suggestedVolumes) {
-      return this.suggestedVolumes.filter(p => !this.volumeBindingsArray.controls.some(c => c.value.containerPath === p.containerPath));
-    } else {
-      return [];
-    }
-  }
-
   constructor(private containerService: DockerContainerService,
     private notification: NotificationService,
     private fb: FormBuilder) {
@@ -78,35 +66,6 @@ export class ContainerCreateComponent implements OnInit {
         imgCtrl.disable();
       }
     }
-  }
-
-  public addVolumeBinding(binding: VolumeBinding = null) {
-    binding = binding || {};
-    const arr = this.form.get('volumeBindings') as FormArray;
-    const group = this.fb.group({
-      'containerPath': [binding.containerPath, Validators.required],
-      'hostPath': [binding.hostPath, Validators.required],
-      'description': [binding.description],
-      'readonly': [binding.readonly || false, Validators.required]
-    });
-    arr.push(group);
-
-    // Update hostPath with containerPath value
-    // while hostPath is dirty
-    group.get('containerPath')
-      .valueChanges
-      .pipe(takeWhile(() => group.get('hostPath').pristine))
-      .subscribe(containerPath => {
-        group.get('hostPath').setValue(containerPath);
-      });
-  }
-
-  public removeVolumeBinding(control: AbstractControl) {
-    this.volumeBindingsArray.removeAt(this.volumeBindingsArray.controls.indexOf(control));
-  }
-
-  public canAddVolumeBinding() {
-    return !this.volumeBindingsArray.length || !this.volumeBindingsArray.controls.some(c => c.invalid);
   }
 
   public imageSelected(image: ImageInspectInfo) {
