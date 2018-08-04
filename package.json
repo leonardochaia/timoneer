@@ -67,7 +67,7 @@
     "@types/electron-settings": "^3.1.1",
     "@types/jasmine": "^2.8.8",
     "@types/jasminewd2": "2.0.3",
-    "@types/node": "10.5.4",
+    "@types/node": "10.5.6",
     "angular-pipes": "^8.0.0",
     "angular-split-ng6": "^1.0.0-rc.5",
     "codelyzer": "^4.4.2",
