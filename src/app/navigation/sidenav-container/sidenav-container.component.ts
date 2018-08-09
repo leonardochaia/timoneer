@@ -32,7 +32,9 @@ export class SidenavContainerComponent {
 
     constructor(private updater: UpdaterService,
         private tabService: TabService,
-        private timoneerTabs: TimoneerTabsService) { }
+        private timoneerTabs: TimoneerTabsService) {
+        this.openDashboard();
+    }
 
     public openSystem() {
         this.timoneerTabs.openSystem();

@@ -46,6 +46,7 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
     this.tabsTemplates.changes.subscribe(() => {
       this.refresh();
     });
+    this.refresh();
   }
 
   public removeTab(tab: ITimoneerTab) {
