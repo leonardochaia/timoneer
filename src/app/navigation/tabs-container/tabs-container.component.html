@@ -5,12 +5,14 @@
   <mat-tab *ngFor="let tab of tabs">
 
     <ng-template mat-tab-label>
-      {{tab.title}}
-      <button mat-icon-button
-              style="margin-left:4px"
-              (click)="removeTab(tab); $event.preventDefault()">
-        <mat-icon>clear</mat-icon>
-      </button>
+      <div (auxclick)="removeTab(tab)">
+        {{tab.title}}
+        <button mat-icon-button
+                style="margin-left:4px"
+                (click)="removeTab(tab); $event.preventDefault()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
     </ng-template>
 
     <ng-container #dynamic></ng-container>
