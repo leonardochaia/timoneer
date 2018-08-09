@@ -28,7 +28,7 @@ export class TabService {
 
     let tab: ITimoneerTab;
     if (!config.multiple) {
-      tab = this.tabs.filter(x => x.title === config.title && x.component === config.component)[0];
+      tab = this.tabs.filter(x => x.title === config.title && x.component === config.component && x.params === config.params)[0];
     }
 
     if (!tab) {
