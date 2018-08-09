@@ -13,9 +13,9 @@ mat-tab-group {
 }
 
 ::ng-deep .mat-tab-body {
-  overflow: auto !important;
+  overflow-y: auto !important;
 }
 
 ::ng-deep .mat-tab-body-content {
-  overflow: auto !important;
+  overflow-y: auto !important;
 }

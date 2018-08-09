@@ -8,11 +8,13 @@ import { DaemonToolsModule } from './daemon-tools/daemon-tools.module';
 import { RegistryModule } from './registry/registry.module';
 import { SettingsModule } from './settings/settings.module';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
+import { HotkeyModule } from 'angular2-hotkeys';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HotkeyModule.forRoot(),
 
     HomeModule,
     DaemonToolsModule,

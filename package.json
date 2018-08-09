@@ -69,6 +69,7 @@
     "@types/node": "10.5.4",
     "angular-pipes": "^8.0.0",
     "angular-split-ng6": "^1.0.0-rc.5",
+    "angular2-hotkeys": "^2.1.2",
     "codelyzer": "^4.4.2",
     "commitlint": "^7.0.0",
     "conventional-changelog-cli": "^2.0.1",

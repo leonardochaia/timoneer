@@ -55,7 +55,11 @@ export class TabService {
     this.tabs.splice(index, 1);
   }
 
-  protected removeCurrentTab() {
+  public removeCurrentTab() {
     this.tabs.splice(this.currentTab, 1);
+  }
+
+  public removeAllTabs() {
+    this.tabs = [];
   }
 }

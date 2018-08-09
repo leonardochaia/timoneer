@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { ITimoneerTab, TAB_DATA } from '../tab.model';
 import { TabService } from '../tab.service';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Component({
   selector: 'tim-tabs-container',
@@ -33,10 +34,12 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
 
   constructor(private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private tabService: TabService) {
+    private tabService: TabService,
+    private hotKey: HotkeysService) {
   }
 
   public ngOnInit() {
+    this.bindShortcuts();
   }
 
   public ngAfterViewInit() {
@@ -69,9 +72,35 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(tab.component);
         const componentRef = template.createComponent(componentFactory, null, injector);
         tab.componentInstance = componentRef.instance;
-        console.log(componentRef);
         this.cd.detectChanges();
       }
     }
+  }
+
+  private bindShortcuts() {
+    this.hotKey.add(new Hotkey(['command+w', 'ctrl+w'], (event: KeyboardEvent): boolean => {
+      this.tabService.removeCurrentTab();
+      return false;
+    }));
+    this.hotKey.add(new Hotkey(['command+shift+w', 'ctrl+shift+w'], (event: KeyboardEvent): boolean => {
+      this.tabService.removeAllTabs();
+      return false;
+    }));
+    this.hotKey.add(new Hotkey(['command+tab', 'ctrl+tab'], (event: KeyboardEvent): boolean => {
+      let next = this.tabService.currentTab + 1;
+      if (next >= this.tabs.length) {
+        next = 0;
+      }
+      this.tabService.currentTab = next;
+      return false;
+    }));
+    this.hotKey.add(new Hotkey(['command+shift+tab', 'ctrl+shift+tab'], (event: KeyboardEvent): boolean => {
+      let next = this.tabService.currentTab - 1;
+      if (next < 0) {
+        next = this.tabs.length - 1;
+      }
+      this.tabService.currentTab = next;
+      return false;
+    }));
   }
 }
