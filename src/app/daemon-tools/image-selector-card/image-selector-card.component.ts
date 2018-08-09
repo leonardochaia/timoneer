@@ -158,7 +158,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
     repo = repo.includes(':') ? repo.split(':')[0] : repo;
     return this.settingsService.getRegistrySettingsForImage(this.image)
       .pipe(
-        switchMap(settings => settings.allowsCatalog ? this.registryService.getRepoTags(settings.url, repo) : of([])),
+        switchMap(settings => settings && settings.allowsCatalog ? this.registryService.getRepoTags(settings.url, repo) : of([])),
         map(tags => {
           return this.imageTags = tags;
         })
