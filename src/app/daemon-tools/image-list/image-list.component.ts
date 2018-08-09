@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImageInfo } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
+import { TabService } from '../../navigation/tab.service';
+import { ContainerCreateContainerComponent } from '../container-create-container/container-create-container.component';
 
 @Component({
   selector: 'tim-image-list',
@@ -28,6 +30,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   private componetDestroyed = new Subject();
 
   constructor(private imageService: DockerImageService,
+    private tabService: TabService,
     private fb: FormBuilder) {
 
     this.filterForm = this.fb.group({
@@ -49,6 +52,14 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   public isImageDangling(image: ImageInfo) {
     return image.RepoTags && image.RepoTags[0] === '<none>:<none>';
+  }
+
+  public createContainer(image: ImageInfo) {
+    this.tabService.addTab({
+      title: 'New Container',
+      component: ContainerCreateContainerComponent,
+      params: image.RepoTags[0] || image.Id
+    });
   }
 
   public ngOnDestroy() {

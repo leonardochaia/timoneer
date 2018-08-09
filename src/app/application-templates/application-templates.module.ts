@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { MatIconModule, MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDividerModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { RouterModule } from '@angular/router';
 import { ApplicationListContainerComponent } from './application-list-container/application-list-container.component';
 import { ApplicationLaunchContainerComponent } from './application-launch-container/application-launch-container.component';
 import { ApplicationLaunchComponent } from './application-launch/application-launch.component';
@@ -14,7 +13,6 @@ import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -38,6 +36,10 @@ import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
   exports: [
     ApplicationListComponent,
     ApplicationListContainerComponent,
+  ],
+  entryComponents: [
+    ApplicationListContainerComponent,
+    ApplicationLaunchContainerComponent,
   ]
 })
 export class ApplicationTemplatesModule { }

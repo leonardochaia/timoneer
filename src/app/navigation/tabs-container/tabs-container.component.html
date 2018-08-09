@@ -1,0 +1,18 @@
+<mat-tab-group [selectedIndex]="selectedTab"
+               [dynamicHeight]="true"
+               (selectedIndexChange)="selectedTab = $event"
+               [@.disabled]="true">
+  <mat-tab *ngFor="let tab of tabs">
+
+    <ng-template mat-tab-label>
+      {{tab.title}}
+      <button mat-icon-button
+              style="margin-left:4px"
+              (click)="removeTab(tab); $event.preventDefault()">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </ng-template>
+
+    <ng-container #dynamic></ng-container>
+  </mat-tab>
+</mat-tab-group>

@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { ContainerInfo } from 'dockerode';
 import { DockerContainerService } from '../docker-container.service';
+import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
 
 @Component({
   selector: 'tim-container-actions-sheet',
@@ -22,7 +23,8 @@ export class ContainerActionsSheetComponent {
     public container: ContainerInfo,
     private bottomSheetRef: MatBottomSheetRef<ContainerActionsSheetComponent>,
     private notificationService: NotificationService,
-    private containerService: DockerContainerService) { }
+    private containerService: DockerContainerService,
+    private tabService: TimoneerTabsService) { }
 
   public dismiss() {
     this.bottomSheetRef.dismiss();
@@ -42,6 +44,16 @@ export class ContainerActionsSheetComponent {
         this.dismiss();
         this.notificationService.open(`Container removed.`);
       });
+  }
+
+  public attach() {
+    this.dismiss();
+    this.tabService.attach(this.container.Id);
+  }
+
+  public exec() {
+    this.dismiss();
+    this.tabService.exec(this.container.Id);
   }
 
   private bindLoading(obs: Observable<any>) {

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Inject } from '@angular/core';
+import { TAB_DATA } from '../../navigation/tab.model';
+import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
 
 @Component({
   selector: 'tim-container-create-container',
@@ -7,20 +8,15 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./container-create-container.component.scss']
 })
 export class ContainerCreateContainerComponent implements OnInit {
-  public initialImage: string;
 
-  constructor(private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+  constructor(private tabService: TimoneerTabsService,
+    @Inject(TAB_DATA)
+    public initialImage: string) { }
 
   public ngOnInit() {
-    this.activatedRoute.queryParamMap.subscribe(params => {
-      if (params.get('image')) {
-        this.initialImage = params.get('image');
-      }
-    });
   }
 
   public containerCreated(id: string) {
-    this.router.navigate(['/docker/containers/', id, 'attach']);
+    this.tabService.attach(id, true);
   }
 }

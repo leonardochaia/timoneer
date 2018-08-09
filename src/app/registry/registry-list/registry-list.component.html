@@ -28,8 +28,7 @@
     <div>
       <a mat-raised-button
          color="primary"
-         [routerLink]="['/docker/containers/create']"
-         [queryParams]="{image: getImageName(repo) | async}">
+         (click)="createContainer(repo)">
         New Container
       </a>
     </div>

@@ -18,7 +18,7 @@
   <a fxFlex
      mat-raised-button
      color="primary"
-     [routerLink]="['/applications/', app.id, 'launch']">
+     (click)="openAppTab(app)">
     Launch
   </a>
 </mat-card>

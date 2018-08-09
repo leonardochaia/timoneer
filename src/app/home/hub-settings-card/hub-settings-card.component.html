@@ -22,7 +22,7 @@
   <a fxFlex
      *ngIf="!valid"
      mat-raised-button
-     [routerLink]="['/settings/']">
+     (click)="openSettings()">
     Configure
   </a>
 </mat-card>

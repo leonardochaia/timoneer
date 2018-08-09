@@ -25,7 +25,7 @@
   <a fxFlex
      *ngIf="!loading"
      mat-raised-button
-     [routerLink]="['/settings/']">
+     (click)="openSettings()">
     Add
   </a>
 </mat-card>
@@ -35,7 +35,7 @@
     <h2>
       {{registry.name}}
       <small>
-        <a [routerLink]="['/registry', registry.name]"
+        <a (click)="openRegistry(registry.name)"
            style="float:right">
           View all
         </a>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DockerRegistrySettings } from '../../settings/settings.model';
 import { SettingsService } from '../../settings/settings.service';
+import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
 
 @Component({
   selector: 'tim-hub-settings-card',
@@ -13,7 +14,8 @@ export class HubSettingsCardComponent implements OnInit {
   public valid: boolean;
   public loading: boolean;
 
-  constructor(private settingsService: SettingsService) { }
+  constructor(private settingsService: SettingsService,
+    private tabService: TimoneerTabsService) { }
 
   public ngOnInit() {
     this.loading = true;
@@ -26,4 +28,7 @@ export class HubSettingsCardComponent implements OnInit {
       });
   }
 
+  public openSettings() {
+    this.tabService.openSettings();
+  }
 }

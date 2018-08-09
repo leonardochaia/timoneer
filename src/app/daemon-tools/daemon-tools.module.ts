@@ -25,7 +25,6 @@ import { NgMathPipesModule, NgObjectPipesModule } from 'angular-pipes';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContainerAttacherComponent } from './container-attacher/container-attacher.component';
 import { ContainerAttacherContainerComponent } from './container-attacher-container/container-attacher-container.component';
-import { RouterModule } from '@angular/router';
 import { ImagePullModalComponent } from './image-pull-modal/image-pull-modal.component';
 import { ImagePullLogsComponent } from './image-pull-logs/image-pull-logs.component';
 import { ContainerExecContainerComponent } from './container-exec-container/container-exec-container.component';
@@ -49,7 +48,6 @@ import { DockerVolumeService } from './docker-volume.service';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule,
 
     FlexLayoutModule,
     MatCardModule,
@@ -76,19 +74,19 @@ import { DockerVolumeService } from './docker-volume.service';
   declarations: [
     ContainerListComponent,
     ImageListComponent,
-    ImageListContainerComponent,
     ContainerAttacherComponent,
-    ContainerAttacherContainerComponent,
     ImagePullLogsComponent,
     ImagePullModalComponent,
-    ContainerExecContainerComponent,
-    ContainerCreateComponent,
     ImageSelectorCardComponent,
-    ContainerCreateContainerComponent,
+    ContainerCreateComponent,
     ContainerActionsSheetComponent,
-    SystemContainerComponent,
     ContainerCreatePortMappingComponent,
     ContainerCreateVolumeMappingComponent,
+    ImageListContainerComponent,
+    ContainerAttacherContainerComponent,
+    ContainerExecContainerComponent,
+    ContainerCreateContainerComponent,
+    SystemContainerComponent,
   ],
   exports: [
     ContainerListComponent,
@@ -111,6 +109,11 @@ import { DockerVolumeService } from './docker-volume.service';
   entryComponents: [
     ImagePullModalComponent,
     ContainerActionsSheetComponent,
+    ImageListContainerComponent,
+    ContainerAttacherContainerComponent,
+    ContainerExecContainerComponent,
+    ContainerCreateContainerComponent,
+    SystemContainerComponent,
   ]
 })
 export class DaemonToolsModule { }

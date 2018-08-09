@@ -50,8 +50,7 @@
     <div>
       <a mat-raised-button
          color="primary"
-         [routerLink]="['/docker/containers/create']"
-         [queryParams]="{image: image.RepoTags[0] || image.Id}">
+         (click)="createContainer(image)">
         New Container
       </a>
     </div>

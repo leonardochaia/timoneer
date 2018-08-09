@@ -7,13 +7,11 @@ import { SettingsModule } from '../settings/settings.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
 import { RegistryListContainerComponent } from './registry-list-container/registry-list-container.component';
-import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
-    RouterModule,
 
     MatCardModule,
     MatButtonModule,
@@ -29,6 +27,9 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     RegistryListComponent
+  ],
+  entryComponents: [
+    RegistryListContainerComponent
   ]
 })
 export class RegistryModule { }

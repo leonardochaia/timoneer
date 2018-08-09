@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
 
 @Component({
   selector: 'tim-home-container',
@@ -7,4 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeContainerComponent {
 
+  constructor(private tabService: TimoneerTabsService) { }
+
+  public openApps() {
+    this.tabService.openApplications();
+  }
 }

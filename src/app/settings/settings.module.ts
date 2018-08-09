@@ -6,7 +6,6 @@ import {
   MatIconModule, MatCardModule, MatFormFieldModule, MatInputModule,
   MatButtonModule, MatSnackBarModule, MatExpansionModule, MatCheckboxModule, MatDialogModule, MatProgressBarModule
 } from '@angular/material';
-import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { SharedModule } from '../shared/shared.module';
@@ -16,7 +15,6 @@ import { SettingsUpdaterComponent } from './settings-updater/settings-updater.co
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -41,6 +39,7 @@ import { SettingsUpdaterComponent } from './settings-updater/settings-updater.co
   ],
   entryComponents: [
     RegistrySettingsModalComponent,
+    SettingsContainerComponent,
   ],
   exports: [
     SettingsContainerComponent,

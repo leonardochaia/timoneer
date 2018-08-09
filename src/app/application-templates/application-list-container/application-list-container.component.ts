@@ -9,7 +9,7 @@ export class ApplicationListContainerComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

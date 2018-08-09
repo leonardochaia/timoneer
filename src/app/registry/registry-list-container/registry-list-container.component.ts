@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
 import { SettingsService } from '../../settings/settings.service';
+import { TAB_DATA } from '../../navigation/tab.model';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'tim-registry-list-container',
@@ -13,22 +13,18 @@ export class RegistryListContainerComponent implements OnInit, OnDestroy {
 
   public registryUrl: string;
 
-  public registryName: string;
-
   private componetDestroyed = new Subject();
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(
+    @Inject(TAB_DATA)
+    public registryName: string,
     private settingsService: SettingsService) { }
 
   public ngOnInit() {
-    this.activatedRoute.paramMap
+    this.settingsService.getRegistrySettingsForName(this.registryName)
       .pipe(takeUntil(this.componetDestroyed))
-      .subscribe(map => {
-        this.settingsService.getRegistrySettingsForName(map.get('registryName'))
-          .subscribe(settings => {
-            this.registryName = this.settingsService.getRegistryName(settings);
-            this.registryUrl = settings.url;
-          });
+      .subscribe(settings => {
+        this.registryUrl = settings.url;
       });
   }
 

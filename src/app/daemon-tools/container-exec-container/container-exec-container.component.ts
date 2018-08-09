@@ -1,20 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntil, map } from 'rxjs/operators';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EventEmitter } from 'stream';
-import { Exec } from 'dockerode';
+import { Exec, ContainerInfo } from 'dockerode';
 import { TerminalMeasures } from '../container-attacher/container-attacher.component';
 import { DockerContainerService } from '../docker-container.service';
+import { TAB_DATA } from '../../navigation/tab.model';
 
 @Component({
   selector: 'tim-container-exec-container',
   templateUrl: './container-exec-container.component.html',
   styleUrls: ['./container-exec-container.component.scss']
 })
-export class ContainerExecContainerComponent implements OnInit, OnDestroy {
-
-  public containerId: string;
+export class ContainerExecContainerComponent implements OnInit {
 
   public stream$: Observable<EventEmitter>;
 
@@ -22,36 +20,27 @@ export class ContainerExecContainerComponent implements OnInit, OnDestroy {
     return this.exec && this.exec.id;
   }
 
-  private componetDestroyed = new Subject();
-
   private exec: Exec;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(
+    @Inject(TAB_DATA)
+    public containerId: string,
     private containerService: DockerContainerService) { }
 
   public ngOnInit() {
-    this.activatedRoute.paramMap
+    this.stream$ = this.containerService.exec(this.containerId, {
+      Cmd: ['bin/sh'],
+      AttachStdin: true,
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: true,
+    })
       .pipe(
-        map(m => m.get('containerId')),
-        takeUntil(this.componetDestroyed)
-      )
-      .subscribe(containerId => {
-        this.containerId = containerId;
-
-        this.stream$ = this.containerService.exec(this.containerId, {
-          Cmd: ['bin/sh'],
-          AttachStdin: true,
-          AttachStdout: true,
-          AttachStderr: true,
-          Tty: true,
+        map(result => {
+          this.exec = result.exec;
+          return result.socket;
         })
-          .pipe(
-            map(result => {
-              this.exec = result.exec;
-              return result.socket;
-            })
-          );
-      });
+      );
   }
 
   public onResized(measures: TerminalMeasures) {
@@ -61,10 +50,5 @@ export class ContainerExecContainerComponent implements OnInit, OnDestroy {
         h: measures.charHeight
       });
     }
-  }
-
-  public ngOnDestroy() {
-    this.componetDestroyed.next();
-    this.componetDestroyed.unsubscribe();
   }
 }

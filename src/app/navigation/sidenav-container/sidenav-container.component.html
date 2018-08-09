@@ -5,7 +5,7 @@
   <mat-nav-list fxFlex="grow">
 
     <a mat-list-item
-       routerLink="/">
+       (click)="openDashboard()">
       <span mat-list-icon>
         <img class="logo"
              [src]="timoneerLogo"
@@ -16,21 +16,21 @@
     </a>
 
     <a mat-list-item
-       routerLink="/applications">
+       (click)="openApplications()">
       <mat-icon mat-list-icon>developer_mode</mat-icon>
       <h4 mat-line>Applications</h4>
       <p mat-line>Container Templates</p>
     </a>
 
     <a mat-list-item
-       routerLink="/docker/images">
+       (click)="openDockerImages()">
       <mat-icon mat-list-icon>iso</mat-icon>
       <h4 mat-line>Images</h4>
       <p mat-line>Docker Images</p>
     </a>
 
     <a mat-list-item
-       routerLink="/docker/system">
+       (click)="openSystem()">
       <mat-icon mat-list-icon>devices</mat-icon>
       <h4 mat-line>System</h4>
       <p mat-line>Docker System Info</p>
@@ -41,7 +41,7 @@
   <mat-nav-list>
 
     <a mat-list-item
-       routerLink="/settings">
+       (click)="openSettings()">
       <mat-icon mat-list-icon>settings</mat-icon>
       <h4 mat-line>Settings</h4>
       <p mat-line>
@@ -50,7 +50,7 @@
     </a>
 
     <a mat-list-item
-       routerLink="/settings"
+       (click)="openSettings()"
        *ngIf="updateStatus === UpdaterStatus.Outdated || updateStatus === UpdaterStatus.PendingInstall">
       <h4 mat-line>
         <span class="tim-bg-primary"
