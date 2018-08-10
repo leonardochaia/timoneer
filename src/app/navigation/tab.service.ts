@@ -47,6 +47,12 @@ export class TabService {
     this.saveTabs();
   }
 
+  public removeOtherTabs(tab: ITimoneerTab) {
+    this.tabs.splice(0, this.tabs.length - 1);
+    this.addTab(tab);
+    this.saveTabs();
+  }
+
   public changeCurrentTab(index: number) {
     this.selectedTab = index;
     this.saveCurrentTab();
@@ -90,7 +96,7 @@ export class TabService {
   private loadCurrentTab() {
     const possible = sessionStorage.getItem('currentTab');
     if (possible && possible.length) {
-      this.selectedTab = parseInt(possible);
+      this.selectedTab = parseInt(possible, 10);
     }
   }
 

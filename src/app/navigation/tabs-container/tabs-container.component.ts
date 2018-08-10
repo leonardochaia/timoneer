@@ -63,6 +63,14 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
     this.tabService.removeTab(tab);
   }
 
+  public removeAllTabs() {
+    this.tabService.removeAllTabs();
+  }
+
+  public removeOtherTabs(tab: ITimoneerTab) {
+    this.tabService.removeOtherTabs(tab);
+  }
+
   private refresh() {
     const templates = this.tabsTemplates.toArray();
     for (let i = 0; i < this.tabs.length; i++) {

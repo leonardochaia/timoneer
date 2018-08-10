@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import {
   MatToolbarModule,
   MatButtonModule, MatIconModule,
-  MatSidenavModule, MatListModule, MatTabsModule,
+  MatSidenavModule, MatListModule,
+  MatTabsModule, MatMenuModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
@@ -24,6 +25,7 @@ import { TabsContainerComponent } from './tabs-container/tabs-container.componen
     MatSidenavModule,
     MatListModule,
     MatTabsModule,
+    MatMenuModule,
     AngularSplitModule,
 
     DaemonToolsModule,
