@@ -1,10 +1,9 @@
 <div fxLayout="column"
      style="padding:16px;">
 
-  <h1 class="mat-display-1"
-      style="text-align: center">
+  <h2 style="text-align: center">
     {{registryName}}
-  </h1>
+  </h2>
 
   <div *ngIf="registryUrl">
     <tim-registry-list [registryUrl]="registryUrl"></tim-registry-list>
