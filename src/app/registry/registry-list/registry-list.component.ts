@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SettingsService } from '../../settings/settings.service';
 import { map } from 'rxjs/operators';
 import { TabService } from '../../navigation/tab.service';
-import { ContainerCreateContainerComponent } from '../../daemon-tools/container-create-container/container-create-container.component';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-registry-list',
@@ -52,9 +52,7 @@ export class RegistryListComponent implements OnInit {
   public createContainer(repo: string) {
     this.getImageName(repo)
       .subscribe(image => {
-        this.tabService.addTab({
-          title: 'New Container',
-          component: ContainerCreateContainerComponent,
+        this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
           params: image
         });
       });

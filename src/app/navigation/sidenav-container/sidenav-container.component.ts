@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.service';
 import { TIM_LOGO } from '../../settings/settings.service';
-import { TimoneerTabsService } from '../timoneer-tabs.service';
-import { HomeContainerComponent } from '../../home/home-container/home-container.component';
 import { TabService } from '../tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
     selector: 'tim-sidenav-container',
@@ -31,31 +30,27 @@ export class SidenavContainerComponent {
     }
 
     constructor(private updater: UpdaterService,
-        private tabService: TabService,
-        private timoneerTabs: TimoneerTabsService) {
+        private tabService: TabService) {
         this.openDashboard();
     }
 
     public openSystem() {
-        this.timoneerTabs.openSystem();
+        this.tabService.add(TimoneerTabs.DOCKER_SYSTEM);
     }
 
     public openDashboard() {
-        this.tabService.addTab({
-            title: 'Dashboard',
-            component: HomeContainerComponent,
-        });
+        this.tabService.add(TimoneerTabs.DASHBOARD);
     }
 
     public openApplications() {
-        this.timoneerTabs.openApplications();
+        this.tabService.add(TimoneerTabs.APPLICATION_LIST);
     }
 
     public openDockerImages() {
-        this.timoneerTabs.openDockerImages();
+        this.tabService.add(TimoneerTabs.DOCKER_IMAGES);
     }
 
     public openSettings() {
-        this.timoneerTabs.openSettings();
+        this.tabService.add(TimoneerTabs.SETTINGS);
     }
 }

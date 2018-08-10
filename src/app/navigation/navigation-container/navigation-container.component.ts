@@ -3,7 +3,8 @@ import { SettingsService } from '../../settings/settings.service';
 import { NotificationService } from '../../shared/notification.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TimoneerTabsService } from '../timoneer-tabs.service';
+import { TabService } from '../tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-navigation-container',
@@ -18,7 +19,7 @@ export class NavigationContainerComponent implements OnInit, OnDestroy {
 
   constructor(private settingsService: SettingsService,
     private notificationService: NotificationService,
-    private tabService: TimoneerTabsService) {
+    private tabService: TabService) {
 
     this.settingsService.areDaemonSettingsValid()
       .pipe(takeUntil(this.componetDestroyed))
@@ -28,7 +29,7 @@ export class NavigationContainerComponent implements OnInit, OnDestroy {
           this.notificationService.open('Daemon Configuration is invalid.', 'Fix', {})
             .onAction()
             .subscribe(() => {
-              this.tabService.openSettings();
+              this.tabService.add(TimoneerTabs.SETTINGS);
             });
         }
       });

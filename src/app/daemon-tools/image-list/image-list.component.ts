@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ImageInfo } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
 import { TabService } from '../../navigation/tab.service';
-import { ContainerCreateContainerComponent } from '../container-create-container/container-create-container.component';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-image-list',
@@ -55,9 +55,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   public createContainer(image: ImageInfo) {
-    this.tabService.addTab({
-      title: 'New Container',
-      component: ContainerCreateContainerComponent,
+    this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
       params: image.RepoTags[0] || image.Id
     });
   }

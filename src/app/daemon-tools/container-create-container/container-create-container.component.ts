@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { TAB_DATA } from '../../navigation/tab.model';
-import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
+import { TabService } from '../../navigation/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-container-create-container',
@@ -9,7 +10,8 @@ import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
 })
 export class ContainerCreateContainerComponent implements OnInit {
 
-  constructor(private tabService: TimoneerTabsService,
+  constructor(
+    private tabService: TabService,
     @Inject(TAB_DATA)
     public initialImage: string) { }
 
@@ -17,6 +19,9 @@ export class ContainerCreateContainerComponent implements OnInit {
   }
 
   public containerCreated(id: string) {
-    this.tabService.attach(id, true);
+    this.tabService.add(TimoneerTabs.DOCKER_ATTACH, {
+      title: `Attached to ${id.slice(0, 12)}`,
+      params: id,
+    });
   }
 }

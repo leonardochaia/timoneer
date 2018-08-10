@@ -9,6 +9,7 @@ import { RegistryModule } from './registry/registry.module';
 import { SettingsModule } from './settings/settings.module';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { AppTabsModule } from './app-tabs.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { HotkeyModule } from 'angular2-hotkeys';
     HotkeyModule.forRoot(),
 
     HomeModule,
+    AppTabsModule,
     DaemonToolsModule,
     RegistryModule,
     SettingsModule,

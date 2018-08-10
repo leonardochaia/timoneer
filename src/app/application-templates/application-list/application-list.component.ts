@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApplicationService } from '../application.service';
 import { Application } from '../application.model';
 import { TabService } from '../../navigation/tab.service';
-import { ApplicationLaunchContainerComponent } from '../application-launch-container/application-launch-container.component';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-application-list',
@@ -22,9 +22,8 @@ export class ApplicationListComponent implements OnInit {
   }
 
   public openAppTab(app: Application) {
-    this.tabService.addTab({
+    this.tabService.add(TimoneerTabs.APPLICATION_LAUNCH, {
       title: `Launch ${app.title}`,
-      component: ApplicationLaunchContainerComponent,
       params: app
     });
   }

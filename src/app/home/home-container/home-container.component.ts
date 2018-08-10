@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
+import { TabService } from '../../navigation/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-home-container',
@@ -8,9 +9,9 @@ import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
 })
 export class HomeContainerComponent {
 
-  constructor(private tabService: TimoneerTabsService) { }
+  constructor(private tabService: TabService) { }
 
   public openApps() {
-    this.tabService.openApplications();
+    this.tabService.add(TimoneerTabs.APPLICATION_LIST);
   }
 }

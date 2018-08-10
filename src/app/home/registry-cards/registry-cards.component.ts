@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../../settings/settings.service';
-import { TimoneerTabsService } from '../../navigation/timoneer-tabs.service';
-import { RegistryListContainerComponent } from '../../registry/registry-list-container/registry-list-container.component';
 import { TabService } from '../../navigation/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-registry-cards',
@@ -16,8 +15,7 @@ export class RegistryCardsComponent implements OnInit {
   public registries: { name: string, url: string }[];
 
   constructor(private settingsService: SettingsService,
-    private tabService: TabService,
-    private timoneerTabService: TimoneerTabsService) { }
+    private tabService: TabService) { }
 
   public ngOnInit() {
 
@@ -35,13 +33,12 @@ export class RegistryCardsComponent implements OnInit {
   }
 
   public openSettings() {
-    this.timoneerTabService.openSettings();
+    this.tabService.add(TimoneerTabs.SETTINGS);
   }
 
   public openRegistry(registry: string) {
-    this.tabService.addTab({
+    this.tabService.add(TimoneerTabs.REGISTRY_IMAGES, {
       title: registry,
-      component: RegistryListContainerComponent,
       params: registry
     });
   }

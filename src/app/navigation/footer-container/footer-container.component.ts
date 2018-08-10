@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TimoneerTabsService } from '../timoneer-tabs.service';
+import { TabService } from '../tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-footer-container',
@@ -7,9 +8,9 @@ import { TimoneerTabsService } from '../timoneer-tabs.service';
   styleUrls: ['./footer-container.component.scss']
 })
 export class FooterContainerComponent {
-  constructor(private tabService: TimoneerTabsService) { }
+  constructor(private tabService: TabService) { }
 
   public openImages() {
-    this.tabService.openDockerImages();
+    this.tabService.add(TimoneerTabs.DOCKER_IMAGES);
   }
 }

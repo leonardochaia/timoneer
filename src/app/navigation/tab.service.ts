@@ -1,6 +1,6 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ITimoneerTab } from './tab.model';
+import { ITimoneerTab, APPLICATION_TABS } from './tab.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,38 +16,20 @@ export class TabService {
 
   private tabAddedSubject = new Subject<ITimoneerTab>();
 
-  constructor() { }
+  constructor(
+    @Inject(APPLICATION_TABS)
+    @Optional()
+    private configuredTabs: ITimoneerTab[]) {
+    this.configuredTabs = this.configuredTabs || [];
+  }
 
-  public addTab(config: {
-    title: string,
-    component: Type<any>,
-    params?: any,
-    multiple?: boolean,
-    replaceCurrent?: boolean
-  }) {
-
-    let tab: ITimoneerTab;
-    if (!config.multiple) {
-      tab = this.tabs.filter(x => x.title === config.title && x.component === config.component && x.params === config.params)[0];
-    }
-
+  public add(tabId: string, config?: { title?: string, params?: any, replaceCurrent?: boolean }) {
+    const tab = this.findTabById(tabId);
     if (!tab) {
-      tab = {
-        title: config.title,
-        component: config.component,
-        params: config.params
-      };
-      this.tabs.push(tab);
+      throw new Error(`Failed to find tab [${tabId}]`);
     }
-
-    if (config.replaceCurrent) {
-      this.removeCurrentTab();
-    }
-
-    this.currentTab = this.tabs.indexOf(tab);
-    this.tabAddedSubject.next(tab);
-
-    return tab;
+    const merged = Object.assign({}, tab, config || {});
+    this.addTab(merged);
   }
 
   public removeTab(tab: ITimoneerTab) {
@@ -61,5 +43,36 @@ export class TabService {
 
   public removeAllTabs() {
     this.tabs = [];
+  }
+
+  private addTab(tab: ITimoneerTab) {
+
+    let isNew = true;
+    if (!tab.multiple) {
+      const found = this.tabs.filter(x => x.id === tab.id
+        && x.title === tab.title
+        && x.params === tab.params)[0];
+      if (found) {
+        isNew = false;
+        tab = found;
+      }
+    }
+
+    if (isNew) {
+      this.tabs.push(tab);
+    }
+
+    if (tab.replaceCurrent) {
+      this.removeCurrentTab();
+    }
+
+    this.currentTab = this.tabs.indexOf(tab);
+    this.tabAddedSubject.next(tab);
+
+    return tab;
+  }
+
+  private findTabById(tabId: string) {
+    return this.configuredTabs.filter(t => t.id === tabId)[0];
   }
 }
