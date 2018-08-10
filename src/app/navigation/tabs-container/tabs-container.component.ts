@@ -10,6 +10,7 @@ import { ITimoneerTab, TAB_DATA } from '../tab.model';
 import { TabService } from '../tab.service';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatTabChangeEvent } from '@angular/material';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-tabs-container',
@@ -119,6 +120,10 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
         next = this.tabs.length - 1;
       }
       this.tabService.changeCurrentTab(next);
+      return false;
+    }));
+    this.hotKey.add(new Hotkey(['command+shift+t', 'ctrl+shift+t'], (event: KeyboardEvent): boolean => {
+      this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW);
       return false;
     }));
   }
