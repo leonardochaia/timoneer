@@ -9,6 +9,7 @@ import {
 import { ITimoneerTab, TAB_DATA } from '../tab.model';
 import { TabService } from '../tab.service';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'tim-tabs-container',
@@ -22,7 +23,7 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
   }
 
   public set selectedTab(value: number) {
-    this.tabService.currentTab = value;
+    this.tabService.changeCurrentTab(value);
   }
 
   @ViewChildren('dynamic', { read: ViewContainerRef })
@@ -47,6 +48,15 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
       this.refresh();
     });
     this.refresh();
+  }
+
+  public tabFocusChanged(event: MatTabChangeEvent) {
+    this.selectedTab = event.index;
+    this.executeCurrentTabComponentFunction('timTabFocused');
+  }
+
+  public animationDone() {
+    this.executeCurrentTabComponentFunction('timTabAnimationDone');
   }
 
   public removeTab(tab: ITimoneerTab) {
@@ -92,7 +102,7 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
       if (next >= this.tabs.length) {
         next = 0;
       }
-      this.tabService.currentTab = next;
+      this.tabService.changeCurrentTab(next);
       return false;
     }));
     this.hotKey.add(new Hotkey(['command+shift+tab', 'ctrl+shift+tab'], (event: KeyboardEvent): boolean => {
@@ -100,8 +110,17 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
       if (next < 0) {
         next = this.tabs.length - 1;
       }
-      this.tabService.currentTab = next;
+      this.tabService.changeCurrentTab(next);
       return false;
     }));
+  }
+
+  private executeCurrentTabComponentFunction(fn: string) {
+    const tab = this.tabs[this.selectedTab];
+    if (tab && tab.componentInstance
+      && tab.componentInstance[fn]
+      && typeof tab.componentInstance[fn] === 'function') {
+      tab.componentInstance[fn]();
+    }
   }
 }

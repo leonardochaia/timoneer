@@ -31,7 +31,9 @@ export class SidenavContainerComponent {
 
     constructor(private updater: UpdaterService,
         private tabService: TabService) {
-        this.openDashboard();
+        if (!tabService.tabs.length) {
+            this.openDashboard();
+        }
     }
 
     public openSystem() {

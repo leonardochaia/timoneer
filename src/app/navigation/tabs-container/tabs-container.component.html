@@ -1,6 +1,7 @@
-<mat-tab-group [selectedIndex]="selectedTab"
+<mat-tab-group [(selectedIndex)]="selectedTab"
                [dynamicHeight]="true"
-               (selectedIndexChange)="selectedTab = $event"
+               (focusChange)="tabFocusChanged($event)"
+               (animationDone)="animationDone()"
                [@.disabled]="true">
   <mat-tab *ngFor="let tab of tabs">
 

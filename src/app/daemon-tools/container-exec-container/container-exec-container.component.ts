@@ -1,18 +1,18 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EventEmitter } from 'stream';
 import { Exec, ContainerInfo } from 'dockerode';
-import { TerminalMeasures } from '../container-attacher/container-attacher.component';
+import { TerminalMeasures, ContainerAttacherComponent } from '../container-attacher/container-attacher.component';
 import { DockerContainerService } from '../docker-container.service';
-import { TAB_DATA } from '../../navigation/tab.model';
+import { TAB_DATA, OnTabAnimationDone } from '../../navigation/tab.model';
 
 @Component({
   selector: 'tim-container-exec-container',
   templateUrl: './container-exec-container.component.html',
   styleUrls: ['./container-exec-container.component.scss']
 })
-export class ContainerExecContainerComponent implements OnInit {
+export class ContainerExecContainerComponent implements OnInit, OnTabAnimationDone {
 
   public stream$: Observable<EventEmitter>;
 
@@ -21,6 +21,9 @@ export class ContainerExecContainerComponent implements OnInit {
   }
 
   private exec: Exec;
+
+  @ViewChild(ContainerAttacherComponent)
+  private attacher: ContainerAttacherComponent;
 
   constructor(
     @Inject(TAB_DATA)
@@ -50,5 +53,9 @@ export class ContainerExecContainerComponent implements OnInit {
         h: measures.charHeight
       });
     }
+  }
+
+  public timTabAnimationDone(): void {
+    this.attacher.onResize();
   }
 }

@@ -122,6 +122,19 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
     });
   }
 
+  public resizeTerminal(width: number = this.terminalContainer.nativeElement.offsetWidth) {
+    const charHeight = 25;
+    const charWidth = Math.floor((width - 20) / 8.39);
+    if (width > 0) {
+      this.terminal.resize(charWidth, charHeight);
+      fit(this.terminal);
+    }
+    return {
+      charHeight,
+      charWidth
+    };
+  }
+
   private setupTerminal() {
     this.terminal = new Terminal({
       cursorBlink: true,
@@ -132,17 +145,6 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
     });
     this.terminal.open(this.terminalContainer.nativeElement);
     this.terminal.focus();
-    this.resizeTerminal(this.terminalContainer.nativeElement.offsetWidth);
-  }
-
-  private resizeTerminal(width: number) {
-    const charHeight = 25;
-    const charWidth = Math.floor((width - 20) / 8.39);
-    this.terminal.resize(charWidth, charHeight);
-    fit(this.terminal);
-    return {
-      charHeight,
-      charWidth
-    };
+    this.resizeTerminal();
   }
 }

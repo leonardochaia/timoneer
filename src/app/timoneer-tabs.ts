@@ -1,5 +1,5 @@
 export class TimoneerTabs {
-    public static DASHBOARD = 'Dashboard';
+    public static DASHBOARD = 'dashboard';
     public static DOCKER_ATTACH = 'docker-attach';
     public static DOCKER_EXEC = 'docker-exec';
     public static DOCKER_SYSTEM = 'docker-system';

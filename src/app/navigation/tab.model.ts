@@ -12,3 +12,11 @@ export interface ITimoneerTab {
     multiple?: boolean;
     replaceCurrent?: boolean;
 }
+
+export interface OnTabFocused {
+    timTabFocused(): void;
+}
+
+export interface OnTabAnimationDone {
+    timTabAnimationDone(): void;
+}
