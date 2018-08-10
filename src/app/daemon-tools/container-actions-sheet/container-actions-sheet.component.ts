@@ -50,7 +50,7 @@ export class ContainerActionsSheetComponent {
   public attach() {
     this.dismiss();
     this.tabService.add(TimoneerTabs.DOCKER_ATTACH, {
-      title: `Attached to ${this.container.Id.slice(0, 12)}`,
+      title: `Attached to ${this.container.Names[0]}`,
       params: this.container.Id,
     });
   }
@@ -58,7 +58,7 @@ export class ContainerActionsSheetComponent {
   public exec() {
     this.dismiss();
     this.tabService.add(TimoneerTabs.DOCKER_EXEC, {
-      title: `Exec into ${this.container.Id.slice(0, 12)}`,
+      title: `Exec into ${this.container.Names[0]}`,
       params: this.container.Id,
     });
   }

@@ -10,6 +10,8 @@ import { Subject, Observable } from 'rxjs';
 import { takeUntil, map, debounceTime } from 'rxjs/operators';
 import { EventEmitter as StreamEventEmitter } from 'stream';
 import { streamToObservable } from '../stream-to-observable';
+import { DockerContainerService } from '../docker-container.service';
+import { ContainerInspectInfo } from 'dockerode';
 
 export interface TerminalMeasures {
   pixelWidth: number;
@@ -41,11 +43,14 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
   public connected: boolean;
   public error: string;
 
+  public container: ContainerInspectInfo;
+
   private componetDestroyed = new Subject();
   private terminal: Terminal;
   private windowSize = new Subject<{ width: number, height: number }>();
 
-  constructor(private ngZone: NgZone) {
+  constructor(private ngZone: NgZone,
+    private containerService: DockerContainerService) {
 
     this.windowSize.asObservable()
       .pipe(
@@ -64,6 +69,12 @@ export class ContainerAttacherComponent implements OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+    if (changes['containerId']) {
+      this.containerService.inspect(this.containerId).subscribe(container => {
+        this.container = container;
+      });
+    }
+
     if (changes['stream']) {
       if (this.stream) {
         this.attaching = true;

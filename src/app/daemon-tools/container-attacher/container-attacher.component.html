@@ -5,7 +5,7 @@
     <h2 *ngIf="connected; else offlineTemplate">
         <mat-icon class="tim-text-primary">check_circle_outline</mat-icon>
         <span class="tim-text-title">
-            Connected to {{containerId | slice:0:12}}
+            Connected to {{container ? container.Name : containerId | slice:0:12}}
         </span>
     </h2>
     <ng-template #offlineTemplate>
