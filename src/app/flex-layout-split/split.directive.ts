@@ -4,7 +4,7 @@ import {
   Directive, ContentChildren,
   QueryList, OnDestroy,
   ElementRef, ComponentFactoryResolver,
-  AfterViewInit, ChangeDetectorRef, Self
+  AfterViewInit, ChangeDetectorRef, Self, Optional
 } from '@angular/core';
 import { SplitAreaDirective } from './split-area.directive';
 import { SplitHandleComponent } from './split-handle/split-handle.component';
@@ -28,7 +28,7 @@ export class SplitDirective implements AfterViewInit, OnDestroy {
 
   constructor(private elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    @Self()
+    @Optional() @Self()
     public fxLayout: LayoutDirective,
     private componentFactoryResolver: ComponentFactoryResolver) { }
 
