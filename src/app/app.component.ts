@@ -1,6 +1,7 @@
 import { Component, Renderer2, OnDestroy } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { AppThemeService } from './shared/app-theme.service';
+import { AppMenuService } from './app-menu/app-menu.service';
 
 @Component({
   selector: 'tim-root',
@@ -13,7 +14,10 @@ export class AppComponent implements OnDestroy {
 
   constructor(private overlayContainer: OverlayContainer,
     private renderer: Renderer2,
+    private menuService: AppMenuService,
     themeService: AppThemeService) {
+
+    menuService.loadMenu();
 
     this.addBaseClasses();
 
