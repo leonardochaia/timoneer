@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabsContainerComponent } from './tabs-container/tabs-container.component';
 import { MatTabsModule, MatIconModule, MatMenuModule, MatButtonModule } from '@angular/material';
+import { TabHistoryService } from './tab-history.service';
+import { TabStorageService } from './tab-storage.service';
+import { TabService } from './tab.service';
 
 @NgModule({
   imports: [
@@ -13,6 +16,11 @@ import { MatTabsModule, MatIconModule, MatMenuModule, MatButtonModule } from '@a
   ],
   declarations: [
     TabsContainerComponent,
+  ],
+  providers: [
+    TabService,
+    TabStorageService,
+    TabHistoryService,
   ],
   exports: [
     TabsContainerComponent,

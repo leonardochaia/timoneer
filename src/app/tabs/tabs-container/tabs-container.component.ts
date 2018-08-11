@@ -8,6 +8,8 @@ import {
 import { ITimoneerTab, TAB_DATA } from '../tab.model';
 import { TabService } from '../tab.service';
 import { MatTabChangeEvent } from '@angular/material';
+import { TabStorageService } from '../tab-storage.service';
+import { TabHistoryService } from '../tab-history.service';
 
 @Component({
   selector: 'tim-tabs-container',
@@ -33,7 +35,12 @@ export class TabsContainerComponent implements AfterViewInit {
 
   constructor(private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
+    tabStorageService: TabStorageService,
+    tabHistoryService: TabHistoryService,
     private tabService: TabService) {
+
+    tabStorageService.initialize();
+    tabHistoryService.initialize();
   }
 
   public ngAfterViewInit() {
