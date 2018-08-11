@@ -52,7 +52,6 @@ export class VolumeListComponent implements OnInit, OnDestroy {
   }
 
   public getContainersUsingVolume(volume: VolumeInfo) {
-    console.log(volume.Name);
     return this.containerService.list({
       all: true,
       filters: {
