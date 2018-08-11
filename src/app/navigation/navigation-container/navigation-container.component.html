@@ -1,28 +1,28 @@
-<split direction="vertical"
-       gutterSize="4"
-       [disabled]="!settingsValid">
+<div fxLayout="column"
+     timSplit
+     style="height:100%">
 
-  <split-area size="70">
+  <div fxFlex="70%"
+       timSplitArea>
 
-    <split direction="horizontal"
-           gutterSize="4">
+    <div fxLayout="row"
+         timSplit
+         fxFlexFill>
 
-      <!-- Sidenav area -->
-      <split-area size="20">
+      <div fxFlex="20%"
+           timSplitArea>
         <tim-sidenav-container></tim-sidenav-container>
-      </split-area>
+      </div>
 
-      <!-- Main area -->
-      <split-area size="80">
+      <div fxFlex="80%"
+           timSplitArea>
         <tim-tabs-container></tim-tabs-container>
-      </split-area>
-    </split>
-  </split-area>
+      </div>
+    </div>
+  </div>
 
-  <!-- Container List Area -->
-  <split-area size="30"
-              *ngIf="settingsValid">
+  <div fxFlex="30%"
+       timSplitArea>
     <tim-footer-container></tim-footer-container>
-  </split-area>
-
-</split>
+  </div>
+</div>
