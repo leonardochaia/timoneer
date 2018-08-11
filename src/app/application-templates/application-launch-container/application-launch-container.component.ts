@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { Application } from '../application.model';
-import { TAB_DATA } from '../../navigation/tab.model';
+import { TAB_DATA } from '../../tabs/tab.model';
 
 @Component({
   selector: 'tim-application-launch-container',

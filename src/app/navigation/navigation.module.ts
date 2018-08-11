@@ -4,7 +4,6 @@ import {
   MatToolbarModule,
   MatButtonModule, MatIconModule,
   MatSidenavModule, MatListModule,
-  MatTabsModule, MatMenuModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
@@ -12,8 +11,8 @@ import { FooterContainerComponent } from './footer-container/footer-container.co
 import { SidenavContainerComponent } from './sidenav-container/sidenav-container.component';
 import { NavigationContainerComponent } from './navigation-container/navigation-container.component';
 import { SharedModule } from '../shared/shared.module';
-import { TabsContainerComponent } from './tabs-container/tabs-container.component';
 import { FlexLayoutSplitModule } from '../flex-layout-split/flex-layout-split.module';
+import { TabsModule } from '../tabs/tabs.module';
 
 @NgModule({
   imports: [
@@ -24,10 +23,9 @@ import { FlexLayoutSplitModule } from '../flex-layout-split/flex-layout-split.mo
     MatIconModule,
     MatSidenavModule,
     MatListModule,
-    MatTabsModule,
-    MatMenuModule,
 
     FlexLayoutSplitModule,
+    TabsModule,
 
     DaemonToolsModule,
     SharedModule,
@@ -36,7 +34,6 @@ import { FlexLayoutSplitModule } from '../flex-layout-split/flex-layout-split.mo
     FooterContainerComponent,
     SidenavContainerComponent,
     NavigationContainerComponent,
-    TabsContainerComponent,
   ],
   exports: [
     NavigationContainerComponent

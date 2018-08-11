@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Application } from '../application.model';
-import { TabService } from '../../navigation/tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({

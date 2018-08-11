@@ -4,7 +4,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { ImageInfo } from 'dockerode';
-import { TabService } from '../../navigation/tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { DockerImageService } from '../docker-image.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 

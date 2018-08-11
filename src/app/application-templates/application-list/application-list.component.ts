@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApplicationService } from '../application.service';
 import { Application } from '../application.model';
-import { TabService } from '../../navigation/tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({

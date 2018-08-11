@@ -1,5 +1,5 @@
 @import 'src/app/navigation/navigation-container/navigation-container.component-theme';
-@import 'src/app/navigation/tabs-container/tabs-container.component-theme';
+@import 'src/app/tabs/tabs-container/tabs-container.component-theme';
 @import 'src/app/flex-layout-split/split-handle/split-handle.component-theme';
 @mixin app-components-theme($theme) {
   @include navigation-container-component-theme($theme);

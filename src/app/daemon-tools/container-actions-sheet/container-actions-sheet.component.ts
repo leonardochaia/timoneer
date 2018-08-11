@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { ContainerInfo } from 'dockerode';
 import { DockerContainerService } from '../docker-container.service';
-import { TabService } from '../../navigation/tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({

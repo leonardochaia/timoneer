@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SettingsService } from '../../settings/settings.service';
-import { TAB_DATA } from '../../navigation/tab.model';
+import { TAB_DATA } from '../../tabs/tab.model';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({

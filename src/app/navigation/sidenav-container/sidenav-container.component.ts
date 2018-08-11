@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.service';
 import { TIM_LOGO } from '../../settings/settings.service';
-import { TabService } from '../tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({

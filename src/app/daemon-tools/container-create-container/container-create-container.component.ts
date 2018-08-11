@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { TAB_DATA } from '../../navigation/tab.model';
-import { TabService } from '../../navigation/tab.service';
+import { TAB_DATA } from '../../tabs/tab.model';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({

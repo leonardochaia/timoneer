@@ -5,7 +5,7 @@ import { EventEmitter } from 'stream';
 import { Exec, ContainerInfo } from 'dockerode';
 import { TerminalMeasures, ContainerAttacherComponent } from '../container-attacher/container-attacher.component';
 import { DockerContainerService } from '../docker-container.service';
-import { TAB_DATA, OnTabAnimationDone } from '../../navigation/tab.model';
+import { TAB_DATA, OnTabAnimationDone } from '../../tabs/tab.model';
 
 @Component({
   selector: 'tim-container-exec-container',

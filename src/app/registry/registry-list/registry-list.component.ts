@@ -3,7 +3,7 @@ import { RegistryService } from '../registry.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SettingsService } from '../../settings/settings.service';
 import { map } from 'rxjs/operators';
-import { TabService } from '../../navigation/tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({

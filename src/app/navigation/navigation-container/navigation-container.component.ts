@@ -3,7 +3,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { NotificationService } from '../../shared/notification.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TabService } from '../tab.service';
+import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
