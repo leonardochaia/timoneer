@@ -10,7 +10,7 @@ import { SettingsModule } from './settings/settings.module';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { AppTabsModule } from './app-tabs.module';
-import { AppShortcutsModule } from './app-shortcuts.module';
+import { GlobalShortcutsModule } from './global-shortcuts.module';
 
 @NgModule({
   imports: [
@@ -19,7 +19,7 @@ import { AppShortcutsModule } from './app-shortcuts.module';
     HotkeyModule.forRoot(),
 
     AppTabsModule,
-    AppShortcutsModule,
+    GlobalShortcutsModule,
 
     HomeModule,
     DaemonToolsModule,
