@@ -3,21 +3,18 @@ import {
   AfterViewInit, ViewChildren,
   ViewContainerRef, QueryList,
   ChangeDetectorRef,
-  OnInit,
   Injector
 } from '@angular/core';
 import { ITimoneerTab, TAB_DATA } from '../tab.model';
 import { TabService } from '../tab.service';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { MatTabChangeEvent } from '@angular/material';
-import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-tabs-container',
   templateUrl: './tabs-container.component.html',
   styleUrls: ['./tabs-container.component.scss']
 })
-export class TabsContainerComponent implements OnInit, AfterViewInit {
+export class TabsContainerComponent implements AfterViewInit {
 
   public get selectedTab() {
     return this.tabService.currentTab;
@@ -36,12 +33,7 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
 
   constructor(private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private tabService: TabService,
-    private hotKey: HotkeysService) {
-  }
-
-  public ngOnInit() {
-    this.bindShortcuts();
+    private tabService: TabService) {
   }
 
   public ngAfterViewInit() {
@@ -95,41 +87,6 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
         this.cd.detectChanges();
       }
     }
-  }
-
-  private bindShortcuts() {
-    this.hotKey.add(new Hotkey(['command+w', 'ctrl+w'], (event: KeyboardEvent): boolean => {
-      this.tabService.removeCurrentTab();
-      return false;
-    }));
-    this.hotKey.add(new Hotkey(['command+shift+w', 'ctrl+shift+w'], (event: KeyboardEvent): boolean => {
-      this.tabService.removeAllTabs();
-      return false;
-    }));
-    this.hotKey.add(new Hotkey(['command+tab', 'ctrl+tab'], (event: KeyboardEvent): boolean => {
-      let next = this.tabService.currentTab + 1;
-      if (next >= this.tabs.length) {
-        next = 0;
-      }
-      this.tabService.changeCurrentTab(next);
-      return false;
-    }));
-    this.hotKey.add(new Hotkey(['command+shift+tab', 'ctrl+shift+tab'], (event: KeyboardEvent): boolean => {
-      let next = this.tabService.currentTab - 1;
-      if (next < 0) {
-        next = this.tabs.length - 1;
-      }
-      this.tabService.changeCurrentTab(next);
-      return false;
-    }));
-    this.hotKey.add(new Hotkey(['command+t', 'ctrl+t'], (event: KeyboardEvent): boolean => {
-      this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW);
-      return false;
-    }));
-    this.hotKey.add(new Hotkey(['command+shift+t', 'ctrl+shift+t'], (event: KeyboardEvent): boolean => {
-      this.tabService.openTabFromHistory();
-      return false;
-    }));
   }
 
   private executeCurrentTabComponentFunction(fn: string) {

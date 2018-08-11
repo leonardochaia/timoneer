@@ -10,6 +10,7 @@ import { SettingsModule } from './settings/settings.module';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { AppTabsModule } from './app-tabs.module';
+import { AppShortcutsModule } from './app-shortcuts.module';
 
 @NgModule({
   imports: [
@@ -17,8 +18,10 @@ import { AppTabsModule } from './app-tabs.module';
     BrowserAnimationsModule,
     HotkeyModule.forRoot(),
 
-    HomeModule,
     AppTabsModule,
+    AppShortcutsModule,
+
+    HomeModule,
     DaemonToolsModule,
     RegistryModule,
     SettingsModule,
