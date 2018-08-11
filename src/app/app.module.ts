@@ -11,6 +11,7 @@ import { ApplicationTemplatesModule } from './application-templates/application-
 import { HotkeyModule } from 'angular2-hotkeys';
 import { AppTabsModule } from './app-tabs.module';
 import { GlobalShortcutsModule } from './global-shortcuts.module';
+import { AppMenuModule } from './app-menu/app-menu.module';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { GlobalShortcutsModule } from './global-shortcuts.module';
     HotkeyModule.forRoot(),
 
     AppTabsModule,
+    AppMenuModule,
     GlobalShortcutsModule,
 
     HomeModule,
