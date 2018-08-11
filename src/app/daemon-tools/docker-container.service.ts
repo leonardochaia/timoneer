@@ -14,7 +14,7 @@ export class DockerContainerService {
     return this.getContainer(id, c => c.inspect());
   }
 
-  public list(options?: { all?: boolean, limit?: number, size?: boolean, filters?: string }) {
+  public list(options?: { all?: boolean, limit?: number, size?: boolean, filters?: any }) {
     return this.daemon.docker(d => d.listContainers(options));
   }
 

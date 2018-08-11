@@ -12,8 +12,18 @@
       <h2 style="margin-bottom: 0">
         {{volume.Name}}
         <br>
-
       </h2>
+      <ng-container *ngIf="containers.get(volume.Name) as containers">
+        <ng-container *ngIf="containers.length; else danglingTemplate">
+          Used by:
+          <span *ngFor="let container of containers">
+            {{container.Names[0]}}
+          </span>
+        </ng-container>
+        <ng-template #danglingTemplate>
+          <b>Dangling</b>
+        </ng-template>
+      </ng-container>
     </div>
     <div>
       <span title="Created At"

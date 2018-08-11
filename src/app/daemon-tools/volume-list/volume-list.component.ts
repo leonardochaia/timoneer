@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, forkJoin } from 'rxjs';
+import { takeUntil, share, switchMap, map } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 import { MatBottomSheet } from '@angular/material';
-import { VolumeInfo, } from 'dockerode';
+import { VolumeInfo, ContainerInfo, } from 'dockerode';
 import { DockerEventsService } from '../docker-events.service';
 import { DockerVolumeService } from '../docker-volume.service';
 import { VolumeActionsSheetComponent } from '../volume-actions-sheet/volume-actions-sheet.component';
+import { DockerContainerService } from '../docker-container.service';
 
 @Component({
   selector: 'tim-volume-list',
@@ -16,11 +17,14 @@ import { VolumeActionsSheetComponent } from '../volume-actions-sheet/volume-acti
 export class VolumeListComponent implements OnInit, OnDestroy {
   public volumes: VolumeInfo[];
 
+  public containers = new Map<string, ContainerInfo[]>();
+
   public loading: boolean;
 
   private componetDestroyed = new Subject();
 
   constructor(private volumeService: DockerVolumeService,
+    private containerService: DockerContainerService,
     private daemonEvents: DockerEventsService,
     private notificationService: NotificationService,
     private bottomSheet: MatBottomSheet) { }
@@ -47,6 +51,16 @@ export class VolumeListComponent implements OnInit, OnDestroy {
     this.componetDestroyed.unsubscribe();
   }
 
+  public getContainersUsingVolume(volume: VolumeInfo) {
+    console.log(volume.Name);
+    return this.containerService.list({
+      all: true,
+      filters: {
+        volume: [volume.Name]
+      }
+    });
+  }
+
   private reload() {
     this.loading = true;
 
@@ -55,6 +69,11 @@ export class VolumeListComponent implements OnInit, OnDestroy {
       .subscribe(volumes => {
         this.loading = false;
         this.volumes = volumes;
+        for (const volume of volumes) {
+          this.getContainersUsingVolume(volume).subscribe(containers => {
+            this.containers.set(volume.Name, containers);
+          });
+        }
       }, e => {
         this.loading = false;
         this.notificationService.open('Error ocurred while obtaining volumes!', null, {
