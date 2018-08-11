@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { TabService } from '../../tabs/tab.service';
-import { TimoneerTabs } from '../../timoneer-tabs';
+import { UpdaterService } from '../../electron-tools/updater.service';
 
 @Component({
   selector: 'tim-footer-container',
@@ -8,9 +7,10 @@ import { TimoneerTabs } from '../../timoneer-tabs';
   styleUrls: ['./footer-container.component.scss']
 })
 export class FooterContainerComponent {
-  constructor(private tabService: TabService) { }
 
-  public openImages() {
-    this.tabService.add(TimoneerTabs.DOCKER_IMAGES);
+  public get appVersion() {
+    return this.updater.currentVersion;
   }
+
+  constructor(private updater: UpdaterService) { }
 }

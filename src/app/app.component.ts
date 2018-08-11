@@ -14,7 +14,7 @@ export class AppComponent implements OnDestroy {
 
   constructor(private overlayContainer: OverlayContainer,
     private renderer: Renderer2,
-    private menuService: AppMenuService,
+    menuService: AppMenuService,
     themeService: AppThemeService) {
 
     menuService.loadMenu();

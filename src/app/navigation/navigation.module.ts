@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   MatToolbarModule,
   MatButtonModule, MatIconModule,
-  MatSidenavModule, MatListModule,
+  MatSidenavModule, MatListModule, MatTooltipModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
@@ -23,6 +23,7 @@ import { TabsModule } from '../tabs/tabs.module';
     MatIconModule,
     MatSidenavModule,
     MatListModule,
+    MatTooltipModule,
 
     FlexLayoutSplitModule,
     TabsModule,

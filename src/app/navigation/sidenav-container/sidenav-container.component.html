@@ -1,75 +1,99 @@
 <mat-sidenav opened
              style="display:block; height:100%;"
-             fxLayout="column">
+             fxLayout="row">
 
-  <mat-nav-list fxFlex="grow">
+  <div fxLayout="column">
+    <mat-nav-list fxFlex="grow">
 
-    <a mat-list-item
-       (click)="openDashboard()">
-      <span mat-list-icon>
-        <img class="logo"
-             [src]="timoneerLogo"
-             style="height:40px; vertical-align: middle; margin-top:-8px; margin-left:-8px;">
-      </span>
-      <h4 mat-line>Dashboard</h4>
-      <p mat-line>Timoneer's Dashboard</p>
-    </a>
-
-    <a mat-list-item
-       (click)="openApplications()">
-      <mat-icon mat-list-icon>developer_mode</mat-icon>
-      <h4 mat-line>Applications</h4>
-      <p mat-line>Container Templates</p>
-    </a>
-
-    <a mat-list-item
-       (click)="openDockerImages()">
-      <mat-icon mat-list-icon>iso</mat-icon>
-      <h4 mat-line>Images</h4>
-      <p mat-line>Docker Images</p>
-    </a>
-
-    <a mat-list-item
-       (click)="openDockerVolumes()">
-      <mat-icon mat-list-icon>storage</mat-icon>
-      <h4 mat-line>Volumes</h4>
-      <p mat-line>Docker Volumes</p>
-    </a>
-
-    <a mat-list-item
-       (click)="openSystem()">
-      <mat-icon mat-list-icon>devices</mat-icon>
-      <h4 mat-line>System</h4>
-      <p mat-line>Docker System Info</p>
-    </a>
-
-  </mat-nav-list>
-
-  <mat-nav-list>
-
-    <a mat-list-item
-       (click)="openSettings()">
-      <mat-icon mat-list-icon>settings</mat-icon>
-      <h4 mat-line>Settings</h4>
-      <p mat-line>
-        Timoneer v{{appVersion}}
-      </p>
-    </a>
-
-    <a mat-list-item
-       (click)="openSettings()"
-       *ngIf="updateStatus === UpdaterStatus.Outdated || updateStatus === UpdaterStatus.PendingInstall">
-      <h4 mat-line>
-        <span class="tim-bg-primary"
-              style="padding:4px; font-weight: bold; margin-right: 6px;">
-          NEW
+      <a mat-list-item
+         matTooltipPosition="right"
+         (click)="openDashboard()">
+        <span mat-list-icon>
+          <img class="logo"
+               [src]="timoneerLogo"
+               style="height:40px; vertical-align: middle; margin-top:-8px; margin-left:-8px;">
         </span>
-        <small>
-          {{updateStatusText}}
-        </small>
-      </h4>
-    </a>
+      </a>
 
-  </mat-nav-list>
+      <a mat-list-item
+         matTooltipPosition="right"
+         matTooltip="Applications"
+         (click)="openApplications()">
+        <mat-icon mat-list-icon>developer_mode</mat-icon>
+      </a>
+
+      <a mat-list-item
+         matTooltipPosition="right"
+         matTooltip="Images"
+         (click)="openDockerImages()">
+        <mat-icon mat-list-icon>iso</mat-icon>
+      </a>
+
+      <a mat-list-item
+         matTooltipPosition="right"
+         matTooltip="Volumes"
+         (click)="openDockerVolumes()">
+        <mat-icon mat-list-icon>storage</mat-icon>
+      </a>
+
+      <a mat-list-item
+         matTooltipPosition="right"
+         matTooltip="System"
+         (click)="openSystem()">
+        <mat-icon mat-list-icon>devices</mat-icon>
+      </a>
+    </mat-nav-list>
+
+    <mat-nav-list>
+
+      <a mat-list-item
+         *ngIf="updateStatus === UpdaterStatus.Outdated || updateStatus === UpdaterStatus.PendingInstall"
+         class="tim-bg-primary"
+         matTooltipPosition="right"
+         [matTooltip]="updateStatusText"
+         (click)="openSettings()">
+        <b>
+          NEW
+        </b>
+      </a>
+
+      <a mat-list-item
+         (click)="openSettings()">
+        <mat-icon mat-list-icon>settings</mat-icon>
+      </a>
+    </mat-nav-list>
+  </div>
+
+  <div fxFlex="grow"
+       style="overflow: hidden">
+
+    <h4 class="list-title">
+      <mat-icon>computer</mat-icon>
+      Running Containers
+    </h4>
+
+    <mat-nav-list>
+      <tim-container-list>
+
+        <ng-template let-container
+                     let-loading="loading">
+
+          <mat-list-item style="height:32px"
+                         [matTooltip]="container.Image"
+                         matTooltipPosition="right"
+                         (click)="!loading ? attach(container.Names[0], container.Id) : null">
+            <small mat-line>{{container.Names[0]}}</small>
+            <div mat-line
+                 *ngIf="loading">
+              <tim-loading [alternative]="true"></tim-loading>
+            </div>
+          </mat-list-item>
+
+        </ng-template>
+      </tim-container-list>
+
+    </mat-nav-list>
+
+  </div>
 
 </mat-sidenav>

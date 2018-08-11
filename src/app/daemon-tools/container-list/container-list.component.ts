@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ContentChild, TemplateRef } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
-import { MatBottomSheet } from '@angular/material';
-import { ContainerActionsSheetComponent } from '../container-actions-sheet/container-actions-sheet.component';
 import { ContainerInfo } from 'dockerode';
 import { DockerEventsService } from '../docker-events.service';
 import { DockerContainerService } from '../docker-container.service';
+import { ContainerMenuService } from '../container-menu.service';
 
 @Component({
   selector: 'tim-container-list',
@@ -18,12 +17,17 @@ export class ContainerListComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
 
+  public loadingMap = new Map<string, boolean>();
+
+  @ContentChild(TemplateRef)
+  public template: TemplateRef<any>;
+
   private componetDestroyed = new Subject();
 
   constructor(private containerService: DockerContainerService,
     private daemonEvents: DockerEventsService,
-    private notificationService: NotificationService,
-    private bottomSheet: MatBottomSheet) { }
+    private menuService: ContainerMenuService,
+    private notificationService: NotificationService) { }
 
   public ngOnInit() {
 
@@ -37,9 +41,19 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   }
 
   public openContainerMenu(container: ContainerInfo) {
-    this.bottomSheet.open(ContainerActionsSheetComponent, {
-      data: container
-    });
+    const menu = this.menuService.open(container);
+
+    menu.actionStarted
+      .pipe(takeUntil(menu.actionFinished))
+      .subscribe(() => {
+        this.loadingMap.set(container.Id, true);
+      });
+
+    menu.actionFinished
+      .pipe(take(1))
+      .subscribe(() => {
+        this.loadingMap.set(container.Id, false);
+      });
   }
 
   public ngOnDestroy() {

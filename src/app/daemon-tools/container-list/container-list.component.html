@@ -3,48 +3,57 @@
 </ng-template>
 <ng-container *ngIf="!loading; else loadingTemplate">
 
-  <mat-card *ngFor="let container of containers"
-            fxLayout="row"
-            fxLayoutGap="8px">
-    <mat-icon class="tim-text-primary tim-icon-48">computer</mat-icon>
-    <div fxFlex="grow">
-      <h2 style="margin-bottom: 0">
-        {{container.Names[0]}}
-        <small class="tim-text-primary">
-          {{container.State}}
-        </small>
-        <br>
-        <code>
+  <ng-container *ngFor="let container of containers; let i = index">
+    <span (auxclick)="openContainerMenu(container)">
+      <ng-container *ngTemplateOutlet="template || defaultTemplate; context: {$implicit: container, loading: loadingMap.get(container.Id)}">
+      </ng-container>
+    </span>
+  </ng-container>
+
+  <ng-template #defaultTemplate
+               let-container>
+    <mat-card fxLayout="row"
+              fxLayoutGap="8px">
+      <mat-icon class="tim-text-primary tim-icon-48">computer</mat-icon>
+      <div fxFlex="grow">
+        <h2 style="margin-bottom: 0">
+          {{container.Names[0]}}
+          <small class="tim-text-primary">
+            {{container.State}}
+          </small>
+          <br>
+          <code>
         {{container.Id | slice:0:12}}
         {{container.Image}}
       </code>
-      </h2>
-    </div>
-    <p>
-      <span title="Port Mappings"
-            class="text-nowrap">
-        <mat-icon>network_wifi</mat-icon>
-        <b>
-          {{container.Ports.length}}
-        </b>
-      </span>
-      <span title="Volume Mappings"
-            class="text-nowrap">
-        <mat-icon>storage</mat-icon>
-        <b>
-          {{container.Mounts.length}}
-        </b>
-      </span>
-      <br>{{container.Status}}
-    </p>
-    <p>
-      <button type="button"
-              (click)="openContainerMenu(container)"
-              mat-raised-button
-              color="accent">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </p>
-  </mat-card>
+        </h2>
+      </div>
+      <p>
+        <span title="Port Mappings"
+              class="text-nowrap">
+          <mat-icon>network_wifi</mat-icon>
+          <b>
+            {{container.Ports.length}}
+          </b>
+        </span>
+        <span title="Volume Mappings"
+              class="text-nowrap">
+          <mat-icon>storage</mat-icon>
+          <b>
+            {{container.Mounts.length}}
+          </b>
+        </span>
+        <br>{{container.Status}}
+      </p>
+      <p>
+        <button type="button"
+                (click)="openContainerMenu(container)"
+                mat-raised-button
+                color="accent">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </p>
+    </mat-card>
+  </ng-template>
 
 </ng-container>

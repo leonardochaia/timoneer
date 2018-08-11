@@ -59,4 +59,11 @@ export class SidenavContainerComponent {
     public openDockerVolumes() {
         this.tabService.add(TimoneerTabs.DOCKER_VOLUMES);
     }
+
+    public attach(name: string, containerId: string) {
+        this.tabService.add(TimoneerTabs.DOCKER_ATTACH, {
+            title: `Attached to ${name}`,
+            params: containerId,
+        });
+    }
 }
