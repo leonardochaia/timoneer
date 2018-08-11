@@ -126,6 +126,10 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
       this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW);
       return false;
     }));
+    this.hotKey.add(new Hotkey(['command+shift+t', 'ctrl+shift+t'], (event: KeyboardEvent): boolean => {
+      this.tabService.openTabFromHistory();
+      return false;
+    }));
   }
 
   private executeCurrentTabComponentFunction(fn: string) {

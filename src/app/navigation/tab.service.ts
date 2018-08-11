@@ -1,6 +1,12 @@
 import { Injectable, Inject, Optional } from '@angular/core';
 import { ITimoneerTab, APPLICATION_TABS } from './tab.model';
 
+interface PersistantTab {
+  id: string;
+  title?: string;
+  params?: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,11 +41,11 @@ export class TabService {
     const index = this.tabs.indexOf(tab);
     this.tabs.splice(index, 1);
     this.saveTabs();
+    this.addToTabHistory(tab);
   }
 
   public removeCurrentTab() {
-    this.tabs.splice(this.currentTab, 1);
-    this.saveTabs();
+    this.removeTab(this.tabs[this.currentTab]);
   }
 
   public removeAllTabs() {
@@ -48,7 +54,7 @@ export class TabService {
   }
 
   public removeOtherTabs(tab: ITimoneerTab) {
-    this.tabs.splice(0, this.tabs.length - 1);
+    this.tabs = [];
     this.addTab(tab);
     this.saveTabs();
   }
@@ -56,6 +62,13 @@ export class TabService {
   public changeCurrentTab(index: number) {
     this.selectedTab = index;
     this.saveCurrentTab();
+  }
+
+  public openTabFromHistory() {
+    const tab = this.popTabHistory();
+    if (tab) {
+      this.addTab(tab);
+    }
   }
 
   private addTab(tab: ITimoneerTab) {
@@ -100,12 +113,49 @@ export class TabService {
     }
   }
 
+  private getTabHistory() {
+    const history = sessionStorage.getItem('tabHistory');
+    if (history) {
+      return JSON.parse(history) as PersistantTab[];
+    } else {
+      return [];
+    }
+  }
+
+  private saveTabHistory(tabHistory: PersistantTab[]) {
+    sessionStorage.setItem('tabHistory', JSON.stringify(tabHistory));
+  }
+
+  private addToTabHistory(tab: ITimoneerTab) {
+    const tabHistory = this.getTabHistory();
+    tabHistory.push(this.tabToPersistantTab(tab));
+    this.saveTabHistory(tabHistory);
+  }
+
+  private popTabHistory() {
+    const tabHistory = this.getTabHistory();
+    if (tabHistory && tabHistory.length) {
+      const pop = tabHistory.pop();
+      this.saveTabHistory(tabHistory);
+      return this.persistantTabToTab(pop);
+    }
+  }
+
+  private tabToPersistantTab(tab: ITimoneerTab): PersistantTab {
+    return {
+      id: tab.id,
+      params: tab.params,
+      title: tab.title,
+    };
+  }
+
+  private persistantTabToTab(persistant: PersistantTab) {
+    const original = this.findTabById(persistant.id);
+    return Object.assign({}, original, persistant);
+  }
+
   private saveTabs() {
-    sessionStorage.setItem('tabs', JSON.stringify(this.tabs.map(t => ({
-      id: t.id,
-      params: t.params,
-      title: t.title,
-    }))));
+    sessionStorage.setItem('tabs', JSON.stringify(this.tabs.map(t => this.tabToPersistantTab(t))));
   }
 
   private loadTabs() {
@@ -114,8 +164,7 @@ export class TabService {
       this.tabs = JSON.parse(json);
       for (let i = 0; i < this.tabs.length; i++) {
         const tab = this.tabs[i];
-        const original = this.findTabById(tab.id);
-        this.tabs[i] = Object.assign({}, original, tab);
+        this.tabs[i] = this.persistantTabToTab(tab);
       }
     } else {
       this.tabs = [];
