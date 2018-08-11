@@ -16,6 +16,7 @@ import { RegistryListContainerComponent } from './registry/registry-list-contain
 import { HomeContainerComponent } from './home/home-container/home-container.component';
 import { ITimoneerTab, APPLICATION_TABS } from './navigation/tab.model';
 import { TimoneerTabs } from './timoneer-tabs';
+import { VolumeListContainerComponent } from './daemon-tools/volume-list-container/volume-list-container.component';
 
 const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
   {
@@ -40,6 +41,11 @@ const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
     id: TimoneerTabs.DOCKER_CONTAINER_NEW,
     title: 'New Container',
     component: ContainerCreateContainerComponent,
+  },
+  {
+    id: TimoneerTabs.DOCKER_VOLUMES,
+    title: 'Volumes',
+    component: VolumeListContainerComponent,
   },
   {
     id: TimoneerTabs.APPLICATION_LIST,

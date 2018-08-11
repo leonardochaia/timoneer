@@ -12,4 +12,8 @@ export class DockerVolumeService {
     return this.daemon.docker(d => d.listVolumes(options) as Promise<any> as Promise<{ Volumes: VolumeInfo[] }>)
       .pipe(map(v => v.Volumes));
   }
+
+  public removeVolume(volume: string, options?: { force?: boolean }) {
+    return this.daemon.docker(d => d.getVolume(volume).remove(options));
+  }
 }

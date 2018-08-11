@@ -55,4 +55,8 @@ export class SidenavContainerComponent {
     public openSettings() {
         this.tabService.add(TimoneerTabs.SETTINGS);
     }
+
+    public openDockerVolumes() {
+        this.tabService.add(TimoneerTabs.DOCKER_VOLUMES);
+    }
 }

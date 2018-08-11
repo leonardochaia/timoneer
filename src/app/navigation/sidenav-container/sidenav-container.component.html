@@ -30,6 +30,13 @@
     </a>
 
     <a mat-list-item
+       (click)="openDockerVolumes()">
+      <mat-icon mat-list-icon>storage</mat-icon>
+      <h4 mat-line>Volumes</h4>
+      <p mat-line>Docker Volumes</p>
+    </a>
+
+    <a mat-list-item
        (click)="openSystem()">
       <mat-icon mat-list-icon>devices</mat-icon>
       <h4 mat-line>System</h4>
