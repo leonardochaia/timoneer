@@ -45,6 +45,8 @@ import { ImageActionsSheetComponent } from './image-actions-sheet/image-actions-
 import { VolumeListComponent } from './volume-list/volume-list.component';
 import { VolumeListContainerComponent } from './volume-list-container/volume-list-container.component';
 import { VolumeActionsSheetComponent } from './volume-actions-sheet/volume-actions-sheet.component';
+import { VolumeCreateComponent } from './volume-create/volume-create.component';
+import { VolumeCreateContainerComponent } from './volume-create-container/volume-create-container.component';
 
 @NgModule({
   imports: [
@@ -95,6 +97,8 @@ import { VolumeActionsSheetComponent } from './volume-actions-sheet/volume-actio
     VolumeListComponent,
     VolumeListContainerComponent,
     VolumeActionsSheetComponent,
+    VolumeCreateComponent,
+    VolumeCreateContainerComponent,
   ],
   exports: [
     ContainerListComponent,
@@ -124,6 +128,7 @@ import { VolumeActionsSheetComponent } from './volume-actions-sheet/volume-actio
     ContainerExecContainerComponent,
     ContainerCreateContainerComponent,
     VolumeListContainerComponent,
+    VolumeCreateContainerComponent,
     SystemContainerComponent,
   ]
 })

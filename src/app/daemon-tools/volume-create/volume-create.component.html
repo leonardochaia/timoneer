@@ -1,0 +1,47 @@
+<form fxLayout="column"
+      [formGroup]="form"
+      (ngSubmit)="create()">
+
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;">
+
+    <mat-icon class="tim-icon-48 tim-text-primary">storage</mat-icon>
+
+    <div fxFlex="fill">
+      <mat-form-field>
+        <input type="text"
+               matInput
+               formControlName="Name"
+               placeholder="Volume Name">
+      </mat-form-field>
+
+    </div>
+  </mat-card>
+
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;">
+
+    <mat-icon class="tim-icon-48 tim-text-primary">storage</mat-icon>
+
+    <div fxFlex="fill">
+      <h3 class="tim-text-title"
+          style="margin:0">
+        Create new volume
+      </h3>
+    </div>
+    <div>
+      <button mat-raised-button
+              [disabled]="form.invalid"
+              type="submit"
+              color="primary">
+        <mat-icon>publish</mat-icon>
+        Create
+      </button>
+    </div>
+  </mat-card>
+
+</form>

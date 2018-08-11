@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TabService } from '../../navigation/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-volume-list-container',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VolumeListContainerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private tabService: TabService) { }
 
-  ngOnInit() {
+  public ngOnInit() {
+  }
+
+  public createVolume() {
+    this.tabService.add(TimoneerTabs.DOCKER_VOLUME_NEW);
   }
 
 }

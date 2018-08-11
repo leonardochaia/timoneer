@@ -16,4 +16,8 @@ export class DockerVolumeService {
   public removeVolume(volume: string, options?: { force?: boolean }) {
     return this.daemon.docker(d => d.getVolume(volume).remove(options));
   }
+
+  public createVolume(data: { Name: string, Driver?: string, DriverOpts?: any, Labels?: any }) {
+    return this.daemon.docker(d => d.createVolume(data) as Promise<VolumeInfo>);
+  }
 }

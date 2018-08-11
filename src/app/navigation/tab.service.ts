@@ -74,6 +74,11 @@ export class TabService {
   private addTab(tab: ITimoneerTab) {
 
     let isNew = true;
+
+    if (tab.replaceCurrent) {
+      this.removeCurrentTab();
+    }
+
     if (!tab.multiple) {
       const found = this.tabs.filter(x => x.id === tab.id
         && x.title === tab.title
@@ -86,10 +91,6 @@ export class TabService {
 
     if (isNew) {
       this.tabs.push(tab);
-    }
-
-    if (tab.replaceCurrent) {
-      this.removeCurrentTab();
     }
 
     this.changeCurrentTab(this.tabs.indexOf(tab));

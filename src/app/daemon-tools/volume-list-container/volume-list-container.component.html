@@ -1,5 +1,12 @@
 <div fxLayout="column"
      style="padding:16px;">
+  <div style="margin-bottom:8px; text-align: right">
+    <button mat-raised-button
+            (click)="createVolume()"
+            color="primary">
+      New Volume
+    </button>
+  </div>
 
   <div>
     <tim-volume-list></tim-volume-list>

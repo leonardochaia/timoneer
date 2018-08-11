@@ -17,6 +17,7 @@ import { HomeContainerComponent } from './home/home-container/home-container.com
 import { ITimoneerTab, APPLICATION_TABS } from './navigation/tab.model';
 import { TimoneerTabs } from './timoneer-tabs';
 import { VolumeListContainerComponent } from './daemon-tools/volume-list-container/volume-list-container.component';
+import { VolumeCreateContainerComponent } from './daemon-tools/volume-create-container/volume-create-container.component';
 
 const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
   {
@@ -46,6 +47,11 @@ const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
     id: TimoneerTabs.DOCKER_VOLUMES,
     title: 'Volumes',
     component: VolumeListContainerComponent,
+  },
+  {
+    id: TimoneerTabs.DOCKER_VOLUME_NEW,
+    title: 'New Volume',
+    component: VolumeCreateContainerComponent,
   },
   {
     id: TimoneerTabs.APPLICATION_LIST,
