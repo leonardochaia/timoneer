@@ -25,6 +25,11 @@ export class DockerEventsService implements OnDestroy {
         if (this.events.has(decoded.Action)) {
           this.events.get(decoded.Action).next(decoded);
         }
+
+        const combined = `${decoded.Type}.${decoded.Action}`;
+        if (this.events.has(combined)) {
+          this.events.get(combined).next(decoded);
+        }
       });
   }
 
@@ -43,7 +48,7 @@ export class DockerEventsService implements OnDestroy {
     }
   }
 
-  public bindAll(events: string[]) {
-    return combineLatest(events.map(e => this.bind(e).pipe(startWith(null))));
+  public bindAll(events: string[], type?: string) {
+    return combineLatest(events.map(e => this.bind(type ? `${type}.${e}` : e).pipe(startWith(null))));
   }
 }

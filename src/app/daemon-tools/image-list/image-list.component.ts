@@ -47,7 +47,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
         this.processFilter();
       });
 
-    this.daemonEvents.bindAll(['delete', 'import', 'load', 'pull', 'tag', 'untag'])
+    this.daemonEvents.bindAll(['delete', 'import', 'load', 'pull', 'tag', 'untag'], 'image')
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(() => {
         this.reload();
