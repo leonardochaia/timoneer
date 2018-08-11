@@ -66,7 +66,7 @@ export class TabService {
   }
 
   public removeAllTabs() {
-    this.removeMultipleTabs(this.tabs);
+    this.removeMultipleTabs(this.tabs.slice());
   }
 
   public removeOtherTabs(tab: ITimoneerTab) {
