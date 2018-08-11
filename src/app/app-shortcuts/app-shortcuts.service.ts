@@ -9,15 +9,12 @@ export class AppShortcutsService implements OnDestroy {
   constructor(private hotKey: HotkeysService) { }
 
   public add(shortcut: string[], action: (event?: KeyboardEvent) => void) {
-    console.log(`Binded: ${shortcut[0]}`);
     const hotKey = new Hotkey(shortcut, (e) => {
-      console.log(`Executed: ${shortcut[0]}`);
       action(e);
       return false;
     });
     this.hotKey.add(hotKey);
     return () => {
-      console.log(`Unbinded: ${hotKey.combo[0]}`);
       this.hotKey.remove(hotKey);
     };
   }
@@ -30,7 +27,6 @@ export class AppShortcutsService implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    console.log(`Unbinded All`);
     this.hotKey.reset();
   }
 }
