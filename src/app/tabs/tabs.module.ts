@@ -5,6 +5,7 @@ import { MatTabsModule, MatIconModule, MatMenuModule, MatButtonModule } from '@a
 import { TabHistoryService } from './tab-history.service';
 import { TabStorageService } from './tab-storage.service';
 import { TabService } from './tab.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { TabService } from './tab.service';
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
+    FlexLayoutModule,
   ],
   declarations: [
     TabsContainerComponent,
