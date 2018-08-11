@@ -11,7 +11,7 @@
 
     <div fxFlex="grow">
       <mat-form-field style="width: 99%">
-        <input type="text"
+        <input type="search"
                placeholder="Type to search.."
                [formControl]="searchTermControl"
                matInput>
@@ -47,13 +47,15 @@
     <p class="text-nowrap">
       <b>{{image.Size | bytes}}</b>
     </p>
-    <div>
-      <a mat-raised-button
-         color="primary"
-         (click)="createContainer(image)">
-        New Container
-      </a>
-    </div>
+
+    <p>
+      <button type="button"
+              (click)="openImageMenu(image)"
+              mat-raised-button
+              color="accent">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </p>
   </mat-card>
 
 </ng-container>

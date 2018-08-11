@@ -45,4 +45,8 @@ export class DockerImageService {
   public inspectImage(image: string) {
     return this.daemon.docker(d => d.getImage(encodeURI(image)).inspect());
   }
+
+  public removeImage(image: string) {
+    return this.daemon.docker(d => d.getImage(encodeURI(image)).remove());
+  }
 }

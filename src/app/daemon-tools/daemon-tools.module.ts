@@ -41,6 +41,7 @@ import { DockerContainerService } from './docker-container.service';
 import { ContainerCreatePortMappingComponent } from './container-create-port-mapping/container-create-port-mapping.component';
 import { ContainerCreateVolumeMappingComponent } from './container-create-volume-mapping/container-create-volume-mapping.component';
 import { DockerVolumeService } from './docker-volume.service';
+import { ImageActionsSheetComponent } from './image-actions-sheet/image-actions-sheet.component';
 
 @NgModule({
   imports: [
@@ -87,6 +88,7 @@ import { DockerVolumeService } from './docker-volume.service';
     ContainerExecContainerComponent,
     ContainerCreateContainerComponent,
     SystemContainerComponent,
+    ImageActionsSheetComponent,
   ],
   exports: [
     ContainerListComponent,
@@ -109,6 +111,7 @@ import { DockerVolumeService } from './docker-volume.service';
   entryComponents: [
     ImagePullModalComponent,
     ContainerActionsSheetComponent,
+    ImageActionsSheetComponent,
     ImageListContainerComponent,
     ContainerAttacherContainerComponent,
     ContainerExecContainerComponent,

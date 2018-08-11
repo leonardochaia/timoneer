@@ -4,8 +4,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImageInfo } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
-import { TabService } from '../../navigation/tab.service';
-import { TimoneerTabs } from '../../timoneer-tabs';
+import { ImageActionsSheetComponent } from '../image-actions-sheet/image-actions-sheet.component';
+import { MatBottomSheet } from '@angular/material';
+import { DockerEventsService } from '../docker-events.service';
 
 @Component({
   selector: 'tim-image-list',
@@ -30,8 +31,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
   private componetDestroyed = new Subject();
 
   constructor(private imageService: DockerImageService,
-    private tabService: TabService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private daemonEvents: DockerEventsService,
+    private bottomSheet: MatBottomSheet) {
 
     this.filterForm = this.fb.group({
       displayDanglingImages: [false],
@@ -44,6 +46,12 @@ export class ImageListComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.processFilter();
       });
+
+    this.daemonEvents.bindAll(['delete', 'import', 'load', 'pull', 'tag', 'untag'])
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe(() => {
+        this.reload();
+      });
   }
 
   public ngOnInit() {
@@ -54,9 +62,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
     return image.RepoTags && image.RepoTags[0] === '<none>:<none>';
   }
 
-  public createContainer(image: ImageInfo) {
-    this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
-      params: image.RepoTags[0] || image.Id
+  public openImageMenu(image: ImageInfo) {
+    this.bottomSheet.open(ImageActionsSheetComponent, {
+      data: image
+    }).afterDismissed().subscribe(reload => {
+      if (reload) {
+        this.reload();
+      }
     });
   }
 

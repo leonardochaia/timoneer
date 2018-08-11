@@ -1,0 +1,26 @@
+<h1>
+  <mat-icon>computer</mat-icon>
+  {{image.RepoTags[0]}}
+</h1>
+<tim-loading *ngIf="loading"
+             [alternative]="true"></tim-loading>
+<p *ngIf="error"
+   class="tim-text-warn">
+  {{error}}
+</p>
+<mat-nav-list>
+
+  <a mat-list-item
+     (click)="createContainer()">
+    <mat-icon mat-list-icon>add_to_queue</mat-icon>
+    <h4 mat-line>New Container</h4>
+    <p mat-line>Create Container from this image</p>
+  </a>
+
+  <a mat-list-item
+     (click)="remove()">
+    <mat-icon mat-list-icon>delete</mat-icon>
+    <h4 mat-line>Remove</h4>
+    <p mat-line>Deletes the image</p>
+  </a>
+</mat-nav-list>
