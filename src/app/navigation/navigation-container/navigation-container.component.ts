@@ -36,6 +36,9 @@ export class NavigationContainerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    if (!this.tabService.tabs.length) {
+      this.tabService.add(TimoneerTabs.DASHBOARD);
+    }
   }
 
   public ngOnDestroy() {
