@@ -13,6 +13,14 @@
     Theming Classes
 **/
 
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
 .timoneer-theme {
   @include angular-material-theme($timoneer-theme);
   @include app-components-theme($timoneer-theme);
