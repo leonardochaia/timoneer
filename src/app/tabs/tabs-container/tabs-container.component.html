@@ -6,7 +6,7 @@
   <mat-tab *ngFor="let tab of tabs">
 
     <ng-template mat-tab-label>
-      <div (auxclick)="$event.which === 2 ? removeTab(tab) : menuTrigger.openMenu()">
+      <div (auxclick)="$event.which === 2 ? removeTab(tab) : openTabMenu(tab)">
         {{tab.title}}
         <button mat-icon-button
                 style="margin-left:4px"
@@ -14,16 +14,6 @@
           <mat-icon>clear</mat-icon>
         </button>
       </div>
-      <span #menuTrigger="matMenuTrigger"
-            [matMenuTriggerFor]="menu"></span>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item
-                (click)="removeTab(tab)">Close</button>
-        <button mat-menu-item
-                (click)="removeAllTabs()">Close All</button>
-        <button mat-menu-item
-                (click)="removeOtherTabs(tab)">Close Others</button>
-      </mat-menu>
     </ng-template>
 
     <ng-container #dynamic></ng-container>

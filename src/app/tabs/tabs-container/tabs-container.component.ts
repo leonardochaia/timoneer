@@ -10,6 +10,7 @@ import { TabService } from '../tab.service';
 import { MatTabChangeEvent } from '@angular/material';
 import { TabStorageService } from '../tab-storage.service';
 import { TabHistoryService } from '../tab-history.service';
+import { ContextMenuConstructor, ContextMenuService } from '../../electron-tools/context-menu.service';
 
 @Component({
   selector: 'tim-tabs-container',
@@ -35,9 +36,10 @@ export class TabsContainerComponent implements AfterViewInit {
 
   constructor(private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
+    private tabService: TabService,
+    private contextMenuService: ContextMenuService,
     tabStorageService: TabStorageService,
-    tabHistoryService: TabHistoryService,
-    private tabService: TabService) {
+    tabHistoryService: TabHistoryService) {
 
     tabStorageService.initialize();
     tabHistoryService.initialize();
@@ -69,6 +71,31 @@ export class TabsContainerComponent implements AfterViewInit {
 
   public removeOtherTabs(tab: ITimoneerTab) {
     this.tabService.removeOtherTabs(tab);
+  }
+
+  public openTabMenu(tab: ITimoneerTab) {
+    const template: ContextMenuConstructor[] = [
+      {
+        label: 'Close',
+        click: () => {
+          this.removeTab(tab);
+        }
+      },
+      {
+        label: 'Close Others',
+        click: () => {
+          this.removeOtherTabs(tab);
+        }
+      },
+      {
+        label: 'Close All',
+        click: () => {
+          this.removeAllTabs();
+        }
+      }
+    ];
+
+    this.contextMenuService.open(template);
   }
 
   private refresh() {
