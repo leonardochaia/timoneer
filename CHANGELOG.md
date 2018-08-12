@@ -1,3 +1,35 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/leonardochaia/timoneer/compare/v0.1.0...v0.2.0) (2018-08-12)
+
+
+### Bug Fixes
+
+* added loading to system view ([5864acd](https://github.com/leonardochaia/timoneer/commit/5864acd))
+* disable text selection ([db0f246](https://github.com/leonardochaia/timoneer/commit/db0f246))
+* fixed tags when no registries are configured ([bc680a9](https://github.com/leonardochaia/timoneer/commit/bc680a9))
+* improved list refreshing logics ([fe58996](https://github.com/leonardochaia/timoneer/commit/fe58996))
+* list not updating after os sleep ([63f9dfd](https://github.com/leonardochaia/timoneer/commit/63f9dfd))
+* set host port and container port when adding suggesting port ([e440f9a](https://github.com/leonardochaia/timoneer/commit/e440f9a))
+* show container name instead of id when attaching ([ab4c620](https://github.com/leonardochaia/timoneer/commit/ab4c620))
+* storage driver not being shown ([a0ef3fa](https://github.com/leonardochaia/timoneer/commit/a0ef3fa))
+
+
+### Features
+
+* added all container listing ([97a915e](https://github.com/leonardochaia/timoneer/commit/97a915e))
+* added application menu ([844efb2](https://github.com/leonardochaia/timoneer/commit/844efb2))
+* added ctrl+shift+t shortcut for new container ([37b6524](https://github.com/leonardochaia/timoneer/commit/37b6524))
+* added tab shortcuts ([5b2e77c](https://github.com/leonardochaia/timoneer/commit/5b2e77c))
+* added Tabs support ([ca2d35b](https://github.com/leonardochaia/timoneer/commit/ca2d35b))
+* added volume listing and remotion ([c6a9305](https://github.com/leonardochaia/timoneer/commit/c6a9305))
+* create volumes ([e95ae7d](https://github.com/leonardochaia/timoneer/commit/e95ae7d))
+* remove docker images ([c57877e](https://github.com/leonardochaia/timoneer/commit/c57877e))
+* show which containers are using a volume ([5d313c8](https://github.com/leonardochaia/timoneer/commit/5d313c8))
+* suggest volume names when creating containers ([7ecead8](https://github.com/leonardochaia/timoneer/commit/7ecead8))
+* support mapping to docker volumes ([b402c83](https://github.com/leonardochaia/timoneer/commit/b402c83))
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/leonardochaia/timoneer/compare/v0.0.2...v0.1.0) (2018-08-01)
 
