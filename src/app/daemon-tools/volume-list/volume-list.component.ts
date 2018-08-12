@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, forkJoin } from 'rxjs';
-import { takeUntil, share, switchMap, map } from 'rxjs/operators';
+import { Subject, Observable, throwError } from 'rxjs';
+import { takeUntil, catchError, map } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
-import { MatBottomSheet } from '@angular/material';
 import { VolumeInfo, ContainerInfo, } from 'dockerode';
 import { DockerEventsService } from '../docker-events.service';
 import { DockerVolumeService } from '../docker-volume.service';
-import { VolumeActionsSheetComponent } from '../volume-actions-sheet/volume-actions-sheet.component';
 import { DockerContainerService } from '../docker-container.service';
 
 @Component({
@@ -21,13 +19,14 @@ export class VolumeListComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
 
+  public loadingMap = new Map<string, boolean>();
+
   private componetDestroyed = new Subject();
 
   constructor(private volumeService: DockerVolumeService,
     private containerService: DockerContainerService,
     private daemonEvents: DockerEventsService,
-    private notificationService: NotificationService,
-    private bottomSheet: MatBottomSheet) { }
+    private notificationService: NotificationService) { }
 
   public ngOnInit() {
 
@@ -40,10 +39,11 @@ export class VolumeListComponent implements OnInit, OnDestroy {
     this.reload();
   }
 
-  public openVolumeMenu(volume: VolumeInfo) {
-    this.bottomSheet.open(VolumeActionsSheetComponent, {
-      data: volume
-    });
+  public deleteVolume(volume: VolumeInfo) {
+    this.bindLoading(volume, this.volumeService.removeVolume(volume.Name))
+      .subscribe(() => {
+        this.notificationService.open(`${volume.Name} has been removed.`);
+      });
   }
 
   public ngOnDestroy() {
@@ -58,6 +58,23 @@ export class VolumeListComponent implements OnInit, OnDestroy {
         volume: [volume.Name]
       }
     });
+  }
+
+  private bindLoading(volume: VolumeInfo, obs: Observable<any>) {
+    this.loadingMap.set(volume.Name, true);
+    return obs.pipe(
+      catchError((e) => {
+        this.loadingMap.set(volume.Name, false);
+        this.notificationService.open(e.message, null, {
+          panelClass: 'tim-bg-warn',
+        });
+        return throwError(e);
+      }),
+      map(r => {
+        this.loadingMap.set(volume.Name, false);
+        return r;
+      })
+    );
   }
 
   private reload() {

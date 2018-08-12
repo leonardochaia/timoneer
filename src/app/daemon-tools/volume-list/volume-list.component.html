@@ -24,7 +24,11 @@
           <b>Dangling</b>
         </ng-template>
       </ng-container>
+
+      <tim-loading [alternative]="true"
+                   *ngIf="loadingMap.get(volume.Name)"></tim-loading>
     </div>
+
     <div>
       <span title="Created At"
             class="text-nowrap">
@@ -34,13 +38,16 @@
         </small>
       </span>
     </div>
-    <div>
+
+    <ng-container *ngIf="!loadingMap.get(volume.Name)">
+
       <button type="button"
-              (click)="openVolumeMenu(volume)"
-              mat-raised-button
-              color="accent">
-        <mat-icon>menu</mat-icon>
+              matTooltip="Delete Volume"
+              (click)="deleteVolume(volume)"
+              mat-raised-button>
+        <mat-icon>delete</mat-icon>
       </button>
-    </div>
+    </ng-container>
+
   </mat-card>
 </ng-container>

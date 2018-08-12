@@ -43,7 +43,6 @@ import { ContainerCreateVolumeMappingComponent } from './container-create-volume
 import { DockerVolumeService } from './docker-volume.service';
 import { VolumeListComponent } from './volume-list/volume-list.component';
 import { VolumeListContainerComponent } from './volume-list-container/volume-list-container.component';
-import { VolumeActionsSheetComponent } from './volume-actions-sheet/volume-actions-sheet.component';
 import { VolumeCreateComponent } from './volume-create/volume-create.component';
 import { VolumeCreateContainerComponent } from './volume-create-container/volume-create-container.component';
 
@@ -94,7 +93,6 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
     SystemContainerComponent,
     VolumeListComponent,
     VolumeListContainerComponent,
-    VolumeActionsSheetComponent,
     VolumeCreateComponent,
     VolumeCreateContainerComponent,
   ],
@@ -118,7 +116,6 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
   ],
   entryComponents: [
     ImagePullModalComponent,
-    VolumeActionsSheetComponent,
     ImageListContainerComponent,
     ContainerAttacherContainerComponent,
     ContainerExecContainerComponent,
