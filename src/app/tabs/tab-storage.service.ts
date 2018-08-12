@@ -7,7 +7,7 @@ import { Tab, TabInstanceConfiguration } from './tab.model';
 @Injectable()
 export class TabStorageService implements OnDestroy {
 
-  private componetDestroyed = new Subject();
+  private disposed = new Subject();
 
   constructor(private tabService: TabService) { }
 
@@ -16,27 +16,27 @@ export class TabStorageService implements OnDestroy {
     this.loadCurrentTab();
 
     this.tabService.tabAdded
-      .pipe(takeUntil(this.componetDestroyed))
+      .pipe(takeUntil(this.disposed))
       .subscribe(() => {
         this.saveTabs();
       });
 
     this.tabService.tabsRemoved
-      .pipe(takeUntil(this.componetDestroyed))
+      .pipe(takeUntil(this.disposed))
       .subscribe(tab => {
         this.saveTabs();
       });
 
     this.tabService.currentTabChanged
-      .pipe(takeUntil(this.componetDestroyed))
+      .pipe(takeUntil(this.disposed))
       .subscribe(() => {
         this.saveCurrentTab();
       });
   }
 
   public ngOnDestroy() {
-    this.componetDestroyed.next();
-    this.componetDestroyed.unsubscribe();
+    this.disposed.next();
+    this.disposed.unsubscribe();
   }
 
   public popTabHistory() {
