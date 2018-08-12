@@ -13,7 +13,7 @@
     Theming Classes
 **/
 
-:not(input):not(textarea),
+:not(input):not(textarea):not(button):not(button .mat-button-wrapper),
 :not(input):not(textarea)::after,
 :not(input):not(textarea)::before {
   -webkit-user-select: none;
@@ -84,4 +84,8 @@ a:hover {
   &.full-height {
     height: 60vh;
   }
+}
+
+.mat-raised-button {
+  min-width: 64px !important;
 }

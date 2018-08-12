@@ -43,19 +43,30 @@
           {{image.Id | slice:7:19}}
         </code>
       </h2>
+      <tim-loading [alternative]="true"
+                   *ngIf="loadingMap.get(image.Id)"></tim-loading>
     </div>
-    <p class="text-nowrap">
-      <b>{{image.Size | bytes}}</b>
-    </p>
 
-    <p>
+    <div class="text-nowrap">
+      <b>{{image.Size | bytes}}</b>
+    </div>
+
+    <ng-container *ngIf="!loadingMap.get(image.Id)">
       <button type="button"
-              (click)="openImageMenu(image)"
+              matTooltip="Create Container"
+              (click)="createContainer(image)"
               mat-raised-button
               color="accent">
-        <mat-icon>menu</mat-icon>
+        <mat-icon>add_to_queue</mat-icon>
       </button>
-    </p>
+
+      <button type="button"
+              matTooltip="Delete Image"
+              (click)="deleteImage(image)"
+              mat-raised-button>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </ng-container>
   </mat-card>
 
 </ng-container>

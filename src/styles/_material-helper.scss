@@ -17,12 +17,15 @@
   }
   .tim-bg-primary {
     background-color: mat-color($primary);
+    color: mat-color($foreground, text);
   }
   .tim-bg-accent {
     background-color: mat-color($accent);
+    color: mat-color($foreground, text);
   }
   .tim-bg-warn {
     background-color: mat-color($warn);
+    color: mat-color($foreground, text);
   }
   .tim-text-title,
   .tim-text-primary {

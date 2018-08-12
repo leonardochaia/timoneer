@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable, throwError } from 'rxjs';
+import { takeUntil, catchError, map } from 'rxjs/operators';
 import { ImageInfo } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
-import { ImageActionsSheetComponent } from '../image-actions-sheet/image-actions-sheet.component';
-import { MatBottomSheet } from '@angular/material';
 import { DockerEventsService } from '../docker-events.service';
+import { TabService } from '../../tabs/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'tim-image-list',
@@ -19,6 +20,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public danglingAmount: number;
 
   public filterForm: FormGroup;
+
+  public loadingMap = new Map<string, boolean>();
 
   public get displayDanlingImagesControl() {
     return this.filterForm.controls['displayDanglingImages'];
@@ -33,7 +36,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   constructor(private imageService: DockerImageService,
     private fb: FormBuilder,
     private daemonEvents: DockerEventsService,
-    private bottomSheet: MatBottomSheet) {
+    private notificationService: NotificationService,
+    private tabService: TabService) {
 
     this.filterForm = this.fb.group({
       displayDanglingImages: [false],
@@ -62,19 +66,39 @@ export class ImageListComponent implements OnInit, OnDestroy {
     return image.RepoTags && image.RepoTags[0] === '<none>:<none>';
   }
 
-  public openImageMenu(image: ImageInfo) {
-    this.bottomSheet.open(ImageActionsSheetComponent, {
-      data: image
-    }).afterDismissed().subscribe(reload => {
-      if (reload) {
-        this.reload();
-      }
+  public deleteImage(image: ImageInfo) {
+    this.bindLoading(image, this.imageService.removeImage(image.Id))
+      .subscribe(() => {
+        this.notificationService.open(`${image.RepoTags[0]} has been removed removed.`);
+      });
+  }
+
+  public createContainer(image: ImageInfo) {
+    this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
+      params: image.RepoTags[0] || image.Id
     });
   }
 
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+  }
+
+  private bindLoading(image: ImageInfo, obs: Observable<any>) {
+    this.loadingMap.set(image.Id, true);
+    return obs.pipe(
+      catchError((e) => {
+        this.loadingMap.set(image.Id, false);
+        this.notificationService.open(e.message, null, {
+          panelClass: 'tim-bg-warn',
+        });
+        return throwError(e);
+      }),
+      map(r => {
+        this.loadingMap.set(image.Id, false);
+        return r;
+      })
+    );
   }
 
   private reload() {

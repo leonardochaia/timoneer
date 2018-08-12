@@ -16,6 +16,7 @@ import {
   MatBottomSheetModule,
   MatDividerModule,
   MatRadioModule,
+  MatTooltipModule,
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
@@ -40,7 +41,6 @@ import { DockerContainerService } from './docker-container.service';
 import { ContainerCreatePortMappingComponent } from './container-create-port-mapping/container-create-port-mapping.component';
 import { ContainerCreateVolumeMappingComponent } from './container-create-volume-mapping/container-create-volume-mapping.component';
 import { DockerVolumeService } from './docker-volume.service';
-import { ImageActionsSheetComponent } from './image-actions-sheet/image-actions-sheet.component';
 import { VolumeListComponent } from './volume-list/volume-list.component';
 import { VolumeListContainerComponent } from './volume-list-container/volume-list-container.component';
 import { VolumeActionsSheetComponent } from './volume-actions-sheet/volume-actions-sheet.component';
@@ -69,6 +69,7 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
     MatBottomSheetModule,
     MatDividerModule,
     MatRadioModule,
+    MatTooltipModule,
 
     SharedModule,
     SettingsModule,
@@ -91,7 +92,6 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
     ContainerExecContainerComponent,
     ContainerCreateContainerComponent,
     SystemContainerComponent,
-    ImageActionsSheetComponent,
     VolumeListComponent,
     VolumeListContainerComponent,
     VolumeActionsSheetComponent,
@@ -118,7 +118,6 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
   ],
   entryComponents: [
     ImagePullModalComponent,
-    ImageActionsSheetComponent,
     VolumeActionsSheetComponent,
     ImageListContainerComponent,
     ContainerAttacherContainerComponent,
