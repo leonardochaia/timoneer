@@ -28,8 +28,5 @@ import { RegistryListContainerComponent } from './registry-list-container/regist
   exports: [
     RegistryListComponent
   ],
-  entryComponents: [
-    RegistryListContainerComponent
-  ]
 })
 export class RegistryModule { }

@@ -28,9 +28,6 @@ import { RegistryCardsComponent } from './registry-cards/registry-cards.componen
     DaemonStatusCardComponent,
     HubSettingsCardComponent,
     RegistryCardsComponent
-  ],
-  entryComponents: [
-    HomeContainerComponent,
   ]
 })
 export class HomeModule { }

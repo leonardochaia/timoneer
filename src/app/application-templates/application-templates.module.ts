@@ -36,10 +36,6 @@ import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
   exports: [
     ApplicationListComponent,
     ApplicationListContainerComponent,
-  ],
-  entryComponents: [
-    ApplicationListContainerComponent,
-    ApplicationLaunchContainerComponent,
   ]
 })
 export class ApplicationTemplatesModule { }

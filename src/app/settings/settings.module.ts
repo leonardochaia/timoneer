@@ -39,7 +39,6 @@ import { SettingsUpdaterComponent } from './settings-updater/settings-updater.co
   ],
   entryComponents: [
     RegistrySettingsModalComponent,
-    SettingsContainerComponent,
   ],
   exports: [
     SettingsContainerComponent,

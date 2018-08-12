@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders, ANALYZE_FOR_ENTRY_COMPONENTS } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabsContainerComponent } from './tabs-container/tabs-container.component';
 import { MatTabsModule, MatIconModule, MatButtonModule } from '@angular/material';
@@ -7,6 +7,7 @@ import { TabStorageService } from './tab-storage.service';
 import { TabService } from './tab.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ElectronToolsModule } from '../electron-tools/electron-tools.module';
+import { ITimoneerTab, APPLICATION_TABS } from './tab.model';
 
 @NgModule({
   imports: [
@@ -30,4 +31,22 @@ import { ElectronToolsModule } from '../electron-tools/electron-tools.module';
     TabsContainerComponent,
   ]
 })
-export class TabsModule { }
+export class TabsModule {
+
+  public static forRoot(config: ITimoneerTab[]): ModuleWithProviders {
+    return {
+      ngModule: TabsModule,
+      providers: [
+        ...config.map(c => ({
+          provide: ANALYZE_FOR_ENTRY_COMPONENTS,
+          useValue: c.component,
+          multi: true
+        })),
+        {
+          provide: APPLICATION_TABS,
+          useValue: config
+        }
+      ]
+    };
+  }
+}

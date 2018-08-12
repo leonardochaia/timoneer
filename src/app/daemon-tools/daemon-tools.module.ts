@@ -118,14 +118,6 @@ import { ContainerListContainerComponent } from './container-list-container/cont
   ],
   entryComponents: [
     ImagePullModalComponent,
-    ImageListContainerComponent,
-    ContainerAttacherContainerComponent,
-    ContainerExecContainerComponent,
-    ContainerCreateContainerComponent,
-    VolumeListContainerComponent,
-    VolumeCreateContainerComponent,
-    SystemContainerComponent,
-    ContainerListContainerComponent,
   ]
 })
 export class DaemonToolsModule { }
