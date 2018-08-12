@@ -37,11 +37,12 @@ export class TabsModule {
     return {
       ngModule: TabsModule,
       providers: [
-        ...config.map(c => ({
+        {
+          // This does magic and finds all component in the config.
           provide: ANALYZE_FOR_ENTRY_COMPONENTS,
-          useValue: c.component,
+          useValue: config,
           multi: true
-        })),
+        },
         {
           provide: APPLICATION_TABS,
           useValue: config
