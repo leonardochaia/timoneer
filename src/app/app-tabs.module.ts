@@ -19,6 +19,11 @@ import { VolumeListContainerComponent } from './daemon-tools/volume-list-contain
 import { VolumeCreateContainerComponent } from './daemon-tools/volume-create-container/volume-create-container.component';
 import { TabsModule } from './tabs/tabs.module';
 import { ContainerListContainerComponent } from './daemon-tools/container-list-container/container-list-container.component';
+import { DaemonToolsModule } from './daemon-tools/daemon-tools.module';
+import { HomeModule } from './home/home.module';
+import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
+import { RegistryModule } from './registry/registry.module';
+import { SettingsModule } from './settings/settings.module';
 
 const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
   {
@@ -86,6 +91,11 @@ const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
 
 @NgModule({
   imports: [
+    HomeModule,
+    DaemonToolsModule,
+    ApplicationTemplatesModule,
+    RegistryModule,
+    SettingsModule,
     TabsModule.forRoot(TIMONEER_AVAILABLE_TABS),
   ],
 })
