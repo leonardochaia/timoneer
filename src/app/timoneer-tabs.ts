@@ -7,6 +7,7 @@ export class TimoneerTabs {
     public static DOCKER_VOLUMES = 'docker-volumes';
     public static DOCKER_VOLUME_NEW = 'docker-volume-new';
     public static DOCKER_CONTAINER_NEW = 'docker-container-new';
+    public static DOCKER_CONTAINER_LIST = 'docker-container-list';
     public static APPLICATION_LIST = 'application-list';
     public static APPLICATION_LAUNCH = 'application-launch';
     public static REGISTRY_IMAGES = 'registry-images';

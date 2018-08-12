@@ -40,6 +40,12 @@ export class AppMenuService {
         label: 'Docker',
         submenu: [
           {
+            label: 'Containers',
+            click: () => {
+              this.openTab(TimoneerTabs.DOCKER_CONTAINER_LIST);
+            }
+          },
+          {
             label: 'Images',
             click: () => {
               this.openTab(TimoneerTabs.DOCKER_IMAGES);

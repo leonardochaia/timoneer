@@ -45,6 +45,7 @@ import { VolumeListComponent } from './volume-list/volume-list.component';
 import { VolumeListContainerComponent } from './volume-list-container/volume-list-container.component';
 import { VolumeCreateComponent } from './volume-create/volume-create.component';
 import { VolumeCreateContainerComponent } from './volume-create-container/volume-create-container.component';
+import { ContainerListContainerComponent } from './container-list-container/container-list-container.component';
 
 @NgModule({
   imports: [
@@ -95,6 +96,7 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
     VolumeListContainerComponent,
     VolumeCreateComponent,
     VolumeCreateContainerComponent,
+    ContainerListContainerComponent,
   ],
   exports: [
     ContainerListComponent,
@@ -123,6 +125,7 @@ import { VolumeCreateContainerComponent } from './volume-create-container/volume
     VolumeListContainerComponent,
     VolumeCreateContainerComponent,
     SystemContainerComponent,
+    ContainerListContainerComponent,
   ]
 })
 export class DaemonToolsModule { }

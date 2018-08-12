@@ -23,6 +23,11 @@ export class DockerContainerService {
       .pipe(take(1));
   }
 
+  public start(id: string) {
+    return this.getContainer(id, c => c.start())
+      .pipe(take(1));
+  }
+
   public remove(id: string, options?: { v?: boolean, force?: boolean, link?: boolean }) {
     return this.getContainer(id, c => c.remove(options))
       .pipe(take(1));

@@ -40,6 +40,10 @@ export class SidenavContainerComponent {
         this.tabService.add(TimoneerTabs.DOCKER_SYSTEM);
     }
 
+    public openContainers() {
+        this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_LIST);
+    }
+
     public openDashboard() {
         this.tabService.add(TimoneerTabs.DASHBOARD);
     }

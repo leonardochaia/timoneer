@@ -17,6 +17,13 @@
 
       <a mat-list-item
          matTooltipPosition="right"
+         matTooltip="Containers"
+         (click)="openContainers()">
+        <mat-icon mat-list-icon>computer</mat-icon>
+      </a>
+
+      <a mat-list-item
+         matTooltipPosition="right"
          matTooltip="Applications"
          (click)="openApplications()">
         <mat-icon mat-list-icon>developer_mode</mat-icon>
@@ -73,7 +80,7 @@
     </h4>
 
     <mat-nav-list>
-      <tim-container-list>
+      <tim-container-list [all]="false">
 
         <ng-template let-container
                      let-loading="loading">

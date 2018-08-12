@@ -18,6 +18,7 @@ import { TimoneerTabs } from './timoneer-tabs';
 import { VolumeListContainerComponent } from './daemon-tools/volume-list-container/volume-list-container.component';
 import { VolumeCreateContainerComponent } from './daemon-tools/volume-create-container/volume-create-container.component';
 import { TabsModule } from './tabs/tabs.module';
+import { ContainerListContainerComponent } from './daemon-tools/container-list-container/container-list-container.component';
 
 const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
   {
@@ -37,6 +38,11 @@ const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
     id: TimoneerTabs.DOCKER_IMAGES,
     title: 'Images',
     component: ImageListContainerComponent,
+  },
+  {
+    id: TimoneerTabs.DOCKER_CONTAINER_LIST,
+    title: 'Containers',
+    component: ContainerListContainerComponent,
   },
   {
     id: TimoneerTabs.DOCKER_CONTAINER_NEW,

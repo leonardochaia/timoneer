@@ -13,22 +13,24 @@
   <ng-template #defaultTemplate
                let-container>
     <mat-card fxLayout="row"
-              fxLayoutGap="8px">
+              fxLayoutAlign="start center"
+              fxLayoutGap="16px">
       <mat-icon class="tim-text-primary tim-icon-48">computer</mat-icon>
       <div fxFlex="grow">
         <h2 style="margin-bottom: 0">
           {{container.Names[0]}}
-          <small class="tim-text-primary">
+          <small [ngClass]="container.State === 'running' ? 'tim-text-primary' : 'tim-text-accent'">
             {{container.State}}
           </small>
           <br>
-          <code>
-        {{container.Id | slice:0:12}}
-        {{container.Image}}
-      </code>
+          <code>{{container.Id | slice:0:12}} {{container.Image}}</code>
         </h2>
+        <tim-loading [alternative]="true"
+                     *ngIf="loadingMap.get(container.Id)"></tim-loading>
       </div>
-      <p>
+
+      <div style="text-align: right">
+
         <span title="Port Mappings"
               class="text-nowrap">
           <mat-icon>network_wifi</mat-icon>
@@ -43,16 +45,83 @@
             {{container.Mounts.length}}
           </b>
         </span>
-        <br>{{container.Status}}
-      </p>
-      <p>
-        <button type="button"
-                (click)="openContainerMenu(container)"
-                mat-raised-button
-                color="accent">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </p>
+
+        <div class="text-nowrap">
+          {{container.Status}}
+        </div>
+      </div>
+
+      <div fxLayout="column"
+           fxLayoutGap="4px">
+
+        <div fxLayout="row"
+             fxLayoutAlign="start center"
+             fxLayoutGap="4px">
+
+          <ng-container *ngIf="container.State === 'running'">
+            <button type="button"
+                    matTooltip="Attach"
+                    (click)="attach(container)"
+                    mat-raised-button
+                    color="accent">
+              <mat-icon>code</mat-icon>
+            </button>
+
+            <button type="button"
+                    matTooltip="Exec"
+                    (click)="exec(container)"
+                    mat-raised-button
+                    color="accent">
+              <mat-icon>settings_ethernet</mat-icon>
+            </button>
+
+          </ng-container>
+
+          <ng-container *ngIf="container.State !== 'running'">
+            <button type="button"
+                    matTooltip="Logs"
+                    (click)="attach(container)"
+                    mat-raised-button
+                    color="accent">
+              <mat-icon>code</mat-icon>
+            </button>
+
+          </ng-container>
+
+        </div>
+
+        <div fxLayout="row"
+             fxLayoutAlign="start center"
+             fxLayoutGap="4px">
+
+          <ng-container *ngIf="container.State === 'running'">
+            <button type="button"
+                    matTooltip="Stop"
+                    (click)="stop(container)"
+                    mat-raised-button>
+              <mat-icon>stop</mat-icon>
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="container.State !== 'running'">
+            <button type="button"
+                    matTooltip="Start"
+                    (click)="start(container)"
+                    color="accent"
+                    mat-raised-button>
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+          </ng-container>
+
+          <button type="button"
+                  matTooltip="Delete"
+                  (click)="delete(container)"
+                  mat-raised-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
     </mat-card>
   </ng-template>
 
