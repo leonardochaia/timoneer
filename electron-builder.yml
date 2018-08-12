@@ -25,7 +25,6 @@ nsis:
 win:
   icon: dist
   target:
-  - portable
   - nsis
 mac:
   icon: dist
