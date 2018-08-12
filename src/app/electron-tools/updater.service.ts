@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy, NgZone } from '@angular/core';
-import { UpdateInfo, CancellationToken } from 'electron-updater';
+import { UpdateInfo } from 'electron-updater';
 import { ElectronService } from './electron.service';
 import { NotificationService } from '../shared/notification.service';
 
@@ -28,8 +28,6 @@ export class UpdaterService implements OnDestroy {
     return this.autoUpdater.currentVersion;
   }
 
-  protected currentDownloadCancellationToken: CancellationToken;
-
   private get autoUpdater() {
     return this.electronService.electronUpdater.autoUpdater;
   }
@@ -41,6 +39,7 @@ export class UpdaterService implements OnDestroy {
     this.autoUpdater.allowPrerelease = true;
     this.autoUpdater.fullChangelog = true;
     this.autoUpdater.logger = console;
+    this.autoUpdater.autoDownload = false;
 
     // HMR support.
     this.autoUpdater.removeAllListeners();
@@ -91,22 +90,9 @@ export class UpdaterService implements OnDestroy {
   public downloadLatestUpdate() {
     if (this.status === UpdaterStatus.Outdated) {
       this.status = UpdaterStatus.Downloading;
-      this.currentDownloadCancellationToken = new CancellationToken();
-      this.autoUpdater.downloadUpdate(this.currentDownloadCancellationToken);
+      this.autoUpdater.downloadUpdate();
 
-      this.notificationService.open(`Downloading Latest Timoneer Version..`, 'Cancel')
-        .onAction().subscribe(() => {
-          this.cancelCurrentDownload();
-        });
-    }
-  }
-
-  public cancelCurrentDownload() {
-    if (this.status === UpdaterStatus.Downloading) {
-      this.currentDownloadCancellationToken.cancel();
-      this.currentDownloadCancellationToken = null;
-      this.status = UpdaterStatus.Outdated;
-      this.notificationService.open(`Download canceled. Restart it from Settings.`);
+      this.notificationService.open(`Downloading Latest Timoneer Version..`);
     }
   }
 
@@ -147,11 +133,11 @@ export class UpdaterService implements OnDestroy {
     this.status = UpdaterStatus.Downloading;
     this.currentDownloadProgress = progress;
     this.statusText = `Downloading.. %${progress.percent}`;
+    console.log(progress);
   }
 
   protected onUpdateDownloaded(info: UpdateInfo) {
     this.currentDownloadProgress = null;
-    this.currentDownloadCancellationToken = null;
     this.status = UpdaterStatus.PendingInstall;
     this.statusText = `v${info.version} is ready to be installed.`;
 

@@ -37,7 +37,7 @@
     <h3 class="tim-text-title">
       Downloading Timoneer v{{currentUpdate.version}}
     </h3>
-    <ng-container *ngIf="updateDownloadProgress">
+    <ng-container *ngIf="updateDownloadProgress; else noProgress">
       <span class="text-nowrap">
         {{updateDownloadProgress.transferred | bytes}} / {{updateDownloadProgress.total | bytes}}
         <small>
@@ -47,5 +47,9 @@
       <mat-progress-bar mode="determinate"
                         [value]="updateDownloadProgress.percent"></mat-progress-bar>
     </ng-container>
+
+    <ng-template #noProgress>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
   </div>
 </ng-container>
