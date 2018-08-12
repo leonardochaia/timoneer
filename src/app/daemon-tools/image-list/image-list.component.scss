@@ -1,7 +1,10 @@
 mat-card {
-    margin-bottom: 16px;
-    h2 {
-      margin-bottom: 0;
-    }
+  margin-bottom: 16px;
+  h2 {
+    margin-bottom: 0;
   }
-  
+}
+
+.mat-raised-button {
+  min-width: 64px !important;
+}
