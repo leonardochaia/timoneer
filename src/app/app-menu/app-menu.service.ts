@@ -80,7 +80,8 @@ export class AppMenuService {
               const shell = this.electronService.remote.shell;
               shell.openExternal('https://github.com/leonardochaia/timoneer');
             }
-          }
+          },
+          { role: 'toggledevtools', accelerator: '' },
         ]
       }
     ];
