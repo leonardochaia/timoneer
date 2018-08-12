@@ -15,9 +15,7 @@ export class VolumeCreateContainerComponent implements OnInit {
   }
 
   public volumeCreated() {
-    this.tabService.add(TimoneerTabs.DOCKER_VOLUMES, {
-      replaceCurrent: true
-    });
+    this.tabService.replaceCurrent(TimoneerTabs.DOCKER_VOLUMES);
   }
 
 }
