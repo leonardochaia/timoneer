@@ -7,16 +7,15 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { JobCancellationToken } from './job-cancellation-token';
 import { take } from 'rxjs/operators';
 import { JobExecutionConfiguration } from './job-execution-configuration';
-import { pipe } from '../../../node_modules/@angular/core/src/render3/pipe';
 
 @Injectable()
 export class JobRunnerService implements OnDestroy {
 
-  public jobs: JobInstance<any>[] = [];
+  public jobs: JobInstance<JobDefinition<any>, any>[] = [];
 
   constructor(private injector: Injector) { }
 
-  public startJob<TResult>(type: Type<JobDefinition<TResult>>, ...providers: Provider[]) {
+  public startJob<TResult, TProgress>(type: Type<JobDefinition<TResult, TProgress>>, ...providers: Provider[]) {
 
     providers = providers || [];
     const jobConfig = type['jobConfiguration'] as JobConfiguration;
@@ -30,7 +29,7 @@ export class JobRunnerService implements OnDestroy {
 
     try {
       const injector = ReflectiveInjector.resolveAndCreate(providers, this.injector);
-      const definition = injector.get(type) as JobDefinition<TResult>;
+      const definition = injector.get(type) as JobDefinition<TResult, TProgress>;
 
       const executionConfig = new JobExecutionConfiguration(type, providers);
       const job = this.execute(definition, executionConfig);
@@ -42,10 +41,11 @@ export class JobRunnerService implements OnDestroy {
     }
   }
 
-  public restartJob<TResult>(job: JobInstance<TResult>) {
+  public restartJob<TJobDef extends JobDefinition<TResult>, TResult, TProgress>(
+    job: JobInstance<TJobDef, TResult, TProgress>) {
     const executionConfig = job.executionConfiguration;
     if (executionConfig.configuration.allowsRestart) {
-      return this.startJob<TResult>(executionConfig.definition, executionConfig.providers);
+      return this.startJob<TResult, TProgress>(executionConfig.definition, executionConfig.providers);
     } else {
       throw new Error('This job can not be restarted');
     }
@@ -59,12 +59,14 @@ export class JobRunnerService implements OnDestroy {
     });
   }
 
-  protected execute<TResult>(jobDefinition: JobDefinition<TResult>, executionConfig: JobExecutionConfiguration<TResult>) {
+  protected execute<TJobDef extends JobDefinition<TResult>, TResult, TProgress>(
+    jobDefinition: TJobDef,
+    executionConfig: JobExecutionConfiguration<TResult, TProgress>) {
     const currentStatus = new BehaviorSubject<JobStatus>(JobStatus.Queued);
     const resultSubject = new Subject<TResult>();
     const cancellationToken = new JobCancellationToken();
-    const progressSubject = new Subject<JobProgress>();
-    let job: JobInstance<TResult>;
+    const progressSubject = new Subject<TProgress>();
+    let job: JobInstance<TJobDef, TResult, TProgress>;
 
     try {
 
@@ -94,6 +96,7 @@ export class JobRunnerService implements OnDestroy {
           resultSubject.complete();
         }, (error: JobError) => {
           console.error(`Job ${jobDefinition.title} reported an error: ${error.message}`);
+          resultSubject.error(error);
           currentStatus.next(JobStatus.Errored);
         });
 

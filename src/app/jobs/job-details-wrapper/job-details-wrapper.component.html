@@ -1,0 +1,59 @@
+<div fxLayout="column"
+     style="height: 40vh; width: 40vw;">
+
+  <div>
+    <h1>
+      {{job.definition.title}}
+      <small [ngClass]="{'tim-text-primary': job.status === JobStatus.Running, 
+      'tim-text-accent': job.status === JobStatus.Success,
+      'tim-text-warn': job.status === JobStatus.Errored || job.status === JobStatus.Cancelled }">
+        {{job.status}}
+      </small>
+    </h1>
+  </div>
+
+  <div fxFlex="grow"
+       style="overflow-y:auto">
+
+    <ng-container *ngIf="job.status === JobStatus.Errored">
+      <mat-card class="tim-bg-warn">
+        {{job.error.message}}
+      </mat-card>
+    </ng-container>
+
+    <ng-container #detailsTemplate></ng-container>
+
+    <ng-container *ngIf="!job.configuration.detailsComponent">
+      <div *ngFor="let progress of job.progressHistory">
+        {{progress.message}}
+      </div>
+    </ng-container>
+
+  </div>
+
+  <div style="padding:16px 0">
+    <tim-job-progress-bar [job]="job"></tim-job-progress-bar>
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutGap="16px">
+
+    <div fxFlex="grow">
+      <button mat-raised-button
+              *ngIf="job.status === JobStatus.Running"
+              color="warn"
+              (click)="job.cancel()">
+        Cancel
+      </button>
+    </div>
+
+    <div>
+
+      <button mat-raised-button
+              mat-dialog-close
+              style="float:right;">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

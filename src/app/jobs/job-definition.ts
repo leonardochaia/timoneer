@@ -1,7 +1,7 @@
 import { Subject, Observable } from 'rxjs';
 import { JobProgress, JobError } from './jobs.model';
 
-export abstract class JobDefinition<TResult> {
+export abstract class JobDefinition<TResult, TProgress extends JobProgress = JobProgress> {
 
     public get completed() {
         return this.completionSubject.asObservable();
@@ -9,11 +9,12 @@ export abstract class JobDefinition<TResult> {
 
     public abstract get title();
 
-    protected completionSubject = new Subject<TResult>();
-    protected progressSubject: Subject<JobProgress>;
     protected cancelled: Observable<void>;
 
-    public startJob(cancellationToken: Observable<void>, progress: Subject<JobProgress>) {
+    private completionSubject = new Subject<TResult>();
+    private progressSubject: Subject<TProgress>;
+
+    public startJob(cancellationToken: Observable<void>, progress: Subject<TProgress>) {
         this.cancelled = cancellationToken;
         this.progressSubject = progress;
         this.start();
@@ -21,13 +22,14 @@ export abstract class JobDefinition<TResult> {
 
     protected abstract start(): void;
 
-    protected progress(progress: JobProgress) {
+    protected progress(progress: TProgress) {
         if (progress) {
             this.progressSubject.next(progress);
         }
     }
 
     protected complete(result: TResult) {
+        this.throwIfCompleted();
         this.completionSubject.next(result);
         this.completionSubject.complete();
         this.completionSubject.unsubscribe();
@@ -35,9 +37,16 @@ export abstract class JobDefinition<TResult> {
     }
 
     protected completeWithError(error: JobError) {
+        this.throwIfCompleted();
         this.completionSubject.error(error);
         this.completionSubject.unsubscribe();
         this.completeProgress();
+    }
+
+    private throwIfCompleted() {
+        if (this.completionSubject.closed) {
+            throw new Error(`Failed to complete ${this.title} since it's already completed.`);
+        }
     }
 
     private completeProgress() {

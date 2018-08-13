@@ -1,20 +1,26 @@
-import { JobDefinition } from './job-definition';
-import { Job } from './job.decorator';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { DockerImageService } from '../daemon-tools/docker-image.service';
 import { DockerStreamResponse } from '../daemon-tools/docker-client.model';
+import { JobDefinition } from '../jobs/job-definition';
+import { Job } from '../jobs/job.decorator';
+import { JobProgress } from '../jobs/jobs.model';
+import { ImagePullLogsComponent } from './image-pull-logs/image-pull-logs.component';
 
 export class PullImageJobParams {
     constructor(public readonly image: string) { }
 }
 
-@Job()
-export class PullImageJob extends JobDefinition<void> {
+export interface PullImageJobProgress extends DockerStreamResponse, JobProgress { }
+
+@Job({
+    detailsComponent: ImagePullLogsComponent
+})
+export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     public get title() {
         return `Pull ${this.image}`;
     }
 
-    public responses: DockerStreamResponse[] = [];
+    public readonly responses: DockerStreamResponse[] = [];
 
     protected progressMap = new Map<string, { total: number, current: number }>();
 
@@ -30,13 +36,7 @@ export class PullImageJob extends JobDefinition<void> {
     public start() {
 
         this.imageService.pullImage(this.image)
-            .pipe(
-                takeUntil(this.completed),
-                takeUntil(this.cancelled),
-                finalize(() => {
-                    this.complete(null);
-                })
-            )
+            .pipe(takeUntil(this.cancelled))
             .subscribe(response => {
 
                 const cached = response.id && this.responses.filter(k => k.id === response.id)[0];
@@ -58,14 +58,16 @@ export class PullImageJob extends JobDefinition<void> {
                     total += p.total;
                 });
 
-                const progress = (current / total) * 100;
-
-                this.progress({
+                const progress = Object.assign({}, response, <JobProgress>{
                     message: response.status,
-                    percent: progress
+                    percent: (current / total) * 100
                 });
+
+                this.progress(progress);
             }, (error: { message: string }) => {
                 this.completeWithError(error);
+            }, () => {
+                this.complete(null);
             });
     }
 }

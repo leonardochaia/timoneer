@@ -1,3 +1,5 @@
+import { InjectionToken } from '@angular/core';
+
 export enum JobStatus {
     Queued = 'Queued',
     Running = 'Running',
@@ -14,3 +16,5 @@ export interface JobProgress {
 export interface JobError {
     message: string;
 }
+
+export const JOB_DETAILS_JOB = new InjectionToken<string>('JobDetailsJob');
