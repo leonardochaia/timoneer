@@ -1,0 +1,49 @@
+<mat-card *ngFor="let job of jobs"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px">
+  <mat-icon class="tim-text-primary">iso</mat-icon>
+
+  <div fxFlex="grow">
+    <h3 class="text-nowrap"
+        style="margin-bottom: 0; overflow: hidden; text-overflow: ellipsis">
+      {{job.definition.title}}
+
+      <ng-container [ngSwitch]="job.status">
+
+        <ng-container *ngSwitchCase="JobStatus.Running">
+          <small *ngIf="job.currentProgress && job.currentProgress.message && job.currentProgress.message.length">
+            ({{job.currentProgress.message}})
+          </small>
+        </ng-container>
+
+        <small *ngSwitchDefault
+               class="text-nowrap"
+               [ngClass]="{'tim-text-primary': job.status === JobStatus.Success, 
+               'tim-text-warn': job.status === JobStatus.Errored || job.status === JobStatus.Cancelled }">
+          {{job.status}}
+        </small>
+      </ng-container>
+
+
+    </h3>
+    <ng-container *ngIf="job.status === JobStatus.Running">
+      <mat-progress-bar [mode]="job.currentProgress.percent < 100 ? 'determinate' : 'indeterminate'"
+                        [value]="job.currentProgress.percent"></mat-progress-bar>
+    </ng-container>
+  </div>
+
+  <div *ngIf="job.status !== JobStatus.Running && job.configuration.allowsRestart">
+    <button mat-raised-button
+            (click)="restartJob(job)">
+      Restart
+    </button>
+  </div>
+
+  <div *ngIf="job.status === JobStatus.Running && job.configuration.allowsCancel">
+    <button mat-raised-button
+            (click)="job.cancel()">
+      Cancel
+    </button>
+  </div>
+</mat-card>
