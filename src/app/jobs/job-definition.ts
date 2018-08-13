@@ -32,22 +32,17 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         this.throwIfCompleted();
         this.completionSubject.next(result);
         this.completionSubject.complete();
-        this.completeProgress();
     }
 
     protected completeWithError(error: JobError) {
         this.throwIfCompleted();
         this.completionSubject.error(error);
         this.completionSubject.complete();
-        this.completeProgress();
     }
 
     private throwIfCompleted() {
         if (this.completionSubject.closed) {
             throw new Error(`Failed to complete ${this.title} since it's already completed.`);
         }
-    }
-
-    private completeProgress() {
     }
 }
