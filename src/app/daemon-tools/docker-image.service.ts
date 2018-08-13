@@ -21,8 +21,7 @@ export class DockerImageService {
     return this.settingsService.getRegistryAuthForImage(image)
       .pipe(
         take(1),
-        switchMap(auth => this.daemon.docker(d => d.pull(image, { 'authconfig': { key: auth } }))
-        ),
+        switchMap(auth => this.daemon.docker(d => d.pull(image, { 'authconfig': { key: auth } }))),
         map(msg => <IncomingMessage>msg),
         switchMap(msg => this.daemon.modem().pipe(map(m => ({ message: msg, modem: m })))),
         switchMap(response => new Observable<DockerStreamResponse>(observer => {
