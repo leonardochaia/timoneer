@@ -13,6 +13,7 @@ import { NavigationContainerComponent } from './navigation-container/navigation-
 import { SharedModule } from '../shared/shared.module';
 import { FlexLayoutSplitModule } from '../flex-layout-split/flex-layout-split.module';
 import { TabsModule } from '../tabs/tabs.module';
+import { JobsModule } from '../jobs/jobs.module';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { TabsModule } from '../tabs/tabs.module';
 
     FlexLayoutSplitModule,
     TabsModule,
+    JobsModule,
 
     DaemonToolsModule,
     SharedModule,
