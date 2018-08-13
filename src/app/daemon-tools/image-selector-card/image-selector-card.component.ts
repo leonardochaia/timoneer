@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, forwardRef } from '@angular/core';
 import { map, switchMap, debounceTime, catchError, take } from 'rxjs/operators';
 import { Subject, Observable, of, throwError, forkJoin } from 'rxjs';
-import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { RegistryService } from '../../registry/registry.service';
 import { SettingsService } from '../../settings/settings.service';
-import { DaemonModalService } from '../daemon-modal.service';
 import { ImageInspectInfo } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
+import { DockerJobsService } from '../docker-jobs.service';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -42,7 +42,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
   public loadingImageData: boolean;
   public imageNotFound: boolean;
   public imageError: string;
-  public imageSelectControl = new FormControl();
+  public imageSelectControl = new FormControl(null, Validators.required);
   public registries: Observable<{ name: string, repos: string[] }[]>;
 
   private componetDestroyed = new Subject();
@@ -50,7 +50,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
 
   constructor(private imageService: DockerImageService,
     private settingsService: SettingsService,
-    private modalService: DaemonModalService,
+    private dockerJobs: DockerJobsService,
     private registryService: RegistryService) { }
 
   public ngOnInit() {
@@ -101,7 +101,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
   }
 
   public pullImage() {
-    this.modalService.pullImageDialog(this.image);
+    this.dockerJobs.pullImage(this.image);
   }
 
   public ngOnDestroy() {
