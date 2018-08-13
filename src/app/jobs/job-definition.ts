@@ -3,19 +3,19 @@ import { JobProgress, JobError } from './jobs.model';
 
 export abstract class JobDefinition<TResult, TProgress extends JobProgress = JobProgress> {
 
+    public abstract get title();
+
     public get completed() {
         return this.completionSubject.asObservable();
     }
-
-    public abstract get title();
 
     protected cancelled: Observable<void>;
 
     private completionSubject = new Subject<TResult>();
     private progressSubject: Subject<TProgress>;
 
-    public startJob(cancellationToken: Observable<void>, progress: Subject<TProgress>) {
-        this.cancelled = cancellationToken;
+    public startJob(cancelled: Observable<void>, progress: Subject<TProgress>) {
+        this.cancelled = cancelled;
         this.progressSubject = progress;
         this.start();
     }
@@ -32,14 +32,13 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         this.throwIfCompleted();
         this.completionSubject.next(result);
         this.completionSubject.complete();
-        this.completionSubject.unsubscribe();
         this.completeProgress();
     }
 
     protected completeWithError(error: JobError) {
         this.throwIfCompleted();
         this.completionSubject.error(error);
-        this.completionSubject.unsubscribe();
+        this.completionSubject.complete();
         this.completeProgress();
     }
 
@@ -50,7 +49,5 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
     }
 
     private completeProgress() {
-        this.progressSubject.complete();
-        this.progressSubject.unsubscribe();
     }
 }

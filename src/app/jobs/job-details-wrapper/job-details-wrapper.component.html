@@ -1,5 +1,5 @@
 <div fxLayout="column"
-     style="height: 40vh; width: 40vw;">
+     style="height: 40vh; min-width: 40vw;">
 
   <div>
     <h1>
@@ -16,7 +16,8 @@
        style="overflow-y:auto">
 
     <ng-container *ngIf="job.status === JobStatus.Errored">
-      <mat-card class="tim-bg-warn">
+      <mat-card class="tim-bg-warn"
+                style="max-width: 40vw">
         {{job.error.message}}
       </mat-card>
     </ng-container>

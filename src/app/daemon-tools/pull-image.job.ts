@@ -1,10 +1,10 @@
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { DockerImageService } from '../daemon-tools/docker-image.service';
 import { DockerStreamResponse } from '../daemon-tools/docker-client.model';
 import { JobDefinition } from '../jobs/job-definition';
 import { Job } from '../jobs/job.decorator';
 import { JobProgress } from '../jobs/jobs.model';
-import { ImagePullLogsComponent } from './image-pull-logs/image-pull-logs.component';
+import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-image-job-details.component';
 
 export class PullImageJobParams {
     constructor(public readonly image: string) { }
@@ -13,7 +13,7 @@ export class PullImageJobParams {
 export interface PullImageJobProgress extends DockerStreamResponse, JobProgress { }
 
 @Job({
-    detailsComponent: ImagePullLogsComponent
+    detailsComponent: PullImageJobDetailsComponent,
 })
 export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     public get title() {
@@ -41,12 +41,16 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
 
                 const cached = response.id && this.responses.filter(k => k.id === response.id)[0];
 
-                if (!cached) {
-                    this.responses.push(response);
-                } else {
+                if (cached) {
                     Object.assign(cached, response);
+                } else {
+                    if (this.imageService.isUserFriendlyResponse(response)) {
+                        this.responses.push(response);
+                    }
                 }
 
+                // Keep a map of valid responses progressDetails
+                // to calculate total progress of the entire pull
                 if (response.progressDetail && response.progressDetail.total && response.progressDetail.current) {
                     this.progressMap.set(response.id, response.progressDetail);
                 }
