@@ -94,6 +94,7 @@ import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-imag
     VolumeCreateComponent,
     VolumeCreateContainerComponent,
     ContainerListContainerComponent,
+    PullImageJobLogsComponent,
     PullImageJobDetailsComponent,
   ],
   exports: [
@@ -114,7 +115,7 @@ import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-imag
     DockerVolumeService,
   ],
   entryComponents: [
-    PullImageJobDetailsComponent,
+    PullImageJobLogsComponent,
   ]
 })
 export class DaemonToolsModule { }

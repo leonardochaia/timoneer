@@ -17,4 +17,4 @@ export interface JobError {
     message: string;
 }
 
-export const JOB_DETAILS_JOB = new InjectionToken<string>('JobDetailsJob');
+export const CURRENT_JOB = new InjectionToken<string>('CurrentJob');

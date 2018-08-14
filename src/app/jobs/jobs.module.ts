@@ -9,8 +9,8 @@ import {
   MatListModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { JobDetailsWrapperComponent } from './job-details-wrapper/job-details-wrapper.component';
 import { JobProgressBarComponent } from './job-progress-bar/job-progress-bar.component';
+import { JobLogsComponent } from './job-logs/job-logs.component';
 
 @NgModule({
   imports: [
@@ -26,14 +26,14 @@ import { JobProgressBarComponent } from './job-progress-bar/job-progress-bar.com
   ],
   declarations: [
     JobListComponent,
-    JobDetailsWrapperComponent,
+    JobLogsComponent,
     JobProgressBarComponent,
   ],
   exports: [
-    JobListComponent
+    JobListComponent,
   ],
   entryComponents: [
-    JobDetailsWrapperComponent,
+    JobLogsComponent,
   ]
 })
 export class JobsModule {

@@ -17,7 +17,7 @@ export class JobListComponent implements OnInit {
   public JobStatus = JobStatus;
 
   public get jobs() {
-    return this.jobRunner.jobs.filter(j => j.status === JobStatus.Running);
+    return this.jobRunner.jobs;
   }
 
   constructor(private jobRunner: JobRunnerService,
@@ -26,7 +26,7 @@ export class JobListComponent implements OnInit {
     private jobDetails: JobDetailsService) { }
 
   public ngOnInit() {
-    this.jobRunner.startJob(TestJob);
+    // this.jobRunner.startJob(TestJob);
   }
 
   public restartJob(job: JobInstance<any>) {

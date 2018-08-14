@@ -4,7 +4,7 @@ import { DockerStreamResponse } from '../daemon-tools/docker-client.model';
 import { JobDefinition } from '../jobs/job-definition';
 import { Job } from '../jobs/job.decorator';
 import { JobProgress } from '../jobs/jobs.model';
-import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-image-job-details.component';
+import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-logs.component';
 
 export class PullImageJobParams {
     constructor(public readonly image: string) { }
@@ -13,7 +13,7 @@ export class PullImageJobParams {
 export interface PullImageJobProgress extends DockerStreamResponse, JobProgress { }
 
 @Job({
-    detailsComponent: PullImageJobDetailsComponent,
+    logsComponent: PullImageJobLogsComponent,
 })
 export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     public get title() {
