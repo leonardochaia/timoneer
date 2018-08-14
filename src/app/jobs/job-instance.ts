@@ -1,11 +1,12 @@
-import { BehaviorSubject } from 'rxjs';
-import { JobStatus, JobProgress, JobError } from './jobs.model';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { JobStatus, JobProgress, JobError, IJobRunner } from './jobs.model';
 import { JobCancellationToken } from './job-cancellation-token';
 import { take } from 'rxjs/operators';
 import { JobExecutionConfiguration } from './job-execution-configuration';
 import { JobDefinition } from './job-definition';
+import { Injector, Type, Provider } from '../../../node_modules/@angular/core';
 
-export class JobInstance<Tdefinition
+export class JobInstance<TJobDef
     extends JobDefinition<TResult> = JobDefinition<any>,
     TResult = any,
     TProgress extends JobProgress = JobProgress> {
@@ -46,6 +47,10 @@ export class JobInstance<Tdefinition
         return this.errorSubject.value;
     }
 
+    public get children() {
+        return this.childJobs;
+    }
+
     public readonly progressHistory: TProgress[] = [];
 
     protected currentResult: TResult;
@@ -54,10 +59,13 @@ export class JobInstance<Tdefinition
     protected progressSubject = new BehaviorSubject<TProgress>(<TProgress>{});
     protected cancellationToken = new JobCancellationToken();
     protected errorSubject = new BehaviorSubject<JobError>(null);
+    protected childJobStarted = new Subject<JobInstance>();
+    private childJobs: JobInstance[] = [];
 
     constructor(
-        public readonly definition: Tdefinition,
-        public readonly executionConfiguration: JobExecutionConfiguration<TResult, TProgress>) {
+        public readonly definition: TJobDef,
+        public readonly executionConfiguration: JobExecutionConfiguration<TResult, TProgress>,
+        jobRunner: IJobRunner) {
 
         this.progress
             .subscribe(p => {
@@ -82,8 +90,18 @@ export class JobInstance<Tdefinition
                 this.completeJob(JobStatus.Cancelled);
             });
 
+
+        definition.childJobAdded
+            .subscribe(childJob => {
+                this.childJobs.push(childJob);
+            });
+
+        const childJobRunner = new ChildJobRunner(this.childJobStarted, jobRunner);
         try {
-            definition.startJob(this.cancellationToken.asObservable(), this.progressSubject);
+            definition.startJob(
+                this.cancellationToken.asObservable(),
+                this.progressSubject,
+                childJobRunner);
             this.statusSubject.next(JobStatus.Running);
         } catch (e) {
             console.error(`Job ${definition.title} failed to start: ${e.message}`);
@@ -101,5 +119,19 @@ export class JobInstance<Tdefinition
         this.statusSubject.complete();
         this.errorSubject.complete();
         this.statusSubject.complete();
+    }
+}
+
+class ChildJobRunner implements IJobRunner {
+
+    constructor(private childJobStarted: Subject<JobInstance>,
+        private jobRunner: IJobRunner) { }
+
+    public startJob<TResult, TProgress>(type: Type<JobDefinition<TResult, TProgress>>, ...providers: Provider[]) {
+
+        const job = this.jobRunner.startJob<TResult, TProgress>(type, providers);
+        this.childJobStarted.next(job);
+
+        return job;
     }
 }

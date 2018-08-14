@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy, Injector, Type, ReflectiveInjector, Provider } from '@angular/core';
 import { JobDefinition } from './job-definition';
 import { JobInstance } from './job-instance';
-import { JobStatus } from './jobs.model';
+import { JobStatus, IJobRunner } from './jobs.model';
 import { JobConfiguration } from './job-configuration';
 import { JobExecutionConfiguration } from './job-execution-configuration';
 
 @Injectable()
-export class JobRunnerService implements OnDestroy {
+export class JobRunnerService implements OnDestroy, IJobRunner {
 
   public jobs: JobInstance<JobDefinition<any>, any>[] = [];
 
@@ -59,7 +59,7 @@ export class JobRunnerService implements OnDestroy {
     jobDefinition: TJobDef,
     executionConfig: JobExecutionConfiguration<TResult, TProgress>) {
 
-    const job = new JobInstance(jobDefinition, executionConfig);
+    const job = new JobInstance(jobDefinition, executionConfig, this);
     this.jobs.push(job);
 
     return job;
