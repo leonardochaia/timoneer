@@ -25,7 +25,7 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     }
 
     protected progressMap = new Map<string, { total: number, current: number }>();
-    protected responseMap = new Map<string, DockerStreamResponse>();
+    protected responseMap = new Map<string, PullImageJobProgress>();
 
     protected get image() {
         return this.params.image;
@@ -37,28 +37,36 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     }
 
     public start() {
+        this.progress({
+            message: `Pulling from ${this.image}`
+        } as Partial<PullImageJobProgress> as PullImageJobProgress);
+
         this.imageService.pullImage(this.image)
             .pipe(takeUntil(this.cancelled))
             .subscribe(response => {
-
-                if (response.id && this.responseMap.has(response.id)) {
-                    this.responseMap.set(response.id, response);
-                } else {
-                    if (this.imageService.isUserFriendlyResponse(response)) {
-                        this.responseMap.set(response.status, response);
-                    }
-                }
                 const jobProgress = Object.assign({}, response, <JobProgress>{
                     message: response.status,
                     percent: this.calculateTotalPercent()
                 });
+
                 this.progress(jobProgress);
 
             }, (error: { message: string }) => {
                 this.completeWithError(error);
             }, () => {
-                this.complete(null);
+                if (!this.isCancelled) {
+                    this.complete(null);
+                }
             });
+    }
+
+    protected progress(progress: PullImageJobProgress) {
+        if (progress.id && this.responseMap.has(progress.id)) {
+            this.responseMap.set(progress.id, progress);
+        } else {
+            this.responseMap.set(progress.id || progress.status, progress);
+        }
+        super.progress(progress);
     }
 
     protected calculateTotalPercent() {

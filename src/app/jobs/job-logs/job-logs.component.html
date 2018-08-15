@@ -22,13 +22,7 @@
       </mat-card>
     </ng-container>
 
-    <ng-container #detailsTemplate></ng-container>
-
-    <ng-container *ngIf="!job.configuration.detailsComponent">
-      <div *ngFor="let progress of job.progressHistory">
-        {{progress.message}}
-      </div>
-    </ng-container>
+    <tim-job-logs-renderer [job]="job"></tim-job-logs-renderer>
 
   </div>
 

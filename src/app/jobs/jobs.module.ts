@@ -11,6 +11,7 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { JobProgressBarComponent } from './job-progress-bar/job-progress-bar.component';
 import { JobLogsComponent } from './job-logs/job-logs.component';
+import { JobLogsRendererComponent } from './job-logs-renderer/job-logs-renderer.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { JobLogsComponent } from './job-logs/job-logs.component';
     JobListComponent,
     JobLogsComponent,
     JobProgressBarComponent,
+    JobLogsRendererComponent,
   ],
   exports: [
     JobListComponent,

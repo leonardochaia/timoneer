@@ -1,0 +1,26 @@
+<ng-container #customLogsTemplate></ng-container>
+
+<ng-container *ngIf="!usingCustomDetails">
+
+  <tim-job-progress-bar [job]="job"></tim-job-progress-bar>
+
+  <ng-container *ngFor="let progress of job.progressHistory">
+    <div fxLayout="row"
+         fxLayoutGap="8px"
+         *ngIf="progress.message">
+      <div class="text-nowrap">
+        <small>
+          {{progress.date | date:'shortTime'}}
+        </small>
+      </div>
+      <div fxFlex="grow">
+        {{progress.message}}
+
+        <div *ngIf="progress.childJob">
+          <tim-job-logs-renderer [job]="progress.childJob"></tim-job-logs-renderer>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

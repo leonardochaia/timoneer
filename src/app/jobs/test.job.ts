@@ -1,11 +1,16 @@
 import { JobDefinition } from './job-definition';
 import { Job } from './job.decorator';
-import { fromEvent } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { fromEvent, Observable } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { Optional } from '@angular/core';
+import { JobError } from './jobs.model';
+import { PullImageJobParams, PullImageJob } from '../daemon-tools/pull-image.job';
 
 export class TestJobParams {
-    constructor(public readonly requiredClicks: number) { }
+    constructor(
+        public readonly requiredClicks: number,
+        public readonly isChild = false
+    ) { }
 }
 
 @Job({
@@ -30,8 +35,56 @@ export class TestJob extends JobDefinition<string> {
     }
 
     public start() {
-        // this.reportClicksProgress();
-        fromEvent(window, 'click')
+
+        if (!this.params.isChild) {
+            this.progress({
+                percent: 0,
+                message: 'Creating a new child job'
+            });
+            const childJob = this.startChildJob(TestJob, {
+                provide: TestJobParams,
+                useValue: new TestJobParams(4, true),
+            });
+
+            this.progress({
+                percent: 30,
+                message: 'Waiting For child Job'
+            });
+
+            childJob.completed
+                .subscribe(childResult => {
+
+                    this.progress({
+                        percent: 50,
+                        message: `Child Job Finished: ${childResult}`
+                    });
+
+                    const params = new PullImageJobParams('ubuntu');
+                    const imageJob = this.startChildJob(PullImageJob, {
+                        provide: PullImageJobParams,
+                        useValue: params
+                    });
+
+                    imageJob.completed
+                        .subscribe(() => {
+                            this.complete('Finished test!');
+                        }, error => {
+                            this.completeWithError({
+                                message: `Image pull finished with errors: ${error.message}`
+                            });
+                        });
+
+                });
+        } else {
+            this.progress({
+                message: 'Binding to click events..'
+            });
+            this.bindClicks(fromEvent(window, 'click') as Observable<MouseEvent>);
+        }
+    }
+
+    protected bindClicks(obs: Observable<MouseEvent>) {
+        return obs
             .pipe(
                 takeUntil(this.completed),
                 takeUntil(this.cancelled)
@@ -48,6 +101,11 @@ export class TestJob extends JobDefinition<string> {
                         message: 'You have to click the primary mouse button!'
                     });
                 }
+            }, (e: JobError) => {
+                this.progress({
+                    message: `Child JobFailed`
+                });
+                this.completeWithError(e);
             });
     }
 

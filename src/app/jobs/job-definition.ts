@@ -2,6 +2,7 @@ import { Subject, Observable } from 'rxjs';
 import { JobProgress, JobError, IJobRunner } from './jobs.model';
 import { Type, Provider } from '@angular/core';
 import { JobInstance } from './job-instance';
+import { take } from 'rxjs/operators';
 
 export abstract class JobDefinition<TResult, TProgress extends JobProgress = JobProgress> {
 
@@ -16,11 +17,13 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
     }
 
     protected cancelled: Observable<void>;
+    protected isCancelled = false;
 
     private completionSubject = new Subject<TResult>();
     private progressSubject: Subject<TProgress>;
     private childJobSubject = new Subject<JobInstance>();
     private jobRunner: IJobRunner;
+    private finished = false;
 
     public startJob(
         cancelled: Observable<void>,
@@ -30,6 +33,11 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         this.cancelled = cancelled;
         this.progressSubject = progress;
         this.jobRunner = jobRunner;
+        this.cancelled
+            .pipe(take(1))
+            .subscribe(() => {
+                this.isCancelled = true;
+            });
         this.start();
     }
 
@@ -37,6 +45,7 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
 
     protected progress(progress: TProgress) {
         if (progress) {
+            progress.date = new Date(Date.now());
             this.progressSubject.next(progress);
         }
     }
@@ -45,12 +54,14 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         this.throwIfCompleted();
         this.completionSubject.next(result);
         this.completionSubject.complete();
+        this.finished = true;
     }
 
     protected completeWithError(error: JobError) {
         this.throwIfCompleted();
         this.completionSubject.error(error);
         this.completionSubject.complete();
+        this.finished = true;
     }
 
     protected startChildJob<TChildResult, TChildProgress>(
@@ -60,12 +71,16 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         const job = this.jobRunner.startJob(type, additionalProviders);
 
         this.childJobSubject.next(job);
+        this.progress({
+            message: `Starting Child Job: ${job.definition.title}`,
+            childJob: job,
+        } as JobProgress as TProgress);
         return job;
     }
 
     private throwIfCompleted() {
-        if (this.completionSubject.closed) {
-            throw new Error(`Failed to complete ${this.title} since it's already completed.`);
+        if (this.finished || this.isCancelled) {
+            throw new Error(`Failed to complete ${this.title} since it's already finished.`);
         }
     }
 }

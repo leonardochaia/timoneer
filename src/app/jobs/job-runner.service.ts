@@ -59,6 +59,12 @@ export class JobRunnerService implements OnDestroy, IJobRunner {
     jobDefinition: TJobDef,
     executionConfig: JobExecutionConfiguration<TResult, TProgress>) {
 
+    jobDefinition.childJobAdded
+      .subscribe(childJob => {
+        const index = this.jobs.indexOf(childJob);
+        this.jobs.splice(index, 1);
+      });
+
     const job = new JobInstance(jobDefinition, executionConfig, this);
     this.jobs.push(job);
 

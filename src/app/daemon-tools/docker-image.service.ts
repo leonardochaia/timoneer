@@ -46,6 +46,9 @@ export class DockerImageService {
             });
           };
           response.modem.followProgress(response.message, onFinished, onProgress);
+          return () => {
+            response.message.destroy();
+          };
         }).pipe(materialize())),
         dematerialize()
         // materialize/dematerialize to send the complete event through.
@@ -54,7 +57,9 @@ export class DockerImageService {
   }
 
   public isUserFriendlyResponse(response: DockerStreamResponse) {
-    return response && !response.status.startsWith('Digest:');
+    return response
+      && response.status
+      && !response.status.startsWith('Digest:');
   }
 
   public inspectImage(image: string) {

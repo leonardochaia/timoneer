@@ -13,6 +13,8 @@ export enum JobStatus {
 export interface JobProgress {
     percent?: number;
     message?: string;
+    childJob?: JobInstance;
+    date?: Date;
 }
 
 export interface JobError {

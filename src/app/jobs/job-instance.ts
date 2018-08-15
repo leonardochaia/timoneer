@@ -4,7 +4,7 @@ import { JobCancellationToken } from './job-cancellation-token';
 import { take } from 'rxjs/operators';
 import { JobExecutionConfiguration } from './job-execution-configuration';
 import { JobDefinition } from './job-definition';
-import { Injector, Type, Provider } from '../../../node_modules/@angular/core';
+import { Type, Provider } from '@angular/core';
 
 export class JobInstance<TJobDef
     extends JobDefinition<TResult> = JobDefinition<any>,
@@ -68,8 +68,14 @@ export class JobInstance<TJobDef
         jobRunner: IJobRunner) {
 
         this.progress
-            .subscribe(p => {
-                this.progressHistory.push(p);
+            .subscribe(progress => {
+                if (!progress.percent && this.progressHistory.length) {
+                    const last = this.progressHistory[this.progressHistory.length - 1];
+                    if (last.percent) {
+                        progress.percent = last.percent;
+                    }
+                }
+                this.progressHistory.push(progress);
             });
 
         this.completed
@@ -79,7 +85,7 @@ export class JobInstance<TJobDef
                 this.completeJob(JobStatus.Success);
             }, (error: JobError) => {
                 console.error(`Job ${definition.title} completed with errors`);
-                console.log(error);
+                console.error(error);
                 this.errorSubject.next(error);
                 this.completeJob(JobStatus.Errored);
             });
@@ -111,6 +117,9 @@ export class JobInstance<TJobDef
     }
 
     public cancel() {
+        for (const childJob of this.children) {
+            childJob.cancel();
+        }
         this.cancellationToken.cancel();
     }
 
