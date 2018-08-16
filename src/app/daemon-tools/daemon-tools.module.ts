@@ -44,7 +44,9 @@ import { VolumeListContainerComponent } from './volume-list-container/volume-lis
 import { VolumeCreateComponent } from './volume-create/volume-create.component';
 import { VolumeCreateContainerComponent } from './volume-create-container/volume-create-container.component';
 import { ContainerListContainerComponent } from './container-list-container/container-list-container.component';
-import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-image-job-details.component';
+import { ContainerLauncherComponent } from './container-launcher/container-launcher.component';
+import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-logs.component';
+import { JobsModule } from '../jobs/jobs.module';
 
 @NgModule({
   imports: [
@@ -72,6 +74,7 @@ import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-imag
 
     SharedModule,
     SettingsModule,
+    JobsModule,
 
     NgMathPipesModule,
     NgObjectPipesModule,
@@ -95,7 +98,7 @@ import { PullImageJobDetailsComponent } from './pull-image-job-details/pull-imag
     VolumeCreateContainerComponent,
     ContainerListContainerComponent,
     PullImageJobLogsComponent,
-    PullImageJobDetailsComponent,
+    ContainerLauncherComponent,
   ],
   exports: [
     ContainerListComponent,

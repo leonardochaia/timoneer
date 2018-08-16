@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
-import { switchMap } from 'rxjs/operators';
-import { NotificationService } from '../../shared/notification.service';
-import { ImageInspectInfo, Container, ContainerCreateBody } from 'dockerode';
-import { from } from 'rxjs';
-import { DockerContainerService } from '../docker-container.service';
+import { ImageInspectInfo, ContainerCreateBody } from 'dockerode';
 import {
   ContainerCreationSuggestedPort, PortBinding,
   ContainerCreationSuggestedVolume, VolumeBinding, VolumeBindingType
 } from '../docker-client.model';
+import { DockerJobsService } from '../docker-jobs.service';
+import { JobInstance } from '../../jobs/job-instance';
+import { ContainerCreationJob } from '../container-creation-job';
 
 @Component({
   selector: 'tim-container-create',
@@ -30,7 +29,7 @@ export class ContainerCreateComponent implements OnInit {
   public suggestedVolumes: ContainerCreationSuggestedVolume[];
 
   @Output()
-  public created = new EventEmitter<string>();
+  public created = new EventEmitter<JobInstance<ContainerCreationJob, string>>();
 
   public form = this.fb.group({
     'image': ['', Validators.required],
@@ -53,8 +52,7 @@ export class ContainerCreateComponent implements OnInit {
 
   public imageData: ImageInspectInfo;
 
-  constructor(private containerService: DockerContainerService,
-    private notification: NotificationService,
+  constructor(private dockerJobs: DockerJobsService,
     private fb: FormBuilder) {
   }
 
@@ -107,13 +105,7 @@ export class ContainerCreateComponent implements OnInit {
 
     data.name = launchConfig.containerName;
 
-    this.containerService.create(data)
-      .pipe(switchMap(container => {
-        this.notification.open(`Container Created. Starting.. ${container.id}`);
-        return from(container.start() as Promise<Container>);
-      }))
-      .subscribe(container => {
-        this.created.emit(container.id);
-      });
+    const job = this.dockerJobs.createContainer(data);
+    this.created.emit(job);
   }
 }

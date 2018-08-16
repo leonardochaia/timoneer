@@ -2,6 +2,9 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { TAB_DATA } from '../../tabs/tab.model';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
+import { ContainerCreationJob } from '../container-creation-job';
+import { JobInstance } from '../../jobs/job-instance';
+import { ContainerLauncherParams } from '../container-launcher/container-launcher.component';
 
 @Component({
   selector: 'tim-container-create-container',
@@ -18,10 +21,11 @@ export class ContainerCreateContainerComponent implements OnInit {
   public ngOnInit() {
   }
 
-  public containerCreated(id: string) {
-    this.tabService.add(TimoneerTabs.DOCKER_ATTACH, {
-      title: `Attached to ${id.slice(0, 12)}`,
-      params: id,
+  public containerCreated(job: JobInstance<ContainerCreationJob, string>) {
+    this.tabService.replaceCurrent(TimoneerTabs.DOCKER_CONTAINER_LAUNCHER, {
+      params: {
+        jobId: job.id,
+      } as ContainerLauncherParams,
     });
   }
 }
