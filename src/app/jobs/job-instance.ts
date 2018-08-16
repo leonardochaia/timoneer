@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subject } from 'rxjs';
-import { JobStatus, JobProgress, JobError, IJobRunner } from './jobs.model';
+import { JobStatus, JobProgress, JobError, IJobRunner, JobLogLine } from './jobs.model';
 import { JobCancellationToken } from './job-cancellation-token';
 import { take } from 'rxjs/operators';
 import { JobExecutionConfiguration } from './job-execution-configuration';
@@ -54,12 +54,13 @@ export class JobInstance<TJobDef
         return this.childJobs;
     }
 
-    public readonly progressHistory: TProgress[] = [];
+    public readonly logs: JobLogLine[] = [];
 
     protected currentResult: TResult;
 
     protected statusSubject = new BehaviorSubject<JobStatus>(JobStatus.Queued);
     protected progressSubject = new BehaviorSubject<TProgress>(<TProgress>{});
+    protected logSubject = new Subject<JobLogLine>();
     protected cancellationToken = new JobCancellationToken();
     protected errorSubject = new BehaviorSubject<JobError>(null);
     protected childJobStarted = new Subject<JobInstance>();
@@ -70,9 +71,9 @@ export class JobInstance<TJobDef
         public readonly executionConfiguration: JobExecutionConfiguration<TJobDef, TResult, TProgress>,
         jobRunner: IJobRunner) {
 
-        this.progress
-            .subscribe(progress => {
-                this.progressHistory.push(progress);
+        this.logSubject
+            .subscribe(line => {
+                this.logs.push(line);
             });
 
         this.completed
@@ -104,6 +105,7 @@ export class JobInstance<TJobDef
             definition.startJob(
                 this.cancellationToken.asObservable(),
                 this.progressSubject,
+                this.logSubject,
                 childJobRunner);
             this.statusSubject.next(JobStatus.Running);
         } catch (e) {
@@ -133,7 +135,7 @@ class ChildJobRunner implements IJobRunner {
     constructor(private childJobStarted: Subject<JobInstance>,
         private jobRunner: IJobRunner) { }
 
-    public startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>
+    public startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress extends JobProgress>
         (type: Type<TJobDef>, ...providers: Provider[]) {
 
         const job = this.jobRunner.startJob<TJobDef, TResult, TProgress>(type, providers);

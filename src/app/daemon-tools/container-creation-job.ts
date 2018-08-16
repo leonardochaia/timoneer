@@ -34,7 +34,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
     public start() {
         this.pullImage()
             .pipe(switchMap(() => {
-                this.progress({
+                this.progressAndLog({
                     percent: 75,
                     message: 'Creating container'
                 });
@@ -42,7 +42,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
                     .pipe(
                         takeUntil(this.cancelled),
                         switchMap(container => {
-                            this.progress({
+                            this.progressAndLog({
                                 percent: 80,
                                 message: `Starting container ${container.id}`
                             });
@@ -51,7 +51,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
                     );
             }))
             .subscribe(container => {
-                this.progress({
+                this.progressAndLog({
                     percent: 100,
                     message: `Container started`
                 });
@@ -65,7 +65,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
 
     protected pullImage() {
         const image = this.creationData.Image;
-        this.progress({
+        this.progressAndLog({
             percent: 0,
             message: `Inspecting image ${image}`
         });
@@ -73,7 +73,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
             .pipe(
                 map(imageInfo => {
 
-                    this.progress({
+                    this.progressAndLog({
                         percent: 50,
                         message: `Obtained image metadata ${image}`
                     });
@@ -83,14 +83,14 @@ export class ContainerCreationJob extends JobDefinition<string> {
                 catchError((error: { statusCode: number, message: string }) => {
 
                     if (error.statusCode === 404) {
-                        this.progress({
+                        this.progressAndLog({
                             percent: 25,
                             message: `Image ${image} not found in daemon`
                         });
                         const job = this.startPullImageJob();
                         return job.completed
                             .pipe(switchMap(() => {
-                                this.progress({
+                                this.progressAndLog({
                                     percent: 50,
                                     message: `Obtained Image ${image}`
                                 });

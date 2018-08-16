@@ -1,5 +1,5 @@
 import { Subject, Observable } from 'rxjs';
-import { JobProgress, JobError, IJobRunner } from './jobs.model';
+import { JobProgress, JobError, IJobRunner, JobLogLine } from './jobs.model';
 import { Type, Provider } from '@angular/core';
 import { JobInstance } from './job-instance';
 import { take } from 'rxjs/operators';
@@ -21,6 +21,7 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
 
     private completionSubject = new Subject<TResult>();
     private progressSubject: Subject<TProgress>;
+    private logSubject: Subject<JobLogLine>;
     private childJobSubject = new Subject<JobInstance>();
     private jobRunner: IJobRunner;
     private finished = false;
@@ -29,16 +30,20 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
     public startJob(
         cancelled: Observable<void>,
         progress: Subject<TProgress>,
+        logSubject: Subject<JobLogLine>,
         jobRunner: IJobRunner) {
 
         this.cancelled = cancelled;
         this.progressSubject = progress;
         this.jobRunner = jobRunner;
+        this.logSubject = logSubject;
+
         this.cancelled
             .pipe(take(1))
             .subscribe(() => {
                 this.isCancelled = true;
             });
+
         this.start();
     }
 
@@ -56,6 +61,23 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         }
     }
 
+    protected progressAndLog(progress: TProgress) {
+        if (progress) {
+            this.progress(progress);
+            if (progress.message) {
+                this.log(progress.message);
+            }
+        }
+    }
+
+    protected log(message: string) {
+        const line: JobLogLine = {
+            message: message,
+            date: new Date()
+        };
+        this.logSubject.next(line);
+    }
+
     protected complete(result: TResult) {
         this.throwIfCompleted();
         this.completionSubject.next(result);
@@ -70,17 +92,20 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
         this.finished = true;
     }
 
-    protected startChildJob<TChildResult, TChildProgress>(
+    protected startChildJob<TChildResult, TChildProgress extends JobProgress>(
         type: Type<JobDefinition<TChildResult, TChildProgress>>,
         ...additionalProviders: Provider[]) {
 
         const job = this.jobRunner.startJob(type, additionalProviders);
 
         this.childJobSubject.next(job);
-        this.progress({
-            message: `Starting Child Job: ${job.definition.title}`,
-            childJob: job,
-        } as JobProgress as TProgress);
+
+        this.logSubject.next({
+            date: new Date(),
+            message: `Starting Job: ${job.definition.title}`,
+            childJob: job
+        });
+
         return job;
     }
 

@@ -31,7 +31,7 @@
 
     <div fxFlex="grow">
       <button mat-raised-button
-              *ngIf="job.status === JobStatus.Running"
+              *ngIf="job.configuration.allowsCancel && job.status === JobStatus.Running"
               color="warn"
               (click)="job.cancel()">
         Cancel

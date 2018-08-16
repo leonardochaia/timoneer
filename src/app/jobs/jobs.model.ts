@@ -11,10 +11,15 @@ export enum JobStatus {
 }
 
 export interface JobProgress {
-    percent?: number;
+    percent: number;
     message?: string;
-    childJob?: JobInstance;
     date?: Date;
+}
+
+export interface JobLogLine {
+    message: string;
+    date: Date;
+    childJob?: JobInstance;
 }
 
 export interface JobError {
@@ -24,7 +29,7 @@ export interface JobError {
 export const CURRENT_JOB = new InjectionToken<string>('CurrentJob');
 
 export interface IJobRunner {
-    startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>(type: Type<TJobDef>,
+    startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress extends JobProgress>(type: Type<TJobDef>,
         ...providers: Provider[])
         : JobInstance<TJobDef, TResult, TProgress>;
 }

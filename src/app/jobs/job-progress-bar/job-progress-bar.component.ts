@@ -12,5 +12,8 @@ export class JobProgressBarComponent {
   public readonly JobStatus = JobStatus;
 
   @Input()
+  public showMessage = false;
+
+  @Input()
   public job: JobInstance;
 }

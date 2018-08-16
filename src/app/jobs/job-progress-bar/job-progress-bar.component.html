@@ -1,4 +1,5 @@
 <ng-container *ngIf="job.status === JobStatus.Running">
+  {{showMessage && !job.currentProgress.persistant ? job.currentProgress.message : ''}}
   <mat-progress-bar [mode]="job.currentProgress.percent < 100 ? 'determinate' : 'indeterminate'"
                     [value]="job.currentProgress.percent"></mat-progress-bar>
 </ng-container>

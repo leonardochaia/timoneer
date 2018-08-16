@@ -2,9 +2,10 @@
 
 <ng-container *ngIf="!usingCustomDetails">
 
-  <tim-job-progress-bar [job]="job"></tim-job-progress-bar>
+  <tim-job-progress-bar [job]="job"
+                        [showMessage]="true"></tim-job-progress-bar>
 
-  <ng-container *ngFor="let progress of job.progressHistory">
+  <ng-container *ngFor="let progress of job.logs">
     <div fxLayout="row"
          fxLayoutGap="8px"
          *ngIf="progress.message">

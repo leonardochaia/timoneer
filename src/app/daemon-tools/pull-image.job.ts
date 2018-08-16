@@ -37,9 +37,7 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     }
 
     public start() {
-        this.progress({
-            message: `Pulling from ${this.image}`
-        } as Partial<PullImageJobProgress> as PullImageJobProgress);
+        this.log(`Pulling from ${this.image}`);
 
         this.imageService.pullImage(this.image)
             .pipe(takeUntil(this.cancelled))

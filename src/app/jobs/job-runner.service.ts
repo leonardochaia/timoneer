@@ -8,11 +8,11 @@ import { JobExecutionConfiguration } from './job-execution-configuration';
 @Injectable()
 export class JobRunnerService implements OnDestroy, IJobRunner {
 
-  public jobs: JobInstance<JobDefinition<any>, any>[] = [];
+  public jobs: JobInstance<JobDefinition<any, JobProgress>, any>[] = [];
 
   constructor(private injector: Injector) { }
 
-  public startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>(type: Type<TJobDef>,
+  public startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress extends JobProgress>(type: Type<TJobDef>,
     ...providers: Provider[])
     : JobInstance<TJobDef, TResult, TProgress> {
 
@@ -38,7 +38,7 @@ export class JobRunnerService implements OnDestroy, IJobRunner {
     }
   }
 
-  public restartJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>(
+  public restartJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress extends JobProgress>(
     job: JobInstance<TJobDef, TResult, TProgress>) {
 
     const executionConfig = job.executionConfiguration;
@@ -75,12 +75,12 @@ export class JobRunnerService implements OnDestroy, IJobRunner {
     });
   }
 
-  protected execute<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>(
+  protected execute<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress extends JobProgress>(
     jobDefinition: TJobDef,
     executionConfig: JobExecutionConfiguration<TJobDef, TResult, TProgress>) {
 
     jobDefinition.childJobAdded
-      .subscribe(childJob => {
+      .subscribe((childJob: JobInstance<any, JobProgress>) => {
         const index = this.jobs.indexOf(childJob);
         if (index >= 0) {
           this.jobs.splice(index, 1);
