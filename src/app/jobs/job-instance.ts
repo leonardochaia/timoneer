@@ -5,11 +5,14 @@ import { take } from 'rxjs/operators';
 import { JobExecutionConfiguration } from './job-execution-configuration';
 import { JobDefinition } from './job-definition';
 import { Type, Provider } from '@angular/core';
+import { v1 as uuid } from 'uuid';
 
 export class JobInstance<TJobDef
-    extends JobDefinition<TResult> = JobDefinition<any>,
+    extends JobDefinition<TResult, TProgress> = JobDefinition<any, TProgress>,
     TResult = any,
     TProgress extends JobProgress = JobProgress> {
+
+    public readonly id = uuid();
 
     public get status() {
         return this.statusSubject.value;
@@ -64,17 +67,11 @@ export class JobInstance<TJobDef
 
     constructor(
         public readonly definition: TJobDef,
-        public readonly executionConfiguration: JobExecutionConfiguration<TResult, TProgress>,
+        public readonly executionConfiguration: JobExecutionConfiguration<TJobDef, TResult, TProgress>,
         jobRunner: IJobRunner) {
 
         this.progress
             .subscribe(progress => {
-                if (!progress.percent && this.progressHistory.length) {
-                    const last = this.progressHistory[this.progressHistory.length - 1];
-                    if (last.percent) {
-                        progress.percent = last.percent;
-                    }
-                }
                 this.progressHistory.push(progress);
             });
 
@@ -136,9 +133,10 @@ class ChildJobRunner implements IJobRunner {
     constructor(private childJobStarted: Subject<JobInstance>,
         private jobRunner: IJobRunner) { }
 
-    public startJob<TResult, TProgress>(type: Type<JobDefinition<TResult, TProgress>>, ...providers: Provider[]) {
+    public startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>
+        (type: Type<TJobDef>, ...providers: Provider[]) {
 
-        const job = this.jobRunner.startJob<TResult, TProgress>(type, providers);
+        const job = this.jobRunner.startJob<TJobDef, TResult, TProgress>(type, providers);
         this.childJobStarted.next(job);
 
         return job;

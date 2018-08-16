@@ -15,10 +15,14 @@ export class JobLogsComponent {
   @Input()
   public job: JobInstance<any>;
 
+  public get isDialog() {
+    return !!this.dialogJob;
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     @Optional()
-    dialogJob: JobInstance<any>
+    private dialogJob: JobInstance<any>
   ) {
 
     if (dialogJob) {

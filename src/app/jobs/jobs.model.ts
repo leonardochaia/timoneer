@@ -24,7 +24,7 @@ export interface JobError {
 export const CURRENT_JOB = new InjectionToken<string>('CurrentJob');
 
 export interface IJobRunner {
-    startJob<TResult, TProgress>(type: Type<JobDefinition<TResult, TProgress>>,
+    startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress>(type: Type<TJobDef>,
         ...providers: Provider[])
-        : JobInstance<JobDefinition<TResult, TProgress>, TResult, TProgress>;
+        : JobInstance<TJobDef, TResult, TProgress>;
 }

@@ -26,10 +26,6 @@
 
   </div>
 
-  <div style="padding:16px 0">
-    <tim-job-progress-bar [job]="job"></tim-job-progress-bar>
-  </div>
-
   <div fxLayout="row"
        fxLayoutGap="16px">
 
@@ -44,7 +40,8 @@
 
     <div>
 
-      <button mat-raised-button
+      <button *ngIf="isDialog"
+              mat-raised-button
               mat-dialog-close
               style="float:right;">
         Close

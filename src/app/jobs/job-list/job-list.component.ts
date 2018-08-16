@@ -3,7 +3,6 @@ import { JobRunnerService } from '../job-runner.service';
 import { JobStatus } from '../jobs.model';
 import { JobInstance } from '../job-instance';
 import { JobDetailsService } from '../job-details.service';
-import { TestJob, TestJobParams } from '../test.job';
 import { ContextMenuService, ContextMenuConstructor } from '../../electron-tools/context-menu.service';
 import { NotificationService } from '../../shared/notification.service';
 
@@ -25,11 +24,6 @@ export class JobListComponent implements OnInit {
     private jobDetails: JobDetailsService) { }
 
   public ngOnInit() {
-    this.jobRunner.startJob(TestJob, {
-      provide: TestJobParams,
-      useValue: new TestJobParams(15),
-    });
-
     if (!this.jobs) {
       this.jobs = this.jobRunner.jobs;
     }

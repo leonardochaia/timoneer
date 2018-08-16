@@ -3,7 +3,8 @@
                  (auxclick)="showMenu(job)"
                  (click)="showDetails(job)">
 
-    <div mat-line>
+    <div mat-line
+         [title]="job.id">
       {{job.definition.title}}
 
       <ng-container [ngSwitch]="job.status">

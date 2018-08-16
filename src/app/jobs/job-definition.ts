@@ -24,6 +24,7 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
     private childJobSubject = new Subject<JobInstance>();
     private jobRunner: IJobRunner;
     private finished = false;
+    private currentPercent: number;
 
     public startJob(
         cancelled: Observable<void>,
@@ -45,6 +46,11 @@ export abstract class JobDefinition<TResult, TProgress extends JobProgress = Job
 
     protected progress(progress: TProgress) {
         if (progress) {
+            if (!isNaN(progress.percent)) {
+                this.currentPercent = progress.percent;
+            } else {
+                progress.percent = this.currentPercent;
+            }
             progress.date = new Date(Date.now());
             this.progressSubject.next(progress);
         }

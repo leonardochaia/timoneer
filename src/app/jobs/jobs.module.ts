@@ -33,6 +33,8 @@ import { JobLogsRendererComponent } from './job-logs-renderer/job-logs-renderer.
   ],
   exports: [
     JobListComponent,
+    JobLogsRendererComponent,
+    JobLogsComponent,
   ],
   entryComponents: [
     JobLogsComponent,
