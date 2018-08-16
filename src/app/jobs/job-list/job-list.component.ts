@@ -18,15 +18,23 @@ export class JobListComponent implements OnInit {
   @Input()
   public jobs: JobInstance[];
 
+  @Input()
+  public status: JobStatus;
+
+  public get filteredJobs() {
+    if (this.status) {
+      return this.jobRunner.jobs.filter(j => j.status === this.status);
+    } else {
+      return this.jobRunner.jobs;
+    }
+  }
+
   constructor(private jobRunner: JobRunnerService,
     private menu: ContextMenuService,
     private notification: NotificationService,
     private jobDetails: JobDetailsService) { }
 
   public ngOnInit() {
-    if (!this.jobs) {
-      this.jobs = this.jobRunner.jobs;
-    }
   }
 
   public restartJob(job: JobInstance<any>) {

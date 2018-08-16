@@ -105,12 +105,13 @@
     </div>
 
     <h4 class="list-title"
-        *ngIf="jobList.jobs && jobList.jobs.length">
+        *ngIf="jobList.filteredJobs && jobList.filteredJobs.length">
       <mat-icon>computer</mat-icon>
       Running Jobs
     </h4>
 
-    <tim-job-list #jobList></tim-job-list>
+    <tim-job-list #jobList
+                  [status]="JobStatus.Running"></tim-job-list>
 
   </div>
 

@@ -1,5 +1,5 @@
 <mat-nav-list dense>
-  <mat-list-item *ngFor="let job of jobs"
+  <mat-list-item *ngFor="let job of filteredJobs"
                  (auxclick)="showMenu(job)"
                  (click)="showDetails(job)">
 
