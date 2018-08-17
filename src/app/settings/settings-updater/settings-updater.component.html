@@ -9,11 +9,14 @@
   </div>
 
   <div *ngSwitchCase="UpdaterStatus.Outdated">
+    <h3>
+      Timoneer v{{currentUpdate.version}} is available.
+    </h3>
     <button type="button"
             mat-raised-button
-            (click)="downloadLatestUpdate()"
+            (click)="checkForUpdates()"
             color="primary">
-      Download Update
+      Download
     </button>
   </div>
 

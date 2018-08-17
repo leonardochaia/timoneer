@@ -11,6 +11,7 @@ import { RegistrySettingsModalComponent } from './registry-settings-modal/regist
 import { SharedModule } from '../shared/shared.module';
 import { NgMathPipesModule } from 'angular-pipes';
 import { SettingsUpdaterComponent } from './settings-updater/settings-updater.component';
+import { JobsModule } from '../jobs/jobs.module';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { SettingsUpdaterComponent } from './settings-updater/settings-updater.co
     NgMathPipesModule,
 
     SharedModule,
+    JobsModule,
   ],
   declarations: [
     SettingsContainerComponent,

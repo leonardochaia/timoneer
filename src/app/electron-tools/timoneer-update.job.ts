@@ -54,6 +54,7 @@ export class TimoneerUpdateJob extends JobDefinition<string, TimoneerUpdateJobPr
                             }
                         });
 
+                    // TODO: Cancellation is not working properly.
                     // const cancellationToken = new CancellationToken();
                     // this.cancelled.subscribe(() => {
                     //     cancellationToken.cancel();

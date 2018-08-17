@@ -144,14 +144,13 @@ export class UpdaterService implements OnDestroy {
     this.status = UpdaterStatus.Downloading;
     this.progressSubject.next(progress);
     this.statusText = `Downloading.. %${progress.percent}`;
-    console.log(progress);
   }
 
   protected onUpdateDownloaded(info: UpdateInfo) {
     this.status = UpdaterStatus.PendingInstall;
     this.statusText = `v${info.version} is ready to be installed.`;
 
-    this.notificationService.open(`Timoneer v${info.version} finished downloading. Restart to install`, 'Restart', {
+    this.notificationService.open(`Timoneer ${this.statusText}`, 'Restart and Install', {
       duration: -1
     }).onAction().subscribe(() => {
       this.quitAndInstall();
