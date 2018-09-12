@@ -24,6 +24,7 @@ import { ApplicationTemplatesModule } from './application-templates/application-
 import { RegistryModule } from './registry/registry.module';
 import { SettingsModule } from './settings/settings.module';
 import { TabConfiguration } from './tabs/tab.model';
+import { ContainerLauncherComponent } from './daemon-tools/container-launcher/container-launcher.component';
 
 const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
@@ -53,6 +54,11 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
     id: TimoneerTabs.DOCKER_CONTAINER_NEW,
     title: 'New Container',
     component: ContainerCreateContainerComponent,
+  },
+  {
+    id: TimoneerTabs.DOCKER_CONTAINER_LAUNCHER,
+    title: 'Launching Container',
+    component: ContainerLauncherComponent,
   },
   {
     id: TimoneerTabs.DOCKER_VOLUMES,

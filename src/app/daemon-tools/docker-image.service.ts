@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { DockerService } from './docker.service';
 import { SettingsService } from '../settings/settings.service';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, map, take, materialize, dematerialize } from 'rxjs/operators';
 import { IncomingMessage } from 'http';
 import { Observable } from 'rxjs';
 import { DockerStreamResponse } from './docker-client.model';
@@ -18,6 +18,9 @@ export class DockerImageService {
   }
 
   public pullImage(image: string) {
+    if (!image.includes(':')) {
+      image += ':latest';
+    }
     return this.settingsService.getRegistryAuthForImage(image)
       .pipe(
         take(1),
@@ -25,9 +28,15 @@ export class DockerImageService {
         map(msg => <IncomingMessage>msg),
         switchMap(msg => this.daemon.modem().pipe(map(m => ({ message: msg, modem: m })))),
         switchMap(response => new Observable<DockerStreamResponse>(observer => {
-          const onFinished = () => {
+          const onFinished = (error, output) => {
             this.ngZone.run(() => {
-              observer.complete();
+              if (error) {
+                observer.error(error);
+              } else {
+                observer.complete();
+              }
+
+              observer.unsubscribe();
             });
           };
 
@@ -37,8 +46,20 @@ export class DockerImageService {
             });
           };
           response.modem.followProgress(response.message, onFinished, onProgress);
-        }))
+          return () => {
+            response.message.destroy();
+          };
+        }).pipe(materialize())),
+        dematerialize()
+        // materialize/dematerialize to send the complete event through.
+        // https://stackoverflow.com/questions/40611203/switchmap-does-not-seem-to-complete-when-the-inner-observable-completes
       );
+  }
+
+  public isUserFriendlyResponse(response: DockerStreamResponse) {
+    return response
+      && response.status
+      && !response.status.startsWith('Digest:');
   }
 
   public inspectImage(image: string) {

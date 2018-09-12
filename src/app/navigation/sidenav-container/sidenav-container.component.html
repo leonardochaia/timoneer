@@ -72,34 +72,46 @@
   </div>
 
   <div fxFlex="grow"
+       fxLayout="column"
        style="overflow: hidden">
 
-    <h4 class="list-title">
+    <div fxFlex="grow">
+      <h4 class="list-title">
+        <mat-icon>computer</mat-icon>
+        Running Containers
+      </h4>
+
+      <mat-nav-list>
+        <tim-container-list [all]="false">
+
+          <ng-template let-container
+                       let-loading="loading">
+
+            <mat-list-item style="height:32px"
+                           [matTooltip]="container.Image"
+                           matTooltipPosition="right"
+                           (click)="!loading ? attach(container.Names[0], container.Id) : null">
+              <small mat-line>{{container.Names[0]}}</small>
+              <div mat-line
+                   *ngIf="loading">
+                <tim-loading [alternative]="true"></tim-loading>
+              </div>
+            </mat-list-item>
+
+          </ng-template>
+        </tim-container-list>
+      </mat-nav-list>
+
+    </div>
+
+    <h4 class="list-title"
+        *ngIf="jobList.filteredJobs && jobList.filteredJobs.length">
       <mat-icon>computer</mat-icon>
-      Running Containers
+      Running Jobs
     </h4>
 
-    <mat-nav-list>
-      <tim-container-list [all]="false">
-
-        <ng-template let-container
-                     let-loading="loading">
-
-          <mat-list-item style="height:32px"
-                         [matTooltip]="container.Image"
-                         matTooltipPosition="right"
-                         (click)="!loading ? attach(container.Names[0], container.Id) : null">
-            <small mat-line>{{container.Names[0]}}</small>
-            <div mat-line
-                 *ngIf="loading">
-              <tim-loading [alternative]="true"></tim-loading>
-            </div>
-          </mat-list-item>
-
-        </ng-template>
-      </tim-container-list>
-
-    </mat-nav-list>
+    <tim-job-list #jobList
+                  [status]="JobStatus.Running"></tim-job-list>
 
   </div>
 

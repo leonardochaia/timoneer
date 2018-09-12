@@ -3,6 +3,7 @@ import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.serv
 import { TIM_LOGO } from '../../settings/settings.service';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
+import { JobStatus } from '../../jobs/jobs.model';
 
 @Component({
     selector: 'tim-sidenav-container',
@@ -12,6 +13,8 @@ import { TimoneerTabs } from '../../timoneer-tabs';
 export class SidenavContainerComponent {
 
     public UpdaterStatus = UpdaterStatus;
+
+    public JobStatus = JobStatus;
 
     public get timoneerLogo() {
         return TIM_LOGO;
