@@ -1,0 +1,28 @@
+<div *ngFor="let log of logs; trackBy: trackByFn">
+  <ng-container *ngIf="isUserFriendly(log)">
+
+    <div fxLayout="row"
+         fxLayoutGap="8px">
+      <div fxFlex="grow">
+        {{log.id ? '[' + log.id + ']' : ''}}
+        <span [ngClass]="log.error ? 'tim-text-warn': ''">
+          {{log.message || log.error}}
+        </span>
+      </div>
+
+      <mat-icon *ngIf="!log.progressDetail?.current && (log.status || log.error)"
+                [ngClass]="log.error ? 'tim-text-warn': 'tim-text-accent'">
+        {{log.error ? 'highlight_off' : 'check_circle_outline' }}
+      </mat-icon>
+
+    </div>
+
+    <div *ngIf="log.progressDetail?.current">
+      ( {{log.progressDetail.current | bytes}} / {{log.progressDetail.total | bytes}} )
+      <mat-progress-bar *ngIf="log.progressDetail.current !== log.progressDetail.total"
+                        mode="determinate"
+                        [value]="(log.progressDetail.current / log.progressDetail.total) * 100"
+                        style="margin-top:8px;"></mat-progress-bar>
+    </div>
+  </ng-container>
+</div>

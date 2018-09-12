@@ -2,6 +2,8 @@ import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { UpdateInfo } from 'electron-updater';
 import { ElectronService } from './electron.service';
 import { NotificationService } from '../shared/notification.service';
+import { ProgressInfo, CancellationToken } from 'builder-util-runtime';
+import { BehaviorSubject } from 'rxjs';
 
 export enum UpdaterStatus {
   CheckingForUpdate = 1,
@@ -22,7 +24,13 @@ export class UpdaterService implements OnDestroy {
 
   public latestVersion: UpdateInfo;
 
-  public currentDownloadProgress: any;
+  public get currentDownloadProgress() {
+    return this.progressSubject.value;
+  }
+
+  public get downloadProgress() {
+    return this.progressSubject.asObservable();
+  }
 
   public get currentVersion() {
     return this.autoUpdater.currentVersion;
@@ -31,6 +39,8 @@ export class UpdaterService implements OnDestroy {
   private get autoUpdater() {
     return this.electronService.electronUpdater.autoUpdater;
   }
+
+  private progressSubject = new BehaviorSubject<ProgressInfo>(null);
 
   constructor(private electronService: ElectronService,
     private notificationService: NotificationService,
@@ -68,7 +78,7 @@ export class UpdaterService implements OnDestroy {
       });
     });
 
-    this.autoUpdater.on('download-progress', (progressObj) => {
+    this.autoUpdater.on('download-progress', (progressObj: ProgressInfo) => {
       this.zone.run(() => {
         this.onDownloadProgress(progressObj);
       });
@@ -84,15 +94,19 @@ export class UpdaterService implements OnDestroy {
   }
 
   public checkForUpdates() {
-    this.autoUpdater.checkForUpdates();
+    return this.autoUpdater.checkForUpdates();
   }
 
-  public downloadLatestUpdate() {
+  public downloadLatestUpdate(cancellationToken?: CancellationToken) {
     if (this.status === UpdaterStatus.Outdated) {
       this.status = UpdaterStatus.Downloading;
-      this.autoUpdater.downloadUpdate();
-
       this.notificationService.open(`Downloading Latest Timoneer Version..`);
+
+      if (cancellationToken) {
+        return this.autoUpdater.downloadUpdate(cancellationToken);
+      } else {
+        return this.autoUpdater.downloadUpdate();
+      }
     }
   }
 
@@ -126,22 +140,17 @@ export class UpdaterService implements OnDestroy {
     this.statusText = `Error while checking for updates: ${error.message}`;
   }
 
-  protected onDownloadProgress(progress: {
-    progress: any, percent: number,
-    bytesPerSecond: number, total: number, transferred: number
-  }) {
+  protected onDownloadProgress(progress: ProgressInfo) {
     this.status = UpdaterStatus.Downloading;
-    this.currentDownloadProgress = progress;
+    this.progressSubject.next(progress);
     this.statusText = `Downloading.. %${progress.percent}`;
-    console.log(progress);
   }
 
   protected onUpdateDownloaded(info: UpdateInfo) {
-    this.currentDownloadProgress = null;
     this.status = UpdaterStatus.PendingInstall;
     this.statusText = `v${info.version} is ready to be installed.`;
 
-    this.notificationService.open(`Timoneer v${info.version} finished downloading. Restart to install`, 'Restart', {
+    this.notificationService.open(`Timoneer ${this.statusText}`, 'Restart and Install', {
       duration: -1
     }).onAction().subscribe(() => {
       this.quitAndInstall();

@@ -26,8 +26,6 @@ import { NgMathPipesModule, NgObjectPipesModule } from 'angular-pipes';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContainerAttacherComponent } from './container-attacher/container-attacher.component';
 import { ContainerAttacherContainerComponent } from './container-attacher-container/container-attacher-container.component';
-import { ImagePullModalComponent } from './image-pull-modal/image-pull-modal.component';
-import { ImagePullLogsComponent } from './image-pull-logs/image-pull-logs.component';
 import { ContainerExecContainerComponent } from './container-exec-container/container-exec-container.component';
 import { ContainerCreateComponent } from './container-create/container-create.component';
 import { ImageSelectorCardComponent } from './image-selector-card/image-selector-card.component';
@@ -46,6 +44,9 @@ import { VolumeListContainerComponent } from './volume-list-container/volume-lis
 import { VolumeCreateComponent } from './volume-create/volume-create.component';
 import { VolumeCreateContainerComponent } from './volume-create-container/volume-create-container.component';
 import { ContainerListContainerComponent } from './container-list-container/container-list-container.component';
+import { ContainerLauncherComponent } from './container-launcher/container-launcher.component';
+import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-logs.component';
+import { JobsModule } from '../jobs/jobs.module';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { ContainerListContainerComponent } from './container-list-container/cont
 
     SharedModule,
     SettingsModule,
+    JobsModule,
 
     NgMathPipesModule,
     NgObjectPipesModule,
@@ -81,8 +83,6 @@ import { ContainerListContainerComponent } from './container-list-container/cont
     ContainerListComponent,
     ImageListComponent,
     ContainerAttacherComponent,
-    ImagePullLogsComponent,
-    ImagePullModalComponent,
     ImageSelectorCardComponent,
     ContainerCreateComponent,
     ContainerCreatePortMappingComponent,
@@ -97,6 +97,8 @@ import { ContainerListContainerComponent } from './container-list-container/cont
     VolumeCreateComponent,
     VolumeCreateContainerComponent,
     ContainerListContainerComponent,
+    PullImageJobLogsComponent,
+    ContainerLauncherComponent,
   ],
   exports: [
     ContainerListComponent,
@@ -104,7 +106,6 @@ import { ContainerListContainerComponent } from './container-list-container/cont
     ImageListContainerComponent,
     ContainerAttacherComponent,
     ContainerAttacherContainerComponent,
-    ImagePullLogsComponent,
     ContainerCreateComponent,
     ImageSelectorCardComponent,
   ],
@@ -117,7 +118,7 @@ import { ContainerListContainerComponent } from './container-list-container/cont
     DockerVolumeService,
   ],
   entryComponents: [
-    ImagePullModalComponent,
+    PullImageJobLogsComponent,
   ]
 })
 export class DaemonToolsModule { }

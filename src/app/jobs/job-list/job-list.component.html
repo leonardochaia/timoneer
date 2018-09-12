@@ -1,0 +1,59 @@
+<mat-nav-list dense>
+  <mat-list-item *ngFor="let job of filteredJobs"
+                 (auxclick)="showMenu(job)"
+                 (click)="showDetails(job)">
+
+    <div mat-line
+         [title]="job.id">
+      {{job.definition.title}}
+
+      <ng-container [ngSwitch]="job.status">
+
+        <ng-container *ngSwitchCase="JobStatus.Running">
+          <small class="text-nowrap"
+                 *ngIf="job.currentProgress && job.currentProgress.message && job.currentProgress.message.length">
+            ({{job.currentProgress.message}})
+          </small>
+        </ng-container>
+
+        <small *ngSwitchDefault
+               class="text-nowrap"
+               [ngClass]="{'tim-text-accent': job.status === JobStatus.Success, 
+                'tim-text-warn': job.status === JobStatus.Errored || job.status === JobStatus.Cancelled }">
+          {{job.status}}
+        </small>
+      </ng-container>
+    </div>
+
+    <div mat-line>
+      <tim-job-progress-bar [job]="job"></tim-job-progress-bar>
+    </div>
+
+    <div mat-line
+         *ngIf="job.children.length && job.status === JobStatus.Running">
+      <ng-template #recursiveList
+                   let-children>
+        <div style="padding-left:8px"
+             *ngFor="let job of children">
+          {{job.definition.title}}
+
+          <small class="text-nowrap"
+                 *ngIf="job.status !== JobStatus.Running"
+                 [ngClass]="{'tim-text-accent': job.status === JobStatus.Success, 
+           'tim-text-warn': job.status === JobStatus.Errored || job.status === JobStatus.Cancelled }">
+            {{job.status}}
+          </small>
+
+          <tim-job-progress-bar [job]="job"></tim-job-progress-bar>
+
+          <ng-container *ngIf="job.children.length && job.status === JobStatus.Running">
+            <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: job.children }"></ng-container>
+          </ng-container>
+
+        </div>
+      </ng-template>
+      <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: job.children }"></ng-container>
+    </div>
+
+  </mat-list-item>
+</mat-nav-list>

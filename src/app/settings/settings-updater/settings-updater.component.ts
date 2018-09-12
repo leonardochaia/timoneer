@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UpdaterService, UpdaterStatus } from '../../electron-tools/updater.service';
+import { JobRunnerService } from '../../jobs/job-runner.service';
+import { TimoneerUpdateJob } from '../../electron-tools/timoneer-update.job';
 
 @Component({
   selector: 'tim-settings-updater',
@@ -22,17 +24,14 @@ export class SettingsUpdaterComponent implements OnInit {
     return this.updater.latestVersion;
   }
 
-  constructor(private updater: UpdaterService) { }
+  constructor(private updater: UpdaterService,
+    private jobRunner: JobRunnerService) { }
 
   public ngOnInit() {
   }
 
   public checkForUpdates() {
-    this.updater.checkForUpdates();
-  }
-
-  public downloadLatestUpdate() {
-    this.updater.downloadLatestUpdate();
+    this.jobRunner.startJob(TimoneerUpdateJob);
   }
 
   public quitAndInstallUpdate() {

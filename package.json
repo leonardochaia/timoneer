@@ -17,14 +17,14 @@
     "gen-ver": "node tim-version-gen",
     "gen-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "gen-releasenotes": "conventional-changelog -p angular -i release-notes.md -s",
-    "start": "yarn postinstall:electron && yarn gen-ver && npm-run-all -p ng:serve electron:serve",
+    "start": "yarn postinstall:electron && yarn gen-ver && npm-run-all -p ng:serve electron:serve ",
     "build": "yarn postinstall:electron && yarn gen-ver && yarn electron:tsc && ng build",
     "build:dev": "yarn build -c dev",
     "build:prod": "yarn gen-releasenotes && yarn build -c production",
     "ng:serve": "ng serve --configuration hmr",
     "ng:serve:web": "yarn postinstall:web && ng serve -o",
     "electron:tsc": "tsc main.ts --lib es2017,es2016,es2015,dom",
-    "electron:serve": "wait-on http-get://localhost:4200/ && yarn electron:tsc && electron . --serve",
+    "electron:serve": "wait-on http-get://localhost:4200/ && yarn electron:tsc && electron . --serve --remote-debugging-port=9222",
     "electron:local": "yarn build:prod && electron .",
     "electron:linux": "yarn build:prod && npx electron-builder build --linux",
     "electron:windows": "yarn build:prod && npx electron-builder build --windows",
@@ -38,6 +38,7 @@
     "bump-version": "node bump-version && yarn gen-changelog"
   },
   "dependencies": {
+    "@types/uuid": "^3.4.3",
     "electron-settings": "^3.2.0",
     "electron-updater": "^3.1.1"
   },
@@ -98,6 +99,7 @@
     "tslint": "^5.11.0",
     "typescript": "^2.9.2",
     "wait-on": "3.0.1",
+    "uuid": "^3.3.2",
     "webdriver-manager": "^12.1.0",
     "xterm": "^3.7.0",
     "zone.js": "0.8.26"

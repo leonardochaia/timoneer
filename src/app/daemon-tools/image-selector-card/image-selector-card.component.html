@@ -64,7 +64,7 @@
     </p>
 
   </div>
-  <div *ngIf="!loadingImageData && imageNotFound">
+  <div *ngIf="!loadingImageData && imageSelectControl.valid">
     <button matSuffix
             mat-raised-button
             (click)="pullImage()"

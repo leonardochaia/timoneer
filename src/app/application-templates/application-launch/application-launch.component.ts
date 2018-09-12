@@ -2,6 +2,9 @@ import { Component, Input } from '@angular/core';
 import { Application } from '../application.model';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
+import { JobInstance } from '../../jobs/job-instance';
+import { ContainerCreationJob } from '../../daemon-tools/container-creation-job';
+import { ContainerLauncherParams } from '../../daemon-tools/container-launcher/container-launcher.component';
 
 @Component({
   selector: 'tim-application-launch',
@@ -15,10 +18,11 @@ export class ApplicationLaunchComponent {
 
   constructor(private tabService: TabService) { }
 
-  public containerCreated(id: string) {
-    this.tabService.replaceCurrent(TimoneerTabs.DOCKER_ATTACH, {
-      title: `Attached to ${id.slice(0, 12)}`,
-      params: id,
+  public containerCreated(job: JobInstance<ContainerCreationJob, string>) {
+    this.tabService.replaceCurrent(TimoneerTabs.DOCKER_CONTAINER_LAUNCHER, {
+      params: {
+        jobId: job.id,
+      } as ContainerLauncherParams,
     });
   }
 }

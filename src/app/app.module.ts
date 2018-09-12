@@ -7,12 +7,14 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { AppTabsModule } from './app-tabs.module';
 import { GlobalShortcutsModule } from './global-shortcuts.module';
 import { AppMenuModule } from './app-menu/app-menu.module';
+import { JobsModule } from './jobs/jobs.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HotkeyModule.forRoot(),
+    JobsModule.forRoot(),
 
     AppTabsModule,
     AppMenuModule,
