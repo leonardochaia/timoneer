@@ -1,3 +1,14 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/leonardochaia/timoneer/compare/v0.2.1...v0.3.0) (2018-09-12)
+
+
+### Features
+
+* added DeveloperTools menu ([4a8d541](https://github.com/leonardochaia/timoneer/commit/4a8d541))
+* added jobs ([7460503](https://github.com/leonardochaia/timoneer/commit/7460503))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/leonardochaia/timoneer/compare/v0.2.0...v0.2.1) (2018-08-12)
 
