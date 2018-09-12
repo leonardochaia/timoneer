@@ -74,7 +74,7 @@ export class TimoneerUpdateJob extends JobDefinition<string, TimoneerUpdateJobPr
                         });
 
                 } else {
-                    this.log(`Timoneer is up to date. v${this.currentVersion} is the latest version`);
+                    this.complete(`Timoneer is up to date. v${this.currentVersion} is the latest version`);
                 }
             }, error => {
                 this.completeWithError({
