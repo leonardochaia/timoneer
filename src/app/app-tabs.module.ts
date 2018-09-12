@@ -13,7 +13,6 @@ import {
 import { ContainerCreateContainerComponent } from './daemon-tools/container-create-container/container-create-container.component';
 import { RegistryListContainerComponent } from './registry/registry-list-container/registry-list-container.component';
 import { HomeContainerComponent } from './home/home-container/home-container.component';
-import { ITimoneerTab } from './tabs/tab.model';
 import { TimoneerTabs } from './timoneer-tabs';
 import { VolumeListContainerComponent } from './daemon-tools/volume-list-container/volume-list-container.component';
 import { VolumeCreateContainerComponent } from './daemon-tools/volume-create-container/volume-create-container.component';
@@ -24,8 +23,9 @@ import { HomeModule } from './home/home.module';
 import { ApplicationTemplatesModule } from './application-templates/application-templates.module';
 import { RegistryModule } from './registry/registry.module';
 import { SettingsModule } from './settings/settings.module';
+import { TabConfiguration } from './tabs/tab.model';
 
-const TIMONEER_AVAILABLE_TABS: ITimoneerTab[] = [
+const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
     id: TimoneerTabs.DOCKER_ATTACH,
     component: ContainerAttacherContainerComponent,

@@ -7,14 +7,14 @@ import { TabStorageService } from './tab-storage.service';
 @Injectable()
 export class TabHistoryService implements OnDestroy {
 
-  private componetDestroyed = new Subject();
+  private disposed = new Subject();
 
   constructor(private tabService: TabService,
     private tabStorageService: TabStorageService) { }
 
   public initialize() {
     this.tabService.tabsRemoved
-      .pipe(takeUntil(this.componetDestroyed))
+      .pipe(takeUntil(this.disposed))
       .subscribe(tab => {
         this.tabStorageService.addToTabHistory(tab);
       });
@@ -28,7 +28,7 @@ export class TabHistoryService implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.componetDestroyed.next();
-    this.componetDestroyed.unsubscribe();
+    this.disposed.next();
+    this.disposed.unsubscribe();
   }
 }

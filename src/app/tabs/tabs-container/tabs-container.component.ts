@@ -5,11 +5,9 @@ import {
   ChangeDetectorRef,
   Injector
 } from '@angular/core';
-import { ITimoneerTab, TAB_DATA } from '../tab.model';
+import { TAB_DATA, Tab } from '../tab.model';
 import { TabService } from '../tab.service';
 import { MatTabChangeEvent } from '@angular/material';
-import { TabStorageService } from '../tab-storage.service';
-import { TabHistoryService } from '../tab-history.service';
 import { ContextMenuConstructor, ContextMenuService } from '../../electron-tools/context-menu.service';
 
 @Component({
@@ -27,7 +25,7 @@ export class TabsContainerComponent implements AfterViewInit {
     this.tabService.changeCurrentTab(value);
   }
 
-  @ViewChildren('dynamic', { read: ViewContainerRef })
+  @ViewChildren('tabTemplate', { read: ViewContainerRef })
   public tabsTemplates: QueryList<ViewContainerRef>;
 
   public get tabs() {
@@ -37,19 +35,18 @@ export class TabsContainerComponent implements AfterViewInit {
   constructor(private cd: ChangeDetectorRef,
     private componentFactoryResolver: ComponentFactoryResolver,
     private tabService: TabService,
-    private contextMenuService: ContextMenuService,
-    tabStorageService: TabStorageService,
-    tabHistoryService: TabHistoryService) {
-
-    tabStorageService.initialize();
-    tabHistoryService.initialize();
+    private contextMenuService: ContextMenuService) {
   }
 
   public ngAfterViewInit() {
+    // Tabs are added using the TabService.
+    // That updates the view with the ngFor
+    // which executes the tabsTemplate changes
+    // tab components are re-created if they do not exist.
     this.tabsTemplates.changes.subscribe(() => {
-      this.refresh();
+      this.updateTabsComponents();
     });
-    this.refresh();
+    this.updateTabsComponents();
   }
 
   public tabFocusChanged(event: MatTabChangeEvent) {
@@ -61,7 +58,7 @@ export class TabsContainerComponent implements AfterViewInit {
     this.executeCurrentTabComponentFunction('timTabAnimationDone');
   }
 
-  public removeTab(tab: ITimoneerTab) {
+  public removeTab(tab: Tab) {
     this.tabService.removeTab(tab);
   }
 
@@ -69,11 +66,11 @@ export class TabsContainerComponent implements AfterViewInit {
     this.tabService.removeAllTabs();
   }
 
-  public removeOtherTabs(tab: ITimoneerTab) {
+  public removeOtherTabs(tab: Tab) {
     this.tabService.removeOtherTabs(tab);
   }
 
-  public openTabMenu(tab: ITimoneerTab) {
+  public openTabMenu(tab: Tab) {
     const template: ContextMenuConstructor[] = [
       {
         label: 'Close',
@@ -98,10 +95,11 @@ export class TabsContainerComponent implements AfterViewInit {
     this.contextMenuService.open(template);
   }
 
-  private refresh() {
+  private updateTabsComponents() {
     const templates = this.tabsTemplates.toArray();
     for (let i = 0; i < this.tabs.length; i++) {
       const tab = this.tabs[i];
+      const config = tab.configuration;
       const template = templates[i];
 
       if (!tab.componentInstance) {
@@ -111,13 +109,13 @@ export class TabsContainerComponent implements AfterViewInit {
         const injector = Injector.create([
           {
             provide: TAB_DATA,
-            useValue: tab.params
+            useValue: config.params
           }
         ], template.parentInjector);
 
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(tab.component);
+        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(config.component);
         const componentRef = template.createComponent(componentFactory, null, injector);
-        tab.componentInstance = componentRef.instance;
+        tab.setComponent(componentRef.instance);
         this.cd.detectChanges();
       }
     }

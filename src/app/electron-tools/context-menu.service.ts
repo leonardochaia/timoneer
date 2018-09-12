@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MenuItemConstructorOptions, BrowserWindow, MenuItem } from 'electron';
-import { ElectronService } from '../electron-tools/electron.service';
+import { ElectronService } from './electron.service';
 import { Subject, from, Observable, throwError } from 'rxjs';
 import { take, map, catchError } from 'rxjs/operators';
 

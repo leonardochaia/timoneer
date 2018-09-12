@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { FormGroup } from '@angular/forms';
 import { ElectronService } from '../electron-tools/electron.service';
-import * as ElectronSettings from 'electron-settings';
 
 const SETTINGS_KEY = 'app-settings';
 
@@ -21,7 +20,7 @@ export class SettingsService {
   private settingsSubject = new BehaviorSubject<ApplicationSettings>(null);
 
   private get electronSettings() {
-    return this.electronService.remote.require('electron-settings') as typeof ElectronSettings;
+    return this.electronService.electronSettings;
   }
 
   constructor(public matDialog: MatDialog,

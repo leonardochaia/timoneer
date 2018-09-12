@@ -16,10 +16,9 @@ export class ApplicationLaunchComponent {
   constructor(private tabService: TabService) { }
 
   public containerCreated(id: string) {
-    this.tabService.add(TimoneerTabs.DOCKER_ATTACH, {
+    this.tabService.replaceCurrent(TimoneerTabs.DOCKER_ATTACH, {
       title: `Attached to ${id.slice(0, 12)}`,
       params: id,
-      replaceCurrent: true
     });
   }
 }

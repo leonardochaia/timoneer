@@ -7,7 +7,7 @@ import { TabStorageService } from './tab-storage.service';
 import { TabService } from './tab.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ElectronToolsModule } from '../electron-tools/electron-tools.module';
-import { ITimoneerTab, APPLICATION_TABS } from './tab.model';
+import { APPLICATION_TABS, TabConfiguration } from './tab.model';
 
 @NgModule({
   imports: [
@@ -22,18 +22,20 @@ import { ITimoneerTab, APPLICATION_TABS } from './tab.model';
   declarations: [
     TabsContainerComponent,
   ],
-  providers: [
-    TabService,
-    TabStorageService,
-    TabHistoryService,
-  ],
   exports: [
     TabsContainerComponent,
   ]
 })
 export class TabsModule {
 
-  public static forRoot(config: ITimoneerTab[]): ModuleWithProviders {
+  constructor(tabStorageService: TabStorageService,
+    tabHistoryService: TabHistoryService) {
+
+    tabStorageService.initialize();
+    tabHistoryService.initialize();
+  }
+
+  public static forRoot(config: TabConfiguration[]): ModuleWithProviders {
     return {
       ngModule: TabsModule,
       providers: [
@@ -46,7 +48,10 @@ export class TabsModule {
         {
           provide: APPLICATION_TABS,
           useValue: config
-        }
+        },
+        TabService,
+        TabStorageService,
+        TabHistoryService,
       ]
     };
   }

@@ -7,7 +7,7 @@
 
     <ng-template mat-tab-label>
       <div (auxclick)="$event.which === 2 ? removeTab(tab) : openTabMenu(tab)">
-        {{tab.title}}
+        {{tab.configuration.title}}
         <button mat-icon-button
                 style="margin-left:4px"
                 (click)="removeTab(tab); $event.preventDefault()">
@@ -16,6 +16,6 @@
       </div>
     </ng-template>
 
-    <ng-container #dynamic></ng-container>
+    <ng-container #tabTemplate></ng-container>
   </mat-tab>
 </mat-tab-group>
