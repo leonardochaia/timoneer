@@ -47,6 +47,7 @@ import { ContainerListContainerComponent } from './container-list-container/cont
 import { ContainerLauncherComponent } from './container-launcher/container-launcher.component';
 import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-logs.component';
 import { JobsModule } from '../jobs/jobs.module';
+import { TimDialogModule } from '../tim-dialog/tim-dialog.module';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { JobsModule } from '../jobs/jobs.module';
     MatTooltipModule,
 
     SharedModule,
+    TimDialogModule,
     SettingsModule,
     JobsModule,
 
