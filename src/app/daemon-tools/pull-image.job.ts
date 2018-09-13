@@ -5,9 +5,7 @@ import { JobDefinition } from '../jobs/job-definition';
 import { Job } from '../jobs/job.decorator';
 import { JobProgress } from '../jobs/jobs.model';
 import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-logs.component';
-import { Injectable } from '@angular/core';
 
-@Injectable()
 export class PullImageJobParams {
     constructor(public readonly image: string) { }
 }
