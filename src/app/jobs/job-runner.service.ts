@@ -4,13 +4,15 @@ import { JobInstance } from './job-instance';
 import { JobStatus, IJobRunner, JobProgress } from './jobs.model';
 import { JobConfiguration } from './job-configuration';
 import { JobExecutionConfiguration } from './job-execution-configuration';
+import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class JobRunnerService implements OnDestroy, IJobRunner {
 
   public jobs: JobInstance<JobDefinition<any, JobProgress>, any>[] = [];
 
-  constructor(private injector: Injector) { }
+  constructor(private injector: Injector,
+    private notification: NotificationService) { }
 
   public startJob<TJobDef extends JobDefinition<TResult, TProgress>, TResult, TProgress extends JobProgress>(type: Type<TJobDef>,
     ...providers: Provider[])
@@ -35,6 +37,7 @@ export class JobRunnerService implements OnDestroy, IJobRunner {
     } catch (e) {
       console.error(`Failed to construct Job for type ${type.name}`);
       console.error(e);
+      this.notification.open(`Failed to start job`);
     }
   }
 
@@ -89,6 +92,16 @@ export class JobRunnerService implements OnDestroy, IJobRunner {
 
     const job = new JobInstance<TJobDef, TResult, TProgress>(jobDefinition, executionConfig, this);
     this.jobs.push(job);
+
+    job.completed.subscribe(null, (e) => {
+      const notif = this.notification.open(`Job ${job.definition.title} completed with error. ${e.message}`, 'Close', {
+        duration: 5000,
+        panelClass: 'tim-bg-warn'
+      });
+      notif.onAction().subscribe(() => {
+        notif.dismiss();
+      });
+    });
 
     return job;
   }
