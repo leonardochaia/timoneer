@@ -1,0 +1,42 @@
+<div class="h-100"
+     fxLayout="column">
+
+  <h1 fxFlex
+      mat-dialog-title
+      *ngIf="data.title"
+      [ngClass]="data.titleClass">
+    {{data.title}}
+  </h1>
+
+  <div>
+    <h2>
+      {{data.message}}
+    </h2>
+
+    <ng-container *ngIf="data.debuggingInfo">
+      <pre style="background: #ccc;
+    padding: 10px;
+    white-space: pre-wrap;
+    border-radius: 5px;">{{data.debuggingInfo|json}}</pre>
+    </ng-container>
+  </div>
+
+  <div fxFlex>
+    <button mat-raised-button
+            (click)="onConfirm()"
+            [color]="data.confirmButton.color"
+            *ngIf="data.confirmButton">
+      <mat-icon *ngIf="data.confirmButton.icon">{{data.confirmButton.icon}}</mat-icon>
+      {{data.confirmButton.text}}
+    </button>
+    <button mat-raised-button
+            *ngIf="data.cancelButton"
+            [color]="data.cancelButton.color"
+            (click)="onClose()"
+            style="float: right;">
+      <mat-icon *ngIf="data.cancelButton.icon">{{data.cancelButton.icon}}</mat-icon>
+      {{data.cancelButton.text}}
+    </button>
+  </div>
+
+</div>
