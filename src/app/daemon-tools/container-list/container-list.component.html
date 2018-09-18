@@ -23,7 +23,8 @@
             {{container.State}}
           </small>
           <br>
-          <code>{{container.Id | slice:0:12}} {{container.Image}}</code>
+          <code title="Container Id">{{container.Id | slice:0:12}}</code>
+          <code title="Image"> {{getImageName(container)}}</code>
         </h2>
         <tim-loading [alternative]="true"
                      *ngIf="loadingMap.get(container.Id)"></tim-loading>

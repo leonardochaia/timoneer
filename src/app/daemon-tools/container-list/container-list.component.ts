@@ -98,6 +98,14 @@ export class ContainerListComponent implements OnInit, OnDestroy {
       });
   }
 
+  public getImageName(container: ContainerInfo) {
+    if (container.Image.startsWith('sha256:')) {
+      return container.Image.replace('sha256:', '').slice(0, 12);
+    } else {
+      return container.Image;
+    }
+  }
+
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
