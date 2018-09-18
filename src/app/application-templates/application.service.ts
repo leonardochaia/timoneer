@@ -86,7 +86,6 @@ export class ApplicationService {
           if (existant.some(t => t.id === template.id)) {
             continue;
           }
-          console.log(`added ${template.id}`);
           existant.push(template);
         }
         this.applicationsSubject.next(existant);
