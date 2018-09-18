@@ -1,0 +1,56 @@
+<form #form="ngForm"
+      fxLayout="column"
+      fxLayoutGap="16px"
+      style="padding: 16px;"
+      (ngSubmit)="save()">
+
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px">
+
+    <mat-icon class="tim-icon-48 tim-text-primary">edit</mat-icon>
+
+    <div fxFlex="fill">
+      <h2 class="tim-text-title"
+          style="margin:0">
+        Edit Applications
+      </h2>
+      <p>
+        You can edit the following JSON to extend the default "Quick Templates" provided by Timoneer.
+      </p>
+    </div>
+  </mat-card>
+
+  <mat-card>
+    <mat-form-field style="width:100%">
+      <textarea matInput
+                rows="16"
+                name="json"
+                required
+                [(ngModel)]="json"></textarea>
+    </mat-form-field>
+  </mat-card>
+
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px">
+
+    <mat-icon class="tim-icon-48 tim-text-primary">developer_mode</mat-icon>
+
+    <div fxFlex="fill">
+      <h3 class="tim-text-title"
+          style="margin:0">
+        Edit Applications
+      </h3>
+    </div>
+    <div>
+      <button mat-raised-button
+              [disabled]="form.invalid"
+              type="submit"
+              color="primary">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+    </div>
+  </mat-card>
+</form>

@@ -10,6 +10,7 @@ export class TimoneerTabs {
     public static DOCKER_CONTAINER_LAUNCHER = 'docker-container-launcher';
     public static DOCKER_CONTAINER_LIST = 'docker-container-list';
     public static APPLICATION_LIST = 'application-list';
+    public static APPLICATION_EDIT_LIST = 'application-edit-list';
     public static APPLICATION_LAUNCH = 'application-launch';
     public static REGISTRY_IMAGES = 'registry-images';
     public static SETTINGS = 'settings';

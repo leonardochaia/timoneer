@@ -25,6 +25,9 @@ import { RegistryModule } from './registry/registry.module';
 import { SettingsModule } from './settings/settings.module';
 import { TabConfiguration } from './tabs/tab.model';
 import { ContainerLauncherComponent } from './daemon-tools/container-launcher/container-launcher.component';
+import {
+  ApplicationEditListContainerComponent
+} from './application-templates/application-edit-list-container/application-edit-list-container.component';
 
 const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
@@ -74,6 +77,11 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
     id: TimoneerTabs.APPLICATION_LIST,
     title: 'Applications',
     component: ApplicationListContainerComponent,
+  },
+  {
+    id: TimoneerTabs.APPLICATION_EDIT_LIST,
+    title: 'Edit Applications',
+    component: ApplicationEditListContainerComponent,
   },
   {
     id: TimoneerTabs.APPLICATION_LAUNCH,

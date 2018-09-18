@@ -1,5 +1,13 @@
 <div fxLayout="column"
+     fxLayoutGap="16px"
      style="padding: 16px">
+  <div style="text-align: right">
+    <button mat-raised-button
+            (click)="editApplications()"
+            color="primary">
+      Edit applications
+    </button>
+  </div>
   <div>
     <tim-application-list></tim-application-list>
   </div>

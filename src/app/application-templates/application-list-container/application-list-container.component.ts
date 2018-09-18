@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TabService } from '../../tabs/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-application-list-container',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ApplicationListContainerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private tab: TabService) { }
 
   public ngOnInit() {
+  }
+
+  public editApplications() {
+    this.tab.add(TimoneerTabs.APPLICATION_EDIT_LIST);
   }
 
 }

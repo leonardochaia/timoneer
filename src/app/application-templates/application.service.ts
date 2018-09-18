@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Application } from './application.model';
-import { of } from 'rxjs';
+import { of, BehaviorSubject, throwError } from 'rxjs';
+import { ElectronService } from '../electron-tools/electron.service';
+import { map } from 'rxjs/operators';
 
-
-const APPLICATIONS: Application[] = [
+const INITIAL_APPLICATIONS: Application[] = [
   {
     id: 'nginx',
     title: 'NGINX',
@@ -12,7 +13,6 @@ const APPLICATIONS: Application[] = [
     ports: [
       {
         containerPort: 80,
-        hostPort: 80,
         description: 'NGINX HTTP '
       }
     ],
@@ -28,17 +28,50 @@ const APPLICATIONS: Application[] = [
   }
 ];
 
+const APPLICATIONS_KEY = 'app-templates';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationService {
 
+  private get electronSettings() {
+    return this.electron.electronSettings;
+  }
+
+  protected applicationsSubject = new BehaviorSubject<Application[]>(INITIAL_APPLICATIONS);
+
+  constructor(private electron: ElectronService) {
+    this.loadApplications();
+  }
+
   public getApplications() {
-    return of(APPLICATIONS.slice());
+    return this.applicationsSubject.asObservable();
   }
 
   public getApplication(id: string) {
-    const app = APPLICATIONS.filter(a => a.id === id)[0];
-    return of(app);
+    return this.applicationsSubject.asObservable()
+      .pipe(map(apps => apps.find(app => app.id === id)));
+  }
+
+  public saveApplications(json: string) {
+
+    let apps: Application[];
+    try {
+      apps = JSON.parse(json);
+    } catch (error) {
+      return throwError(error);
+    }
+
+    this.electronSettings.set(APPLICATIONS_KEY, apps as any);
+    this.applicationsSubject.next(apps);
+    return of(apps);
+  }
+
+  private loadApplications() {
+    if (this.electronSettings.has(APPLICATIONS_KEY)) {
+      const apps = this.electronSettings.get(APPLICATIONS_KEY) as any as Application[];
+      this.applicationsSubject.next(apps);
+    }
   }
 }

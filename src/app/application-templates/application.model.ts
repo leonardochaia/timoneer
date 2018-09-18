@@ -14,6 +14,5 @@ export interface ApplicationVolumeMapping {
 
 export interface ApplicationPortMapping {
     containerPort: number;
-    hostPort: number;
     description: string;
 }

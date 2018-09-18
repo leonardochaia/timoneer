@@ -9,6 +9,7 @@ import { ApplicationLaunchComponent } from './application-launch/application-lau
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistryModule } from '../registry/registry.module';
 import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
+import { ApplicationEditListContainerComponent } from './application-edit-list-container/application-edit-list-container.component';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { DaemonToolsModule } from '../daemon-tools/daemon-tools.module';
     ApplicationListContainerComponent,
     ApplicationLaunchContainerComponent,
     ApplicationLaunchComponent,
+    ApplicationEditListContainerComponent,
   ],
   exports: [
     ApplicationListComponent,
