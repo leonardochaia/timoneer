@@ -1,4 +1,4 @@
-<form #form="ngForm"
+<form #editForm="ngForm"
       fxLayout="column"
       fxLayoutGap="16px"
       style="padding: 16px;"
@@ -16,18 +16,43 @@
         Edit Applications
       </h2>
       <p>
-        You can edit the following JSON to extend the default "Quick Templates" provided by Timoneer.
+        Custom Templates can be provided to extend Timoneer's "Quick Templates".
       </p>
     </div>
   </mat-card>
 
   <mat-card>
-    <mat-form-field style="width:100%">
+    <h3>
+      <mat-icon>device_hub</mat-icon>
+      External sources
+    </h3>
+    <p>
+      Add a set of URLs to fetch Templates from.
+    </p>
+    <button type="button"
+            mat-raised-button
+            (click)="addSource()"
+            color="primary">
+      Add external source
+    </button>
+    <tim-application-edit-external-source [sources]="externalSourcesArray"></tim-application-edit-external-source>
+  </mat-card>
+
+  <mat-card>
+    <h3>
+      <mat-icon>code</mat-icon>
+      Local Templates
+    </h3>
+    <p>
+      A JSON array of Templates.
+    </p>
+    <mat-form-field [formGroup]="form">
       <textarea matInput
                 rows="16"
                 name="json"
                 required
-                [(ngModel)]="json"></textarea>
+                style="background: #303030;padding:8px;"
+                formControlName="localTemplates"></textarea>
     </mat-form-field>
   </mat-card>
 
@@ -35,17 +60,17 @@
             fxLayoutAlign="start center"
             fxLayoutGap="8px">
 
-    <mat-icon class="tim-icon-48 tim-text-primary">developer_mode</mat-icon>
+    <mat-icon class="tim-icon-48 tim-text-primary">save</mat-icon>
 
     <div fxFlex="fill">
       <h3 class="tim-text-title"
           style="margin:0">
-        Edit Applications
+        Save Changes
       </h3>
     </div>
     <div>
       <button mat-raised-button
-              [disabled]="form.invalid"
+              [disabled]="editForm.invalid"
               type="submit"
               color="primary">
         <mat-icon>save</mat-icon>

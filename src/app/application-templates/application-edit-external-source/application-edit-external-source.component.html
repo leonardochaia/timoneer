@@ -1,0 +1,20 @@
+<div style="margin-top: 16px">
+  <mat-card *ngFor="let source of sources.value; let index = index"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px">
+
+    <div fxFlex="fill">
+      <h3 style="margin: 0">
+        <mat-icon>device_hub</mat-icon>
+        {{source.url}}
+      </h3>
+    </div>
+    <div>
+      <button mat-raised-button
+              (click)="removeSource(index)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+</div>

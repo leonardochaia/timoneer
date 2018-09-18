@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>
+  External Source
+</h1>
+
+<form [formGroup]="sourceFormGroup">
+  <mat-form-field>
+    <input type="url"
+           matInput
+           formControlName="url"
+           placeholder="Url">
+  </mat-form-field>
+
+</form>
+
+<div fxLayout="row"
+     style="margin-top: 16px;">
+  <div fxFlex="fill">
+    <button mat-raised-button
+            [mat-dialog-close]="">
+      Cancel
+    </button>
+  </div>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="sourceFormGroup.invalid"
+          [mat-dialog-close]="sourceFormGroup"
+          cdkFocusInitial>
+    Confirm
+  </button>
+</div>

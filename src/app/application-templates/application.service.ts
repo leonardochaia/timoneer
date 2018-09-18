@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Application } from './application.model';
-import { of, BehaviorSubject, throwError } from 'rxjs';
+import { of, BehaviorSubject, throwError, forkJoin } from 'rxjs';
 import { ElectronService } from '../electron-tools/electron.service';
-import { map } from 'rxjs/operators';
+import { map, switchMap, startWith } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 const INITIAL_APPLICATIONS: Application[] = [
   {
@@ -28,7 +29,17 @@ const INITIAL_APPLICATIONS: Application[] = [
   }
 ];
 
-const APPLICATIONS_KEY = 'app-templates';
+interface ApplicationConfig {
+  localTemplates: Application[];
+  externalSources: { url: string }[];
+}
+
+const INITIAL_CONFIG: ApplicationConfig = {
+  externalSources: [],
+  localTemplates: INITIAL_APPLICATIONS
+};
+
+const CONFIG_KEY = 'app-templates';
 
 @Injectable({
   providedIn: 'root'
@@ -39,10 +50,13 @@ export class ApplicationService {
     return this.electron.electronSettings;
   }
 
-  protected applicationsSubject = new BehaviorSubject<Application[]>(INITIAL_APPLICATIONS);
+  protected configSubject = new BehaviorSubject<ApplicationConfig>(INITIAL_CONFIG);
+  protected applicationsSubject = new BehaviorSubject<Application[]>(this.configSubject.value.localTemplates);
 
-  constructor(private electron: ElectronService) {
-    this.loadApplications();
+  constructor(private electron: ElectronService,
+    private httpClient: HttpClient) {
+    this.loadConfiguration();
+    this.reloadExternalSources();
   }
 
   public getApplications() {
@@ -50,28 +64,48 @@ export class ApplicationService {
   }
 
   public getApplication(id: string) {
-    return this.applicationsSubject.asObservable()
+    return this.getApplications()
       .pipe(map(apps => apps.find(app => app.id === id)));
   }
 
-  public saveApplications(json: string) {
-
-    let apps: Application[];
-    try {
-      apps = JSON.parse(json);
-    } catch (error) {
-      return throwError(error);
-    }
-
-    this.electronSettings.set(APPLICATIONS_KEY, apps as any);
-    this.applicationsSubject.next(apps);
-    return of(apps);
+  public getConfig() {
+    return this.configSubject.asObservable();
   }
 
-  private loadApplications() {
-    if (this.electronSettings.has(APPLICATIONS_KEY)) {
-      const apps = this.electronSettings.get(APPLICATIONS_KEY) as any as Application[];
-      this.applicationsSubject.next(apps);
+  public saveApplications(config: ApplicationConfig) {
+    this.electronSettings.set(CONFIG_KEY, config as any);
+    this.loadConfiguration();
+    return of(config);
+  }
+
+  public reloadExternalSources() {
+    this.loadExternalSources()
+      .subscribe(externalApps => {
+        const existant = this.configSubject.value.localTemplates.slice();
+        for (const template of externalApps) {
+          if (existant.some(t => t.id === template.id)) {
+            continue;
+          }
+          console.log(`added ${template.id}`);
+          existant.push(template);
+        }
+        this.applicationsSubject.next(existant);
+      });
+  }
+
+  private loadExternalSources() {
+    return this.configSubject
+      .pipe(
+        map(config => config.externalSources),
+        switchMap(sources => sources.length ? forkJoin(sources.map(s => this.httpClient.get<Application[]>(s.url))) : of([[]])),
+        map(arrays => [].concat.apply([], arrays) as Application[]),
+      );
+  }
+
+  private loadConfiguration() {
+    if (this.electronSettings.has(CONFIG_KEY)) {
+      const config = this.electronSettings.get(CONFIG_KEY) as any as ApplicationConfig;
+      this.configSubject.next(config);
     }
   }
 }
