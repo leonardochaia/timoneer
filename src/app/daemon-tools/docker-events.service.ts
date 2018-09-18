@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { Subject, combineLatest } from 'rxjs';
 import { DockerEvent } from 'dockerode';
-import { switchMap, takeUntil, startWith } from 'rxjs/operators';
+import { switchMap, takeUntil, startWith, throttle, throttleTime } from 'rxjs/operators';
 import { DockerService } from './docker.service';
 import { streamToObservable } from './stream-to-observable';
 import { ElectronService } from '../electron-tools/electron.service';
@@ -49,12 +49,14 @@ export class DockerEventsService implements OnDestroy {
     } else {
       const subject = new Subject<DockerEvent>();
       this.events.set(event, subject);
-      return subject.asObservable();
+      return subject.asObservable()
+        .pipe(throttleTime(500));
     }
   }
 
   public bindAll(events: string[], type?: string) {
-    return combineLatest(events.map(e => this.bind(type ? `${type}.${e}` : e).pipe(startWith(null))));
+    return combineLatest(events.map(e => this.bind(type ? `${type}.${e}` : e)
+      .pipe(startWith(null))));
   }
 
   private unbindFromDocker() {
@@ -69,7 +71,7 @@ export class DockerEventsService implements OnDestroy {
         switchMap(stream => streamToObservable<Buffer>(stream, this.ngZone)),
         takeUntil(this.disposed),
         takeUntil(this.unbinded),
-    )
+      )
       .subscribe(chunk => {
         const decoded = JSON.parse(chunk.toString('utf8')) as DockerEvent;
         if (this.events.has(decoded.Action)) {
