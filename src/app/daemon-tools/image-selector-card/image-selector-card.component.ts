@@ -150,7 +150,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
 
           return repos.filter(r => r.repos.length);
         }),
-    );
+      );
   }
 
   private loadImageTags() {
@@ -160,6 +160,9 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
       .pipe(
         switchMap(settings => settings && settings.allowsCatalog ? this.registryService.getRepoTags(settings.url, repo) : of([])),
         map(tags => {
+          if (tags && tags.length && !this.image.includes(':')) {
+            this.image += `:${tags[0]}`;
+          }
           return this.imageTags = tags;
         })
       );
