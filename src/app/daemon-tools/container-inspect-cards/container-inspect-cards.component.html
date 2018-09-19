@@ -1,0 +1,62 @@
+<div *ngIf="containerInfo"
+     fxLayout="column"
+     fxLayoutGap="16px">
+  <mat-card>
+    <h3>
+      <mat-icon class="tim-text-primary">computer</mat-icon>
+      {{containerInfo.Name}} ({{containerInfo.Id | slice:0:12}})
+    </h3>
+    <p>
+      <b>{{containerInfo.Config.Image}}</b>
+    </p>
+
+  </mat-card>
+
+  <mat-card *ngIf="portMappings && portMappings.length">
+    <h3>
+      <mat-icon class="tim-text-primary">network_wifi</mat-icon>
+      Port bindings:
+    </h3>
+    <ul>
+      <li *ngFor="let mapping of portMappings">
+        <span title="Container Port">{{mapping.containerPort}}</span>
+        <mat-icon>arrow_right_alt</mat-icon>
+        <b title="HostPort">{{mapping.hostPort}}</b>
+      </li>
+    </ul>
+  </mat-card>
+
+  <mat-card *ngIf="containerInfo.Mounts && containerInfo.Mounts.length">
+    <h3>
+      <mat-icon class="tim-text-primary">storage</mat-icon>
+      Volumes
+    </h3>
+    <ul>
+      <li *ngFor="let mapping of containerInfo.Mounts">
+        <span title="Container Path">{{mapping.Destination}}</span>
+        <mat-icon>arrow_right_alt</mat-icon>
+        <b title="Volume">{{mapping['Name']}}</b> ({{mapping['Type']}})
+      </li>
+    </ul>
+  </mat-card>
+
+  <mat-card>
+    <h3>
+      <mat-icon class="tim-text-primary">confirmation_number</mat-icon>
+      Environment Variables
+    </h3>
+    <pre><ng-container *ngFor="let env of containerInfo.Config.Env">{{env+"\n"}}</ng-container></pre>
+  </mat-card>
+
+  <mat-card *ngIf="labels && labels.length">
+    <h3>
+      <mat-icon class="tim-text-primary">label</mat-icon>
+      Labels
+    </h3>
+    <ul>
+      <li *ngFor="let label of labels">
+        {{label.key}}: <b>{{label.value}}</b>
+      </li>
+    </ul>
+  </mat-card>
+</div>
