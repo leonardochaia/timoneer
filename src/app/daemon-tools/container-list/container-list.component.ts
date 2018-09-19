@@ -106,6 +106,10 @@ export class ContainerListComponent implements OnInit, OnDestroy {
     }
   }
 
+  public getPortMappings(container: ContainerInfo) {
+    return container.Ports.map(p => p.PublicPort ? `${p.PublicPort}:${p.PrivatePort}` : p.PrivatePort).join('\n');
+  }
+
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();

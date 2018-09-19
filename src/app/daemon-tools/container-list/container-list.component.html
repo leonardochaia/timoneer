@@ -32,7 +32,7 @@
 
       <div style="text-align: right">
 
-        <span title="Port Mappings"
+        <span [title]="'Port Mappings:\n' + getPortMappings(container)"
               class="text-nowrap">
           <mat-icon>network_wifi</mat-icon>
           <b>
