@@ -1,3 +1,26 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/leonardochaia/timoneer/compare/v0.3.0...v0.4.0) (2018-09-19)
+
+
+### Bug Fixes
+
+* docker events bindings now have a throttle of 500ms ([2456551](https://github.com/leonardochaia/timoneer/commit/2456551))
+* fix prod build with jobs by disabling optimization on ng build ([3536ff3](https://github.com/leonardochaia/timoneer/commit/3536ff3))
+* fixed container naming on lists ([0d68fcf](https://github.com/leonardochaia/timoneer/commit/0d68fcf))
+* fixes pull image jobs ([8a1a614](https://github.com/leonardochaia/timoneer/commit/8a1a614))
+
+
+### Features
+
+* allow to edit a JSON for Quick Templates ([b5645cd](https://github.com/leonardochaia/timoneer/commit/b5645cd))
+* force remove running containers ([aa8a70c](https://github.com/leonardochaia/timoneer/commit/aa8a70c))
+* load Quick Templates from json file ([6356e26](https://github.com/leonardochaia/timoneer/commit/6356e26))
+* select first tag when selecting an image ([e06fdfb](https://github.com/leonardochaia/timoneer/commit/e06fdfb))
+* show current attached container info below terminal ([6ebceca](https://github.com/leonardochaia/timoneer/commit/6ebceca))
+* show port mappings on container list hover ([460ca3e](https://github.com/leonardochaia/timoneer/commit/460ca3e))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/leonardochaia/timoneer/compare/v0.2.1...v0.3.0) (2018-09-12)
 
