@@ -48,7 +48,7 @@
     </div>
 
     <div class="text-nowrap">
-      <b>{{image.Size | bytes}}</b>
+      <b>{{image.Size | bytesToHuman}}</b>
     </div>
 
     <ng-container *ngIf="!loadingMap.get(image.Id)">

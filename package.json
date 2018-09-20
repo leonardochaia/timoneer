@@ -38,9 +38,11 @@
     "bump-version": "node bump-version && yarn gen-changelog"
   },
   "dependencies": {
+    "@types/filesize": "^3.6.0",
     "@types/uuid": "^3.4.3",
     "electron-settings": "^3.2.0",
-    "electron-updater": "^3.1.1"
+    "electron-updater": "^3.1.1",
+    "filesize": "^3.6.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.8.1",
@@ -98,8 +100,8 @@
     "split-ca": "^1.0.1",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2",
-    "wait-on": "3.0.1",
     "uuid": "^3.3.2",
+    "wait-on": "3.0.1",
     "webdriver-manager": "^12.1.0",
     "xterm": "^3.7.0",
     "zone.js": "0.8.26"

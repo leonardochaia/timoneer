@@ -4,7 +4,7 @@ import { UpdaterService } from './updater.service';
 import { takeUntil } from 'rxjs/operators';
 import { ProgressInfo } from 'builder-util-runtime';
 import { JobProgress } from '../jobs/jobs.model';
-import { BytesPipe } from 'angular-pipes';
+import { BytesToHumanPipe } from '../shared/bytes-to-human.pipe';
 
 export interface TimoneerUpdateJobProgress extends ProgressInfo, JobProgress { }
 
@@ -22,12 +22,12 @@ export class TimoneerUpdateJob extends JobDefinition<string, TimoneerUpdateJobPr
         return this.updater.latestVersion.version;
     }
 
-    private bytePipe: BytesPipe;
+    private bytePipe: BytesToHumanPipe;
 
     constructor(
         private updater: UpdaterService) {
         super();
-        this.bytePipe = new BytesPipe();
+        this.bytePipe = new BytesToHumanPipe();
     }
 
     public start() {

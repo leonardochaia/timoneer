@@ -42,7 +42,7 @@
             Logging Driver: {{systemInfo.LoggingDriver}}
           </li>
           <li>
-            Ram: {{systemInfo.MemTotal | bytes}} CPUs: {{systemInfo.NCPU}}
+            Ram: {{systemInfo.MemTotal | bytesToHuman}} CPUs: {{systemInfo.NCPU}}
           </li>
         </ul>
       </mat-card>
@@ -101,7 +101,7 @@
         <div>
           <h2 style="margin:0">Images</h2>
           <h3 style="margin:0">
-            {{imageSize | bytes}}
+            {{imageSize | bytesToHuman}}
           </h3>
         </div>
       </mat-card>
@@ -117,7 +117,7 @@
         <div fxFlexAlign="center">
           <h2 style="margin:0">Containers</h2>
           <h3 style="margin:0">
-            {{containerSize | bytes}}
+            {{containerSize | bytesToHuman}}
           </h3>
         </div>
       </mat-card>
@@ -134,7 +134,7 @@
         <div fxFlexAlign="center">
           <h2 style="margin:0">Volumes</h2>
           <h3 style="margin:0">
-            {{volumeSize | bytes}}
+            {{volumeSize | bytesToHuman}}
           </h3>
         </div>
       </mat-card>
@@ -142,3 +142,4 @@
     </div>
   </ng-container>
 </div>
+<pre *ngIf="dataUsage">{{dataUsage|json}}</pre>

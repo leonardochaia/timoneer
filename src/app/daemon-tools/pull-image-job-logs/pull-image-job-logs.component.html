@@ -18,7 +18,7 @@
     </div>
 
     <div *ngIf="log.progressDetail?.current">
-      ( {{log.progressDetail.current | bytes}} / {{log.progressDetail.total | bytes}} )
+      ( {{log.progressDetail.current | bytesToHuman}} / {{log.progressDetail.total | bytesToHuman}} )
       <mat-progress-bar *ngIf="log.progressDetail.current !== log.progressDetail.total"
                         mode="determinate"
                         [value]="(log.progressDetail.current / log.progressDetail.total) * 100"

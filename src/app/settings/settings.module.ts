@@ -9,7 +9,6 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { SharedModule } from '../shared/shared.module';
-import { NgMathPipesModule } from 'angular-pipes';
 import { SettingsUpdaterComponent } from './settings-updater/settings-updater.component';
 import { JobsModule } from '../jobs/jobs.module';
 
@@ -29,7 +28,6 @@ import { JobsModule } from '../jobs/jobs.module';
     MatExpansionModule,
     MatDialogModule,
     MatProgressBarModule,
-    NgMathPipesModule,
 
     SharedModule,
     JobsModule,

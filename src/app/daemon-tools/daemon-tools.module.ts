@@ -22,7 +22,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
 import { ImageListComponent } from './image-list/image-list.component';
 import { ImageListContainerComponent } from './image-list-container/image-list-container.component';
-import { NgMathPipesModule, NgObjectPipesModule } from 'angular-pipes';
+import { NgObjectPipesModule } from 'angular-pipes';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContainerAttacherComponent } from './container-attacher/container-attacher.component';
 import { ContainerAttacherContainerComponent } from './container-attacher-container/container-attacher-container.component';
@@ -79,7 +79,6 @@ import { ContainerInspectCardsComponent } from './container-inspect-cards/contai
     SettingsModule,
     JobsModule,
 
-    NgMathPipesModule,
     NgObjectPipesModule,
   ],
   declarations: [

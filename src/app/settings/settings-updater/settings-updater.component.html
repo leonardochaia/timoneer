@@ -42,9 +42,9 @@
     </h3>
     <ng-container *ngIf="updateDownloadProgress; else noProgress">
       <span class="text-nowrap">
-        {{updateDownloadProgress.transferred | bytes}} / {{updateDownloadProgress.total | bytes}}
+        {{updateDownloadProgress.transferred | bytesToHuman}} / {{updateDownloadProgress.total | bytesToHuman}}
         <small>
-          ({{updateDownloadProgress.bytesPerSecond | bytes}}/s)
+          ({{updateDownloadProgress.bytesPerSecond | bytesToHuman}}/s)
         </small>
       </span>
       <mat-progress-bar mode="determinate"
