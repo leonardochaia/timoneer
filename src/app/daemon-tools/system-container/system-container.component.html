@@ -89,52 +89,21 @@
     <div fxLayout="row"
          fxLayoutGap="16px"
          *ngIf="dataUsage">
+
       <mat-card fxLayout="row"
                 fxLayoutAlign="start center"
-                fxLayoutGap="16px">
+                fxLayoutGap="16px"
+                *ngFor="let key of ['images', 'containers', 'volumes']">
         <div>
           <h1 class="mat-display-1 tim-text-primary"
               style="margin:0; font-weight: bold;">
-            {{dataUsage.Images.length}}
+            {{dataUsage[key].count}}
           </h1>
         </div>
         <div>
-          <h2 style="margin:0">Images</h2>
+          <h2 style="margin:0">{{key | titlecase}}</h2>
           <h3 style="margin:0">
-            {{imageSize | bytesToHuman}}
-          </h3>
-        </div>
-      </mat-card>
-
-      <mat-card fxLayout="row"
-                fxLayoutGap="16px">
-        <div>
-          <h1 class="mat-display-1 tim-text-primary"
-              style="margin:0; font-weight: bold;">
-            {{dataUsage.Containers.length}}
-          </h1>
-        </div>
-        <div fxFlexAlign="center">
-          <h2 style="margin:0">Containers</h2>
-          <h3 style="margin:0">
-            {{containerSize | bytesToHuman}}
-          </h3>
-        </div>
-      </mat-card>
-
-
-      <mat-card fxLayout="row"
-                fxLayoutGap="16px">
-        <div>
-          <h1 class="mat-display-1 tim-text-primary"
-              style="margin:0; font-weight: bold;">
-            {{dataUsage.Volumes.length}}
-          </h1>
-        </div>
-        <div fxFlexAlign="center">
-          <h2 style="margin:0">Volumes</h2>
-          <h3 style="margin:0">
-            {{volumeSize | bytesToHuman}}
+            {{dataUsage[key].size | bytesToHuman}}
           </h3>
         </div>
       </mat-card>
@@ -142,4 +111,3 @@
     </div>
   </ng-container>
 </div>
-<pre *ngIf="dataUsage">{{dataUsage|json}}</pre>
