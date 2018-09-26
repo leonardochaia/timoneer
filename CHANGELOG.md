@@ -1,3 +1,14 @@
+<a name="0.4.1"></a>
+## [0.4.1](https://github.com/leonardochaia/timoneer/compare/v0.4.0...v0.4.1) (2018-09-26)
+
+
+### Bug Fixes
+
+* fixed docker data usage not being calculated correctly ([a8fdc66](https://github.com/leonardochaia/timoneer/commit/a8fdc66))
+* fixed filesize calculation ([b9c9a13](https://github.com/leonardochaia/timoneer/commit/b9c9a13))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/leonardochaia/timoneer/compare/v0.3.0...v0.4.0) (2018-09-19)
 
