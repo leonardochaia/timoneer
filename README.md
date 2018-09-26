@@ -9,7 +9,9 @@ develop:
 
 Docker Client for Windows, Mac & Linux.
 
-[Download latest release](https://github.com/leonardochaia/timoneer/releases/latest)
+## Download latest release
+
+[Download for Windows, Mac & Linux](https://github.com/leonardochaia/timoneer/releases/latest)
 
 ## What's Included
 
