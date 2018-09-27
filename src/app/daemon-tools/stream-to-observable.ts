@@ -20,5 +20,8 @@ export function streamToObservable<T>(stream: NodeJS.EventEmitter, zone: NgZone)
                 observer.complete();
             });
         });
+        return {
+            unsubscribe: () => (stream as any).destroy()
+        };
     });
 }

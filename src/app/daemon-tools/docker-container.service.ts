@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { DockerService } from './docker.service';
 import { map, take, switchMap } from 'rxjs/operators';
 import { Container, ExecConfig, Exec, ContainerCreateBody } from 'dockerode';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { TLSSocket } from 'tls';
+import { PassThrough } from 'stream';
 
 @Injectable()
 export class DockerContainerService {
@@ -45,7 +46,10 @@ export class DockerContainerService {
     hijack?: boolean
   }) {
     return this.daemon.docker(d => d.getContainer(id).attach(options))
-      .pipe(take(1));
+      .pipe(
+        take(1),
+        switchMap(stream => this.demuxIfNecesary(id, stream))
+      );
   }
 
   public create(options: ContainerCreateBody) {
@@ -62,6 +66,22 @@ export class DockerContainerService {
         ),
         take(1)
       );
+  }
+
+  protected demuxIfNecesary(id: string, stream: NodeJS.ReadableStream) {
+    const pass = new PassThrough();
+    return this.getContainer(id, c => c.inspect())
+      .pipe(switchMap((container) => {
+        if (container.Config.Tty) {
+          return of(stream);
+        } else {
+          return this.daemon.modem()
+            .pipe(map(modem => {
+              modem.demuxStream(stream, pass, pass);
+              return pass;
+            }));
+        }
+      }));
   }
 
   protected getContainer<T>(id: string, fn: (c: Container) => Promise<T>) {
