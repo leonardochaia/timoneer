@@ -49,6 +49,7 @@ import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-
 import { JobsModule } from '../jobs/jobs.module';
 import { TimDialogModule } from '../tim-dialog/tim-dialog.module';
 import { ContainerInspectCardsComponent } from './container-inspect-cards/container-inspect-cards.component';
+import { ContainerLogsContainerComponent } from './container-logs-container/container-logs-container.component';
 
 @NgModule({
   imports: [
@@ -102,6 +103,7 @@ import { ContainerInspectCardsComponent } from './container-inspect-cards/contai
     PullImageJobLogsComponent,
     ContainerLauncherComponent,
     ContainerInspectCardsComponent,
+    ContainerLogsContainerComponent,
   ],
   exports: [
     ContainerListComponent,

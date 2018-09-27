@@ -78,17 +78,13 @@
 
           </ng-container>
 
-          <ng-container *ngIf="container.State !== 'running'">
-            <button type="button"
-                    matTooltip="Logs"
-                    (click)="attach(container)"
-                    mat-raised-button
-                    color="accent">
-              <mat-icon>code</mat-icon>
-            </button>
-
-          </ng-container>
-
+          <button type="button"
+                  matTooltip="Logs"
+                  (click)="logs(container)"
+                  mat-raised-button
+                  color="accent">
+            <mat-icon>subject</mat-icon>
+          </button>
         </div>
 
         <div fxLayout="row"

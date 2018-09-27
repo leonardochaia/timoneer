@@ -28,6 +28,7 @@ import { ContainerLauncherComponent } from './daemon-tools/container-launcher/co
 import {
   ApplicationEditListContainerComponent
 } from './application-templates/application-edit-list-container/application-edit-list-container.component';
+import { ContainerLogsContainerComponent } from './daemon-tools/container-logs-container/container-logs-container.component';
 
 const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
@@ -37,6 +38,10 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
     id: TimoneerTabs.DOCKER_EXEC,
     component: ContainerExecContainerComponent,
+  },
+  {
+    id: TimoneerTabs.DOCKER_LOGS,
+    component: ContainerLogsContainerComponent,
   },
   {
     id: TimoneerTabs.DOCKER_SYSTEM,

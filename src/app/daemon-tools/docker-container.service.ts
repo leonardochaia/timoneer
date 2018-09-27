@@ -39,6 +39,18 @@ export class DockerContainerService {
       .pipe(take(1));
   }
 
+  public logs(id: string) {
+    return this.daemon.docker(d => d.getContainer(id).logs({
+      follow: true,
+      stdout: true,
+      stderr: true,
+    }))
+      .pipe(
+        take(1),
+        switchMap(stream => this.demuxIfNecesary(id, stream))
+      );
+  }
+
   public attach(id: string, options?: {
     detachKeys?: string, logs?: boolean,
     stream?: boolean, stdin?: boolean,

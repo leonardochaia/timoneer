@@ -38,6 +38,15 @@ export class ContainerMenuService {
             params: container.Id,
           });
         },
+      },
+      {
+        label: 'Logs',
+        click: () => {
+          this.tabService.add(TimoneerTabs.DOCKER_LOGS, {
+            title: `Logs from ${container.Names[0]}`,
+            params: container.Id,
+          });
+        },
       }
     ];
 

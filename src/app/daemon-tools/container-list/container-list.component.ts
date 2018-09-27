@@ -69,6 +69,13 @@ export class ContainerListComponent implements OnInit, OnDestroy {
     });
   }
 
+  public logs(container: ContainerInfo) {
+    this.tabService.add(TimoneerTabs.DOCKER_LOGS, {
+      title: `Logs from ${container.Names[0]}`,
+      params: container.Id,
+    });
+  }
+
   public exec(container: ContainerInfo) {
     this.tabService.add(TimoneerTabs.DOCKER_EXEC, {
       title: `Exec into ${container.Names[0]}`,
