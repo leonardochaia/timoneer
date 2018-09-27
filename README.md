@@ -9,9 +9,8 @@ develop:
 
 Docker Client for Windows, Mac & Linux.
 
-## Download latest release
+## [Download Latest Release](https://github.com/leonardochaia/timoneer/releases/latest)
 
-[Download for Windows, Mac & Linux](https://github.com/leonardochaia/timoneer/releases/latest)
 
 ## What's Included
 
@@ -27,9 +26,12 @@ Intended to manage containers locally. You can add your private registries and i
 1. Volumes actions include: List, create, remove
 1. Registries: List images and tags.
 
-## Development
+## Development / Contributing
 
-Electron Application, using Angular 6 and Dockerode as Docker client.
+If you just want the latest release of Timoneer [click here](https://github.com/leonardochaia/timoneer/releases/latest)
+
+If you want to contribute or run the project in development mode, clone the repo and use `yarn start`
+This is an Electron Application, using Angular 6 and Dockerode as Docker client.
 
 ```bash
 yarn install
