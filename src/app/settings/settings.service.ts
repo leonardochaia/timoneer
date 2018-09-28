@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApplicationSettings, DockerRegistrySettings, DockerClientSettings } from './settings.model';
 import { of, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
 import { FormGroup } from '@angular/forms';
@@ -95,9 +95,15 @@ export class SettingsService {
   public getRegistrySettingsForImage(image: string) {
     if (image.includes('/')) {
       return this.getSettings()
-        .pipe(map(settings =>
-          settings.registries.filter(x => image.includes(this.getRegistryName(x)))[0]
-        ));
+        .pipe(switchMap(settings => {
+          const registry = settings.registries.find(x => image.includes(this.getRegistryName(x)));
+          // If no registry, asume Docker Hub username
+          if (registry) {
+            return of(registry);
+          } else {
+            return this.getDockerIOSettings();
+          }
+        }));
     } else {
       return this.getDockerIOSettings();
     }
@@ -138,7 +144,7 @@ export class SettingsService {
     return this.getSettings()
       .pipe(
         map(settings => settings.registries[0]),
-    );
+      );
   }
 
   public openRegistrySettingsDialog(registryFormGroup: FormGroup) {
