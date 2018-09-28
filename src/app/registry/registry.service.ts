@@ -65,6 +65,7 @@ export class RegistryService {
 
           return this.settingsService.getRegistrySettingsForUrl(registryUrl)
             .pipe(
+              take(1),
               switchMap(registrySettings => {
                 if (!registrySettings) {
                   return throwError(`Unauthorized, no registry settings found for registry [${registryUrl}]`);
