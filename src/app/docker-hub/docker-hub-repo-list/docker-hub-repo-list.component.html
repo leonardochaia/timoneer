@@ -14,7 +14,7 @@
 </mat-card>
 <ng-container *ngIf="!loading; else loadingTemplate">
 
-  <mat-card *ngFor="let repo of repos"
+  <mat-card *ngFor="let repo of repos.results"
             fxLayout="row"
             fxLayoutAlign="start center"
             fxLayoutGap="8px">

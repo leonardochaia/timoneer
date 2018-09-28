@@ -70,7 +70,6 @@
     "conventional-changelog-cli": "^2.0.1",
     "conventional-recommended-bump": "^4.0.0",
     "core-js": "^2.5.7",
-    "docker-hub-api": "^0.6.0",
     "dockerode": "^2.5.7",
     "electron": "^3.0.0",
     "electron-builder": "^20.28.4",

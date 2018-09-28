@@ -19,6 +19,7 @@ function createWindow() {
     height: size.height,
     webPreferences: {
       experimentalFeatures: true,
+      webSecurity: false,
     },
     darkTheme: true,
   });
