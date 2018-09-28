@@ -28,6 +28,11 @@ export class AppMenuService {
       {
         label: 'Edit',
         submenu: [
+          { role: 'cut' },
+          { role: 'copy' },
+          { role: 'paste' },
+          { role: 'selectall' },
+          { type: 'separator' },
           {
             label: 'Settings',
             click: () => {
