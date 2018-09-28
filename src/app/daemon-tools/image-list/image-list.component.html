@@ -43,8 +43,7 @@
           {{image.Id | slice:7:19}}
         </code>
       </h2>
-      <tim-loading [alternative]="true"
-                   *ngIf="loadingMap.get(image.Id)"></tim-loading>
+      <tim-loading *ngIf="loadingMap.get(image.Id)"></tim-loading>
     </div>
 
     <div class="text-nowrap">

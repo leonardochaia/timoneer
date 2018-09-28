@@ -6,7 +6,7 @@
             [ngClass]="daemonRacheable ? 'tim-text-primary': 'tim-text-warn'">computer</mat-icon>
   <div fxFlex="grow">
     <ng-container *ngIf="loading; else daemonTemplate">
-      <tim-loading [alternative]="true"></tim-loading>
+      <tim-loading></tim-loading>
     </ng-container>
     <ng-template #daemonTemplate>
       <ng-container *ngIf="daemonRacheable; else daemonErrorTemplate">
