@@ -4,20 +4,29 @@ import { PullImageJob, PullImageJobParams, PullImageJobProgress } from './pull-i
 import { ContainerCreateBody } from '../../../node_modules/@types/dockerode';
 import { ContainerCreationJobParams, ContainerCreationJob } from './container-creation-job';
 import { JobProgress } from '../jobs/jobs.model';
+import { JobDetailsService } from '../jobs/job-details.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DockerJobsService {
 
-  constructor(private jobRunner: JobRunnerService) { }
+  constructor(
+    private jobRunner: JobRunnerService,
+    private jobDetails: JobDetailsService) { }
 
-  public pullImage(image: string) {
+  public pullImage(image: string, openDetails = true) {
     const params = new PullImageJobParams(image);
-    return this.jobRunner.startJob<PullImageJob, void, PullImageJobProgress>(PullImageJob, {
+    const job = this.jobRunner.startJob<PullImageJob, void, PullImageJobProgress>(PullImageJob, {
       provide: PullImageJobParams,
       useValue: params
     });
+
+    if (openDetails) {
+      this.jobDetails.openDetailsModal(job);
+    }
+
+    return job;
   }
 
   public createContainer(creationData: ContainerCreateBody) {
