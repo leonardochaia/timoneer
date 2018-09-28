@@ -8207,6 +8207,10 @@ write-file-atomic@~2.1.0:
     imurmurhash "^0.1.4"
     slide "^1.1.5"
 
+www-authenticate@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/www-authenticate/-/www-authenticate-0.6.2.tgz#b7a7d487bdc5a8b423a4d8fd5f9c661adde50ebf"
+
 xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"

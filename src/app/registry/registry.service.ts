@@ -46,17 +46,14 @@ export class RegistryService {
   }
 
   protected get<T>(registryUrl: string, path: string, params?: { [param: string]: string | string[]; }): Observable<T> {
-    let attempts = 0;
-    const recursion = (headers?: any) => {
-      attempts++;
-      if (attempts > 2) {
-        console.error('stop');
-        return;
-      }
-      return this.httpClient.get<T>(this.ensureEndingSlash(registryUrl) + path, {
-        headers: headers,
-        params: params
-      }).pipe(catchError(e => {
+
+    const doHttpCall = (headers?: any) => this.httpClient.get<T>(this.ensureEndingSlash(registryUrl) + path, {
+      headers: headers,
+      params: params
+    });
+
+    return doHttpCall()
+      .pipe(catchError(e => {
         if (e.status === 401) {
           const header = e.headers.get('www-authenticate');
 
@@ -74,7 +71,7 @@ export class RegistryService {
                 return this.authService.getAccesstokenFromHeader(header, registrySettings.url,
                   registrySettings.username, registrySettings.password)
                   .pipe(
-                    switchMap(token => recursion({
+                    switchMap(token => doHttpCall({
                       Authorization: `Bearer ${token}`
                     }))
                   );
@@ -85,10 +82,6 @@ export class RegistryService {
           return throwError(e);
         }
       }));
-    };
-
-    const possibleToken = this.authService.getAccessTokenForUrl(registryUrl);
-    return recursion(possibleToken ? { Authorization: `Bearer ${possibleToken}` } : null);
   }
 
   private ensureEndingSlash(str: string) {
