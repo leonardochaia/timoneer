@@ -24,7 +24,6 @@ export class DockerHubService {
   protected logIn(username: string, password: string) {
     return from(dockerHubApi.login(username, password))
       .pipe(map((info: any) => {
-        console.log(info);
         dockerHubApi.setLoginToken(info.token);
         return info;
       }));
