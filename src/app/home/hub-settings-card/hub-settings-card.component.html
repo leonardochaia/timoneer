@@ -1,4 +1,5 @@
-<mat-card fxLayout="row"
+<mat-card *ngIf="!valid; else repoListTemplate"
+          fxLayout="row"
           fxLayoutAlign="start center"
           fxLayoutGap="8px"
           style="margin-bottom: 16px;">
@@ -11,18 +12,27 @@
     <ng-template #settingsTemplate>
       <h2 style="margin: 0">
         <span class="tim-text-title">
-          Docker Hub {{valid? '' : 'is not'}} Configured
+          Docker Hub is not Configured
         </span>
       </h2>
-      <p *ngIf="valid">
-        Username: {{hubSettings.username}}
-      </p>
     </ng-template>
   </div>
   <a fxFlex
-     *ngIf="!valid"
      mat-raised-button
      (click)="openSettings()">
     Configure
   </a>
 </mat-card>
+
+<ng-template #repoListTemplate>
+  <h2>
+    Docker Hub /{{hubSettings.username}}
+    <small>
+      <a (click)="openDockerHubList()"
+         style="float:right">
+        View all
+      </a>
+    </small>
+  </h2>
+  <tim-docker-hub-repo-list></tim-docker-hub-repo-list>
+</ng-template>

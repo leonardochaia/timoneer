@@ -9,6 +9,7 @@ import { DaemonStatusCardComponent } from './daemon-status-card/daemon-status-ca
 import { SharedModule } from '../shared/shared.module';
 import { HubSettingsCardComponent } from './hub-settings-card/hub-settings-card.component';
 import { RegistryCardsComponent } from './registry-cards/registry-cards.component';
+import { DockerHubModule } from '../docker-hub/docker-hub.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { RegistryCardsComponent } from './registry-cards/registry-cards.componen
 
     RegistryModule,
     ApplicationTemplatesModule,
+    DockerHubModule,
     SharedModule,
   ],
   declarations: [

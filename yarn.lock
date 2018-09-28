@@ -2396,6 +2396,13 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
+docker-hub-api@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/docker-hub-api/-/docker-hub-api-0.6.0.tgz#9d6e427b476026bd9b0b3a9c1d888e10beaafe91"
+  dependencies:
+    lodash "^3.10.1"
+    request "^2.67.0"
+
 docker-modem@1.0.x:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/docker-modem/-/docker-modem-1.0.7.tgz#69702a95c060eeb6775f79ccdcc734e5946972a4"
@@ -4653,6 +4660,10 @@ lodash.without@~4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.without/-/lodash.without-4.4.0.tgz#3cd4574a00b67bae373a94b748772640507b7aac"
 
+lodash@^3.10.1:
+  version "3.10.1"
+  resolved "http://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
+
 lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
@@ -6521,7 +6532,7 @@ request@2.87.0, request@^2.45.0, request@^2.74.0, request@^2.83.0, request@^2.87
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-request@^2.88.0:
+request@^2.67.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   dependencies:

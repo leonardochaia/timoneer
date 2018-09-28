@@ -29,6 +29,7 @@ import {
   ApplicationEditListContainerComponent
 } from './application-templates/application-edit-list-container/application-edit-list-container.component';
 import { ContainerLogsContainerComponent } from './daemon-tools/container-logs-container/container-logs-container.component';
+import { DockerHubRepoListContainerComponent } from './docker-hub/docker-hub-repo-list-container/docker-hub-repo-list-container.component';
 
 const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
@@ -95,6 +96,10 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
     id: TimoneerTabs.REGISTRY_IMAGES,
     component: RegistryListContainerComponent,
+  },
+  {
+    id: TimoneerTabs.DOCKERHUB_IMAGES,
+    component: DockerHubRepoListContainerComponent,
   },
   {
     id: TimoneerTabs.DASHBOARD,
