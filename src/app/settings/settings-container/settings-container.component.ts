@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UpdaterService } from '../../electron-tools/updater.service';
 import { timoneerVersion } from '../../../tim-version';
+import { SettingsDialogService } from '../settings-dialog.service';
 
 @Component({
   selector: 'tim-settings-container',
@@ -36,6 +37,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   private componetDestroyed = new Subject();
 
   constructor(private settingsService: SettingsService,
+    private settingsDialog: SettingsDialogService,
     private updater: UpdaterService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder) {
@@ -43,7 +45,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
 
   public createRegistry() {
     const group = this.createRegistryGroup();
-    this.settingsService.openRegistrySettingsDialog(group)
+    this.settingsDialog.openRegistrySettingsDialog(group)
       .afterClosed().subscribe(newGroup => {
         if (newGroup) {
           this.registriesArray.push(newGroup);
@@ -54,7 +56,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   public editRegistry(group: FormGroup) {
     const index = this.registriesArray.controls.indexOf(group);
     const clone = this.createRegistryGroup(group.getRawValue());
-    this.settingsService.openRegistrySettingsDialog(clone)
+    this.settingsDialog.openRegistrySettingsDialog(clone)
       .afterClosed().subscribe(newGroup => {
         if (newGroup) {
           this.registriesArray.setControl(index, newGroup);

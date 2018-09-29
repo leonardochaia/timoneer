@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApplicationSettings, DockerRegistrySettings, DockerClientSettings } from './settings.model';
 import { of, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { MatDialog } from '@angular/material';
-import { RegistrySettingsModalComponent } from './registry-settings-modal/registry-settings-modal.component';
-import { FormGroup } from '@angular/forms';
 import { ElectronService } from '../electron-tools/electron.service';
 
 const SETTINGS_KEY = 'app-settings';
@@ -23,8 +20,7 @@ export class SettingsService {
     return this.electronService.electronSettings;
   }
 
-  constructor(public matDialog: MatDialog,
-    private electronService: ElectronService) { }
+  constructor(private electronService: ElectronService) { }
 
   public saveSettings(settings: ApplicationSettings) {
     this.electronSettings.set(SETTINGS_KEY, settings as any);
@@ -145,12 +141,6 @@ export class SettingsService {
       .pipe(
         map(settings => settings.registries[0]),
       );
-  }
-
-  public openRegistrySettingsDialog(registryFormGroup: FormGroup) {
-    return this.matDialog.open(RegistrySettingsModalComponent, {
-      data: registryFormGroup,
-    });
   }
 
   public getDockerClientConfigFromEnvironment(): DockerClientSettings {

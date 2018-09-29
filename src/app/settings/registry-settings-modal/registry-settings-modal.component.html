@@ -32,7 +32,13 @@
   </mat-checkbox>
 </form>
 
+<div style="margin:16px 0"
+     *ngIf="loading">
+  <tim-loading></tim-loading>
+</div>
+
 <div fxLayout="row"
+     *ngIf="!loading"
      style="margin-top: 16px;">
   <div fxFlex="fill">
     <button mat-raised-button
@@ -43,7 +49,7 @@
   <button mat-raised-button
           color="primary"
           [disabled]="registryFormGroup.invalid"
-          [mat-dialog-close]="registryFormGroup"
+          (click)="confirm()"
           cdkFocusInitial>
     Confirm
   </button>

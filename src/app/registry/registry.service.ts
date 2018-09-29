@@ -46,7 +46,12 @@ export class RegistryService {
       );
   }
 
-  protected get<T>(registryUrl: string, path: string, params?: { [param: string]: string | string[]; }): Observable<T> {
+  public testRegistrySettings(settings: DockerRegistrySettings) {
+    return this.get<void>(settings.url, `v2/_catalog`, { n: '1' }, settings);
+  }
+
+  protected get<T>(registryUrl: string, path: string, params?: { [param: string]: string | string[]; },
+    settings?: DockerRegistrySettings): Observable<T> {
 
     const doHttpCall = (headers?: any) => this.httpClient.get<T>(this.ensureEndingSlash(registryUrl) + path, {
       headers: headers,
@@ -63,7 +68,7 @@ export class RegistryService {
             return throwError(e);
           }
 
-          return this.settingsService.getRegistrySettingsForUrl(registryUrl)
+          return (settings ? of(settings) : this.settingsService.getRegistrySettingsForUrl(registryUrl))
             .pipe(
               take(1),
               switchMap(registrySettings => {

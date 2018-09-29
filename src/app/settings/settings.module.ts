@@ -11,10 +11,12 @@ import { RegistrySettingsModalComponent } from './registry-settings-modal/regist
 import { SharedModule } from '../shared/shared.module';
 import { SettingsUpdaterComponent } from './settings-updater/settings-updater.component';
 import { JobsModule } from '../jobs/jobs.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,

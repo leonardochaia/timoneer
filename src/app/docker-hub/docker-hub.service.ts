@@ -34,6 +34,13 @@ export class DockerHubService {
         })));
   }
 
+  public logIn(username: string, password: string) {
+    return this.httpClient.post<{ token: string }>(`https://hub.docker.com/v2/users/login`, {
+      username: username,
+      password: password
+    });
+  }
+
   protected appendLibraryIfNecessary(repo: string) {
     if (!repo.includes('/')) {
       repo = 'library/' + repo;
@@ -63,12 +70,5 @@ export class DockerHubService {
           params: params
         }))
       );
-  }
-
-  protected logIn(username: string, password: string) {
-    return this.httpClient.post<{ token: string }>(`https://hub.docker.com/v2/users/login`, {
-      username: username,
-      password: password
-    });
   }
 }
