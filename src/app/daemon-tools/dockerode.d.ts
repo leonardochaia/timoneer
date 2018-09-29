@@ -2500,4 +2500,12 @@ declare module 'dockerode' {
          */
         TmpfsOptions?: MountTmpfsOptions;
     }
+
+    export interface ImageSearchResult {
+        description: string;
+        is_official: boolean;
+        is_automated: boolean;
+        name: string;
+        star_count: number;
+    }
 }

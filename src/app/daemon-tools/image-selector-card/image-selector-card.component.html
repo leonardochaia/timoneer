@@ -17,7 +17,7 @@
       <input type="text"
              matInput
              autocomplete="off"
-             placeholder="Select an image"
+             placeholder="Select a Repository"
              [formControl]="imageSelectControl"
              [matAutocomplete]="autoGroup"
              #trigger="matAutocompleteTrigger"
@@ -37,6 +37,9 @@
 
     <tim-loading *ngIf="loadingImageData"></tim-loading>
 
+    <p *ngIf="dockerHubData && dockerHubData.description && dockerHubData.description.length">
+      {{dockerHubData.description}}
+    </p>
 
     <p *ngIf="!disabled">
       <mat-chip-list multiple="false"
@@ -48,9 +51,8 @@
     </p>
 
     <p>
-      <span *ngIf="imageNotFound"
-            class="tim-text-warn">
-        Image metadata not available. (Image not found on Daemon. It will be pulled when launching)
+      <span *ngIf="imageNotFound">
+        Click on 'Pull' to download this image now.
       </span>
       <span *ngIf="!imageNotFound && imageError"
             class="tim-text-warn">
@@ -58,6 +60,7 @@
       </span>
 
       <span *ngIf="imageData">
+        Image already exists.
         Os: {{imageData.Os}} {{imageData.Architecture}} - Created: {{imageData.Created | date: 'medium'}}
       </span>
     </p>
@@ -69,7 +72,7 @@
             (click)="pullImage()"
             type="button"
             color="primary">
-      Pull Now
+      Pull
     </button>
   </div>
 </mat-card>

@@ -5,6 +5,7 @@ import { switchMap, map, take, materialize, dematerialize } from 'rxjs/operators
 import { IncomingMessage } from 'http';
 import { Observable } from 'rxjs';
 import { DockerStreamResponse } from './docker-client.model';
+import { ImageSearchResult } from 'dockerode';
 
 @Injectable()
 export class DockerImageService {
@@ -15,6 +16,12 @@ export class DockerImageService {
 
   public imageList(options?: { all?: boolean, filters?: string, digests?: boolean, options?: any }) {
     return this.daemon.docker(d => d.listImages(options));
+  }
+
+  public searchDockerHub(term: string) {
+    return this.daemon.docker(d => d.searchImages({
+      term: term
+    }) as Promise<ImageSearchResult[]>);
   }
 
   public pullImage(image: string) {

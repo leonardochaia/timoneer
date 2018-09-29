@@ -1,12 +1,14 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, forwardRef } from '@angular/core';
-import { map, switchMap, debounceTime, catchError, take } from 'rxjs/operators';
+import { map, switchMap, debounceTime, catchError, take, filter, distinct } from 'rxjs/operators';
 import { Subject, Observable, of, throwError, forkJoin } from 'rxjs';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { RegistryService } from '../../registry/registry.service';
 import { SettingsService } from '../../settings/settings.service';
-import { ImageInspectInfo } from 'dockerode';
+import { ImageInspectInfo, ImageInfo } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
 import { DockerJobsService } from '../docker-jobs.service';
+import { DockerHubService } from '../../docker-hub/docker-hub.service';
+import { DockerHubRepository } from '../../docker-hub/docker-hub.model';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -39,6 +41,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
   public disabled: boolean;
   public imageTags: string[];
   public imageData: ImageInspectInfo;
+  public dockerHubData: DockerHubRepository;
   public loadingImageData: boolean;
   public imageNotFound: boolean;
   public imageError: string;
@@ -51,6 +54,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
   constructor(private imageService: DockerImageService,
     private settingsService: SettingsService,
     private dockerJobs: DockerJobsService,
+    private dockerHub: DockerHubService,
     private registryService: RegistryService) { }
 
   public ngOnInit() {
@@ -58,13 +62,17 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
       this.loadImageMetadata();
     }
 
-    this.registries = this.imageSelectControl.valueChanges.pipe(
-      debounceTime(500),
-      switchMap(term => this.filterRepos(term))
-    );
+    this.registries = this.imageSelectControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinct(),
+        switchMap(term => this.filterRepos(term))
+      );
+
     this.imageSelectControl.valueChanges
       .pipe(
-        debounceTime(500)
+        debounceTime(600),
+        distinct()
       )
       .subscribe(() => this.onImageSelected());
   }
@@ -90,7 +98,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
   }
 
   public clearImageData() {
-    this.imageData = this.imageTags = this.imageError = null;
+    this.imageData = this.imageTags = this.imageError = this.dockerHubData = null;
     this.imageNotFound = false;
   }
 
@@ -120,24 +128,68 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
 
   private triggerOnChanges() {
     if (this.onChanges) {
+      if (!this.image.includes(':')) {
+        this.image += ':latest';
+      }
+
       this.onChanges(this.image);
     }
   }
 
   private getDameonImages() {
-    return this.imageService.imageList()
-      .pipe(
-        map(images => [{
-          name: 'Docker Daemon',
-          repos: Array.prototype.concat.apply([], images.filter(i => i.RepoTags && i.RepoTags.length).map(i => i.RepoTags))
-        }])
-      );
+    if (this.showDaemonImages) {
+      return this.imageService.imageList()
+        .pipe(
+          map(info => Array.prototype.concat.apply([], info.filter(i => i.RepoTags && i.RepoTags.length).map(i => i.RepoTags)) as string[]),
+          // image to repo
+          map(info => info.map(s => s.includes(':') ? s.slice(0, s.indexOf(':')) : s)),
+          map(images => [{
+            name: 'Docker Daemon',
+            repos: images
+          }]),
+        );
+    } else {
+      return of([]);
+    }
+  }
+
+  private getMyDockerHubImages() {
+    return this.settingsService.getDockerIOSettings()
+      .pipe(switchMap(settings => {
+        if (settings.username && settings.password) {
+          return this.dockerHub.getReposForUser(null)
+            .pipe(
+              map(r => r.results),
+              map(images => [{
+                name: `Docker Hub /${settings.username}`,
+                repos: Array.prototype.concat.apply([], images.map(i => `${i.namespace}/${i.name}`))
+              }])
+            );
+        } else {
+          return of([]);
+        }
+      }));
+  }
+
+  private getDockerHubImages(term: string) {
+    if (term) {
+      return this.imageService.searchDockerHub(term)
+        .pipe(map(repos => [{
+          name: `Docker Hub Public`,
+          repos: repos.map(r => r.name)
+        }]));
+    } else {
+      return of([]);
+    }
   }
 
   private filterRepos(term: string) {
     return this.registryService.getRepositoriesFromAllRegistries()
       .pipe(
-        switchMap(results => this.showDaemonImages ? this.getDameonImages().pipe(map(daemon => results.concat(daemon))) : of(results)),
+        catchError(e => of([])),
+        switchMap(results => this.getDameonImages().pipe(map(daemon => results.concat(daemon)))),
+        switchMap(results => this.getMyDockerHubImages().pipe(map(hub => results.concat(hub)))),
+        switchMap(results => this.getDockerHubImages(term).pipe(map(hub => results.concat(hub)))),
         map(repos => {
 
           if (!term || !term.length) {
@@ -153,16 +205,28 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
       );
   }
 
+  private loadImageTagsFromDockerHub(repo: string) {
+    return this.dockerHub.getRepositoryTags(repo)
+      .pipe(
+        map(r => r.results),
+        map(tags => tags.map(t => t.name)),
+        catchError(e => [])
+      );
+  }
+
   private loadImageTags() {
     let repo = this.image.includes('/') ? this.image.split('/')[1] : this.image;
     repo = repo.includes(':') ? repo.split(':')[0] : repo;
     return this.settingsService.getRegistrySettingsForImage(this.image)
       .pipe(
-        switchMap(settings => settings && settings.allowsCatalog ? this.registryService.getRepoTags(settings.url, repo) : of([])),
-        map(tags => {
-          if (tags && tags.length && !this.image.includes(':')) {
-            this.image += `:${tags[0]}`;
+        switchMap(settings => {
+          if (settings && settings.allowsCatalog) {
+            return this.registryService.getRepoTags(settings.url, repo);
+          } else {
+            return this.loadImageTagsFromDockerHub(this.image);
           }
+        }),
+        map(tags => {
           return this.imageTags = tags;
         })
       );
@@ -187,16 +251,29 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
           }
           this.imageError = e.reason;
           // dont throw an error.
-          return this.imageError;
+          return of(null);
         })
       );
 
+    const hubInfo = this.dockerHub.getRepository(this.image)
+      .pipe(
+        map(repo => this.dockerHubData = repo),
+        catchError(e => {
+          return of(null);
+        }));
+
+    const tags = this.loadImageTags()
+      .pipe(catchError(e => {
+        this.imageError = e.message;
+        return of(null);
+      }));
+
     forkJoin([
       inspect.pipe(take(1)),
-      this.loadImageTags().pipe(take(1)),
+      hubInfo.pipe(take(1)),
+      tags.pipe(take(1)),
     ])
       .pipe(catchError((e) => {
-        this.imageError = e.message;
         this.loadingImageData = false;
         return throwError(e);
       }))
