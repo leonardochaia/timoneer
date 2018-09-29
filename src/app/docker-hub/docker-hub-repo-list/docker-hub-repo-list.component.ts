@@ -29,7 +29,7 @@ export class DockerHubRepoListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.loading = true;
-    this.dockerHub.getReposForUser('bitnami', this.amount)
+    this.dockerHub.getReposForUser(null, this.amount)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(repos => {
         this.repos = repos;

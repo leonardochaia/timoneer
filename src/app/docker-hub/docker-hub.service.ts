@@ -26,10 +26,12 @@ export class DockerHubService {
   }
 
   public getReposForUser(username: string = null, pageSize = 15, pageNumber = 1) {
-    return this.get<DockerHubRepositoryResponse>(`https://hub.docker.com/v2/repositories/${username}/`, {
-      'page_size': '' + pageSize,
-      'page': '' + pageNumber,
-    });
+    return this.settings.getDockerIOSettings()
+      .pipe(switchMap(settings =>
+        this.get<DockerHubRepositoryResponse>(`https://hub.docker.com/v2/repositories/${username || settings.username}/`, {
+          'page_size': '' + pageSize,
+          'page': '' + pageNumber,
+        })));
   }
 
   protected appendLibraryIfNecessary(repo: string) {
