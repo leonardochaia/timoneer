@@ -1,3 +1,25 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/leonardochaia/timoneer/compare/v0.4.1...v0.5.0) (2018-09-29)
+
+
+### Bug Fixes
+
+* fixed registry settings subscriptions ([139767a](https://github.com/leonardochaia/timoneer/commit/139767a))
+* fixes copy/paste on MacOs, closes [#26](https://github.com/leonardochaia/timoneer/issues/26) ([d91282a](https://github.com/leonardochaia/timoneer/commit/d91282a))
+* fixes Docker Hub private repo authentication ([6620f44](https://github.com/leonardochaia/timoneer/commit/6620f44))
+* improved non tty container attach ([40fb899](https://github.com/leonardochaia/timoneer/commit/40fb899))
+
+
+### Features
+
+* added better docker logs support. Still room for improvements ([569cca4](https://github.com/leonardochaia/timoneer/commit/569cca4))
+* list Docker Hub public and private images ([96f2b38](https://github.com/leonardochaia/timoneer/commit/96f2b38))
+* list own Docker Hub images ([c73311f](https://github.com/leonardochaia/timoneer/commit/c73311f))
+* open image logs modal when pulling ([5483436](https://github.com/leonardochaia/timoneer/commit/5483436))
+* test registry credentials ([6394ccd](https://github.com/leonardochaia/timoneer/commit/6394ccd))
+
+
+
 <a name="0.4.1"></a>
 ## [0.4.1](https://github.com/leonardochaia/timoneer/compare/v0.4.0...v0.4.1) (2018-09-26)
 
