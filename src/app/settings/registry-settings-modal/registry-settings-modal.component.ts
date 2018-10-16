@@ -28,10 +28,6 @@ export class RegistrySettingsModalComponent implements OnInit {
   public ngOnInit() {
   }
 
-  public close() {
-    this.dialogRef.close();
-  }
-
   public confirm() {
     this.loading = true;
     this.registryFormGroup.disable();
@@ -61,7 +57,8 @@ export class RegistrySettingsModalComponent implements OnInit {
     obs
       .pipe(take(1))
       .subscribe(() => {
-        this.close();
+        this.registryFormGroup.enable();
+        this.dialogRef.close(this.registryFormGroup);
         this.notification.open('Login succeded', null, {
           panelClass: 'tim-bg-primary'
         });
