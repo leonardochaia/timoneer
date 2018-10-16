@@ -16,6 +16,9 @@ export class DockerJobsService {
     private jobDetails: JobDetailsService) { }
 
   public pullImage(image: string, openDetails = true) {
+    if (!image.includes(':')) {
+      image += ':latest';
+    }
     const params = new PullImageJobParams(image);
     const job = this.jobRunner.startJob<PullImageJob, void, PullImageJobProgress>(PullImageJob, {
       provide: PullImageJobParams,

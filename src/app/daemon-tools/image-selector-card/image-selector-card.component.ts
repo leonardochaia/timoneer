@@ -128,10 +128,6 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
 
   private triggerOnChanges() {
     if (this.onChanges) {
-      if (!this.image.includes(':')) {
-        this.image += ':latest';
-      }
-
       this.onChanges(this.image);
     }
   }
