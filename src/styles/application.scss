@@ -18,6 +18,7 @@
   @include angular-material-theme($timoneer-theme);
   @include app-components-theme($timoneer-theme);
   @include expose-material-theme-classes($timoneer-theme);
+
   .bg-invalid {
     background-color: rgb(251, 217, 214) !important;
   }
@@ -27,9 +28,11 @@
   @include angular-material-theme($timoneer-dark-theme);
   @include app-components-theme($timoneer-dark-theme);
   @include expose-material-theme-classes($timoneer-dark-theme);
+
   .tim-text-title {
     color: whitesmoke;
   }
+
   .bg-invalid {
     background-color: #6d0a02 !important;
   }
@@ -63,6 +66,10 @@ a:hover {
   white-space: nowrap;
 }
 
+.material-icons {
+  width: auto !important;
+}
+
 .material-icons,
 .icon-text {
   vertical-align: middle;
@@ -74,6 +81,7 @@ a:hover {
 
 .app-modal {
   width: 80vw;
+
   &.full-height {
     height: 60vh;
   }
