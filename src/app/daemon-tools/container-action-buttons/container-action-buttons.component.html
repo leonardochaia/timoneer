@@ -1,0 +1,73 @@
+<ng-template #loadingTemplate>
+  <tim-loading></tim-loading>
+</ng-template>
+<div *ngIf="!loading; else loadingTemplate"
+     fxLayout="row">
+
+  <div fxFlex="grow"
+       fxLayout="row"
+       fxLayoutAlign="start center"
+       fxLayoutGap="4px">
+
+    <ng-container *ngIf="containerState === 'running'; else notRunningTemplate">
+      <button type="button"
+              *ngIf="isButtonVisible('attach')"
+              (click)="attach()"
+              mat-raised-button
+              color="accent">
+        <mat-icon>code</mat-icon>
+        Attach
+      </button>
+
+      <button type="button"
+              *ngIf="isButtonVisible('exec')"
+              (click)="exec()"
+              mat-raised-button>
+        <mat-icon>settings_ethernet</mat-icon>
+        Exec
+      </button>
+
+    </ng-container>
+
+    <ng-template #notRunningTemplate>
+      <button type="button"
+              *ngIf="isButtonVisible('start')"
+              (click)="start()"
+              color="accent"
+              mat-raised-button>
+        <mat-icon>play_arrow</mat-icon>
+        Start
+      </button>
+    </ng-template>
+
+    <button type="button"
+            *ngIf="isButtonVisible('logs')"
+            (click)="logs()"
+            mat-raised-button>
+      <mat-icon>subject</mat-icon>
+      Logs
+    </button>
+
+    <ng-container *ngIf="containerState === 'running'">
+      <button type="button"
+              *ngIf="isButtonVisible('stop')"
+              (click)="stop()"
+              mat-raised-button>
+        <mat-icon>stop</mat-icon>
+        Stop
+      </button>
+    </ng-container>
+
+  </div>
+
+  <div>
+    <button type="button"
+            *ngIf="isButtonVisible('delete')"
+            (click)="remove()"
+            mat-raised-button>
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
+  </div>
+
+</div>

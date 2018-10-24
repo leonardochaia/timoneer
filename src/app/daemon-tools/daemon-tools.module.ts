@@ -50,6 +50,7 @@ import { JobsModule } from '../jobs/jobs.module';
 import { TimDialogModule } from '../tim-dialog/tim-dialog.module';
 import { ContainerInspectCardsComponent } from './container-inspect-cards/container-inspect-cards.component';
 import { ContainerLogsContainerComponent } from './container-logs-container/container-logs-container.component';
+import { ContainerActionButtonsComponent } from './container-action-buttons/container-action-buttons.component';
 
 @NgModule({
   imports: [
@@ -104,6 +105,7 @@ import { ContainerLogsContainerComponent } from './container-logs-container/cont
     ContainerLauncherComponent,
     ContainerInspectCardsComponent,
     ContainerLogsContainerComponent,
+    ContainerActionButtonsComponent,
   ],
   exports: [
     ContainerListComponent,

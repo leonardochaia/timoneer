@@ -62,49 +62,6 @@ export class ContainerListComponent implements OnInit, OnDestroy {
       });
   }
 
-  public attach(container: ContainerInfo) {
-    this.tabService.add(TimoneerTabs.DOCKER_ATTACH, {
-      title: `Attached to ${container.Names[0]}`,
-      params: container.Id,
-    });
-  }
-
-  public logs(container: ContainerInfo) {
-    this.tabService.add(TimoneerTabs.DOCKER_LOGS, {
-      title: `Logs from ${container.Names[0]}`,
-      params: container.Id,
-    });
-  }
-
-  public exec(container: ContainerInfo) {
-    this.tabService.add(TimoneerTabs.DOCKER_EXEC, {
-      title: `Exec into ${container.Names[0]}`,
-      params: container.Id,
-    });
-  }
-
-  public start(container: ContainerInfo) {
-    this.bindLoading(container, this.containerService.start(container.Id))
-      .subscribe(() => {
-        this.notificationService.open(`${container.Names[0]} started`);
-        this.attach(container);
-      });
-  }
-
-  public stop(container: ContainerInfo) {
-    this.bindLoading(container, this.containerService.stop(container.Id))
-      .subscribe(() => {
-        this.notificationService.open(`${container.Names[0]} stopped`);
-      });
-  }
-
-  public remove(container: ContainerInfo) {
-    this.bindLoading(container, this.containerService.remove(container.Id))
-      .subscribe(() => {
-        this.notificationService.open(`${container.Names[0]} removed`);
-      });
-  }
-
   public getImageName(container: ContainerInfo) {
     if (container.Image.startsWith('sha256:')) {
       return container.Image.replace('sha256:', '').slice(0, 12);
@@ -139,22 +96,5 @@ export class ContainerListComponent implements OnInit, OnDestroy {
         this.containers = [];
         console.error(e);
       });
-  }
-
-  private bindLoading(image: ContainerInfo, obs: Observable<any>) {
-    this.loadingMap.set(image.Id, true);
-    return obs.pipe(
-      catchError((e) => {
-        this.loadingMap.set(image.Id, false);
-        this.notificationService.open(e.message, null, {
-          panelClass: 'tim-bg-warn',
-        });
-        return throwError(e);
-      }),
-      map(r => {
-        this.loadingMap.set(image.Id, false);
-        return r;
-      })
-    );
   }
 }

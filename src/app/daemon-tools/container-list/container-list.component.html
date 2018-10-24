@@ -12,112 +12,60 @@
 
   <ng-template #defaultTemplate
                let-container>
-    <mat-card fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="16px">
-      <mat-icon class="tim-text-primary tim-icon-48">computer</mat-icon>
-      <div fxFlex="grow">
-        <h2 style="margin-bottom: 0">
-          {{container.Names[0]}}
-          <small [ngClass]="container.State === 'running' ? 'tim-text-primary' : 'tim-text-accent'">
-            {{container.State}}
-          </small>
-          <br>
-          <code title="Container Id">{{container.Id | slice:0:12}}</code>
-          <code title="Image"> {{getImageName(container)}}</code>
-        </h2>
-        <tim-loading *ngIf="loadingMap.get(container.Id)"></tim-loading>
-      </div>
+    <mat-card>
+      <div fxLayout="row"
+           fxLayoutAlign="start center"
+           fxLayoutGap="16px">
 
-      <div style="text-align: right">
+        <mat-icon class="tim-text-primary tim-icon-48">computer</mat-icon>
+        <div fxFlex="grow">
+          <h2 style="margin-bottom: 0">
+            <span title="Name">
+              {{container.Names[0]}}
+            </span>
 
-        <span [title]="'Port Mappings:\n' + getPortMappings(container)"
-              class="text-nowrap">
-          <mat-icon>network_wifi</mat-icon>
-          <b>
-            {{container.Ports.length}}
-          </b>
-        </span>
-        <span title="Volume Mappings"
-              class="text-nowrap">
-          <mat-icon>storage</mat-icon>
-          <b>
-            {{container.Mounts.length}}
-          </b>
-        </span>
+            <small>
+              <code title="Id">{{container.Id | slice:0:12}}</code>
+            </small>
 
-        <div class="text-nowrap">
-          {{container.Status}}
+            <small title="State"
+                   [ngClass]="container.State === 'running' ? 'tim-text-primary' : 'tim-text-accent'">
+              {{container.State}}
+            </small>
+            <br>
+            <code title="Image"> {{getImageName(container)}}</code>
+          </h2>
+          <tim-loading *ngIf="loadingMap.get(container.Id)"></tim-loading>
+        </div>
+
+        <div style="text-align: right">
+
+          <span [title]="'Port Mappings:\n' + getPortMappings(container)"
+                class="text-nowrap">
+            <mat-icon>network_wifi</mat-icon>
+            <b>
+              {{container.Ports.length}}
+            </b>
+          </span>
+          <span title="Volume Mappings"
+                class="text-nowrap">
+            <mat-icon>storage</mat-icon>
+            <b>
+              {{container.Mounts.length}}
+            </b>
+          </span>
+
+          <div class="text-nowrap">
+            {{container.Status}}
+          </div>
         </div>
       </div>
 
-      <div fxLayout="column"
-           fxLayoutGap="4px">
-
-        <div fxLayout="row"
-             fxLayoutAlign="start center"
-             fxLayoutGap="4px">
-
-          <ng-container *ngIf="container.State === 'running'">
-            <button type="button"
-                    matTooltip="Attach"
-                    (click)="attach(container)"
-                    mat-raised-button
-                    color="accent">
-              <mat-icon>code</mat-icon>
-            </button>
-
-            <button type="button"
-                    matTooltip="Exec"
-                    (click)="exec(container)"
-                    mat-raised-button
-                    color="accent">
-              <mat-icon>settings_ethernet</mat-icon>
-            </button>
-
-          </ng-container>
-
-          <button type="button"
-                  matTooltip="Logs"
-                  (click)="logs(container)"
-                  mat-raised-button
-                  color="accent">
-            <mat-icon>subject</mat-icon>
-          </button>
-        </div>
-
-        <div fxLayout="row"
-             fxLayoutAlign="start center"
-             fxLayoutGap="4px">
-
-          <ng-container *ngIf="container.State === 'running'">
-            <button type="button"
-                    matTooltip="Stop"
-                    (click)="stop(container)"
-                    mat-raised-button>
-              <mat-icon>stop</mat-icon>
-            </button>
-          </ng-container>
-
-          <ng-container *ngIf="container.State !== 'running'">
-            <button type="button"
-                    matTooltip="Start"
-                    (click)="start(container)"
-                    color="accent"
-                    mat-raised-button>
-              <mat-icon>play_arrow</mat-icon>
-            </button>
-          </ng-container>
-
-          <button type="button"
-                  matTooltip="Delete"
-                  (click)="remove(container)"
-                  mat-raised-button>
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
+      <div>
+        <tim-container-action-buttons [containerId]="container.Id"
+                                      [containerName]="container.Names[0]"
+                                      [containerState]="container.State"></tim-container-action-buttons>
       </div>
-
     </mat-card>
   </ng-template>
 
