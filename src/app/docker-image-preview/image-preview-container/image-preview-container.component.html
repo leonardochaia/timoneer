@@ -1,4 +1,9 @@
+<ng-template #loadingTemplate>
+  <tim-loading></tim-loading>
+</ng-template>
+
 <div fxLayout="column"
+     *ngIf="!loading; else loadingTemplate"
      style="padding:16px;">
 
   <div *ngIf="manifest">

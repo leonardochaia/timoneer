@@ -16,6 +16,7 @@ export interface ImagePreviewContainerComponentData {
 })
 export class ImagePreviewContainerComponent implements OnInit {
   public manifest: ImageManifest;
+  public loading: boolean;
 
   constructor(
     @Inject(TAB_DATA)
@@ -23,9 +24,11 @@ export class ImagePreviewContainerComponent implements OnInit {
     private registry: RegistryService) { }
 
   public ngOnInit() {
+    this.loading = true;
     this.registry.getImageManifest(this.tabData.registry, this.tabData.image, this.tabData.tag)
       .subscribe(manifest => {
         this.manifest = manifest;
+        this.loading = false;
       });
   }
 }

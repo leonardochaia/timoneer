@@ -6,6 +6,7 @@ import { MatCardModule, MatIconModule } from '@angular/material';
 import { ImageHistoryComponent } from './image-history/image-history.component';
 import { NgObjectPipesModule } from 'angular-pipes';
 import { ManifestMetadataComponent } from './manifest-metadata/manifest-metadata.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { ManifestMetadataComponent } from './manifest-metadata/manifest-metadata
     NgObjectPipesModule,
     MatCardModule,
     MatIconModule,
+    SharedModule,
   ],
   declarations: [
     ImagePreviewContainerComponent,
