@@ -11,7 +11,6 @@ Docker Client for Windows, Mac & Linux.
 
 ## [Download Latest Release](https://github.com/leonardochaia/timoneer/releases/latest)
 
-
 ## What's Included
 
 ![Timoneer](/resources/preview.gif "Timoneer")
@@ -37,6 +36,11 @@ This is an Electron Application, using Angular 6 and Dockerode as Docker client.
 yarn install
 yarn start
 ```
+
+## License
+
+From Timoneer v0.6.2 onwards the code is licensed under the MIT License.
+Previous versions are licensed under GNU GPL.
 
 ## Credits
 
