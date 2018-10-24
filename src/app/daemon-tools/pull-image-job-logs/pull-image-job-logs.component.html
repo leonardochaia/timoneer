@@ -1,8 +1,7 @@
 <ng-container *ngFor="let log of logs; trackBy: trackByFn">
   <ng-container *ngIf="isUserFriendly(log)">
 
-    <div fxLayout="row"
-         fxLayoutGap="8px">
+    <div fxLayout="row">
       <div fxFlex="grow">
         {{log.id ? '[' + log.id + ']' : ''}}
         <span [ngClass]="log.error ? 'tim-text-warn': ''">
@@ -10,11 +9,13 @@
         </span>
       </div>
 
-      <mat-icon *ngIf="!log.progressDetail?.current && (log.status || log.error)"
-                [ngClass]="log.error ? 'tim-text-warn': 'tim-text-accent'">
-        {{log.error ? 'highlight_off' : 'check_circle_outline' }}
-      </mat-icon>
-
+      <div fxFlex
+           style="text-align:right"
+           *ngIf="!log.progressDetail?.current && (log.status || log.error)">
+        <mat-icon [ngClass]="log.error ? 'tim-text-warn': 'tim-text-accent'">
+          {{log.error ? 'highlight_off' : 'check_circle_outline' }}
+        </mat-icon>
+      </div>
     </div>
 
     <div *ngIf="log.progressDetail?.current">

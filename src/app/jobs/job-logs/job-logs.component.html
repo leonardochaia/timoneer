@@ -12,18 +12,18 @@
     </h1>
   </div>
 
-  <div fxFlex="grow"
-       style="overflow-y:auto">
+  <div fxFlex="grow">
 
-    <ng-container *ngIf="job.status === JobStatus.Errored">
-      <mat-card class="tim-bg-warn"
-                style="max-width: 40vw">
-        {{job.error.message}}
-      </mat-card>
-    </ng-container>
+    <div style="overflow-y:auto;; overflow-x: hidden">
+      <ng-container *ngIf="job.status === JobStatus.Errored">
+        <mat-card class="tim-bg-warn"
+                  style="max-width: 40vw">
+          {{job.error.message}}
+        </mat-card>
+      </ng-container>
 
-    <tim-job-logs-renderer [job]="job"></tim-job-logs-renderer>
-
+      <tim-job-logs-renderer [job]="job"></tim-job-logs-renderer>
+    </div>
   </div>
 
   <div fxLayout="row"
