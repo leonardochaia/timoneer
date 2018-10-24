@@ -157,7 +157,7 @@ export class ImageSelectorCardComponent implements OnInit, OnDestroy, ControlVal
             .pipe(
               map(r => r.results),
               map(images => [{
-                name: `Docker Hub /${settings.username}`,
+                name: `Docker Hub ${settings.username}`,
                 repos: Array.prototype.concat.apply([], images.map(i => `${i.namespace}/${i.name}`))
               }])
             );
