@@ -63,7 +63,7 @@
     "@types/filesize": "^3.6.0",
     "@types/node": "^10.10.1",
     "@types/uuid": "^3.4.4",
-    "angular-pipes": "^8.1.1",
+    "angular-pipes": "^9.0.1",
     "angular2-hotkeys": "^2.1.3",
     "codelyzer": "^4.4.4",
     "commitlint": "^7.0.0",
