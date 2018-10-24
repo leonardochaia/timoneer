@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 import { ImagePreviewContainerComponentData } from '../../docker-image-preview/image-preview-container/image-preview-container.component';
+import { ContainerCreateBody } from 'dockerode';
 
 @Component({
   selector: 'tim-registry-list',
@@ -54,7 +55,9 @@ export class RegistryListComponent implements OnInit {
     this.getImageName(repo)
       .subscribe(image => {
         this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
-          params: image
+          params: {
+            Image: image
+          } as ContainerCreateBody
         });
       });
   }

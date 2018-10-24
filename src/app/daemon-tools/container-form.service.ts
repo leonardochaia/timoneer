@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { PortBinding } from './docker-client.model';
-import { FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { PortBinding, VolumeBindingType, VolumeBinding } from './docker-client.model';
+import { FormBuilder, Validators, AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { takeWhile } from 'rxjs/operators';
-import { ContainerCreateBody } from 'dockerode';
+import { ContainerCreateBody, HostConfigPortBindings } from 'dockerode';
 
 @Injectable({
   providedIn: 'root'
@@ -50,44 +50,228 @@ export class ContainerFormService {
     return !portBindingsArray.length || !portBindingsArray.controls.some(c => c.invalid);
   }
 
-  public clearPortBindings(portBindingsArray: FormArray) {
-    portBindingsArray.controls.splice(0, portBindingsArray.length);
+  public addVolumeBinding(volumeBindingsArray: FormArray, binding: Partial<VolumeBinding> = null) {
+    binding = binding || {};
+    const group = this.fb.group({
+      'containerPath': [binding.containerPath, Validators.required],
+      'description': [binding.description],
+      'type': [binding.type || VolumeBindingType.Bind, Validators.required],
+      'readonly': [binding.readonly || false],
+      'hostPath': [binding.hostPath],
+      'volumeName': [binding.volumeName],
+    });
+
+    volumeBindingsArray.push(group);
+
+    // Update hostPath with containerPath value
+    // while hostPath is dirty
+    group.get('containerPath')
+      .valueChanges
+      .pipe(takeWhile(() => group.get('hostPath').pristine))
+      .subscribe(containerPath => {
+        group.get('hostPath').setValue(containerPath);
+      });
+
+    const updateForm = (type: VolumeBindingType) => {
+      switch (type) {
+        case VolumeBindingType.Volume:
+          group.get('hostPath').setValidators([]);
+          group.get('hostPath').disable();
+
+          group.get('volumeName').setValidators([Validators.required]);
+          group.get('volumeName').enable();
+          break;
+
+        case VolumeBindingType.Bind:
+          group.get('hostPath').setValidators([Validators.required]);
+          group.get('hostPath').enable();
+
+          group.get('volumeName').setValidators([]);
+          group.get('volumeName').disable();
+          break;
+      }
+      group.get('hostPath').updateValueAndValidity();
+    };
+
+    updateForm(group.get('type').value);
+
+    // update form when type changes
+    group.get('type').valueChanges.subscribe(updateForm);
   }
 
-  protected createForm(data: ContainerCreateBody) {
+  public removeVolumeBinding(volumeBindingsArray: FormArray, control: AbstractControl) {
+    volumeBindingsArray.removeAt(volumeBindingsArray.controls.indexOf(control));
+  }
+
+  public canAddVolumeBinding(volumeBindingsArray: FormArray) {
+    return !volumeBindingsArray.length || !volumeBindingsArray.controls.some(c => c.invalid);
+  }
+
+  public createForm(data?: ContainerCreateBody) {
     data = data || {
       Tty: true,
     };
 
-    const form = this.fb.group({
-      'Image': [data.Image, Validators.required],
-      'name': [data.name],
-      'Cmd': [data.Cmd],
-      'Tty': [data.Tty, Validators.required],
+    // Create fhe form based on the DTO
+    // so that properties that we're
+    // not allowing edit are kept
+    const form = this.createFormGroup(data);
 
-      // Custom wrappers fields
-      'portBindings': this.fb.array([]),
-      'volumeBindings': this.fb.array([]),
-    });
+    // We must set the controls that we do use though
+    form.setControl('Image', this.fb.control(data.Image, Validators.required));
+    form.setControl('name', this.fb.control(data.name));
+    form.setControl('Cmd', this.fb.control(JSON.stringify(data.Cmd)));
+    form.setControl('Tty', this.fb.control(data.Tty));
+
+    if (typeof data.Tty !== 'boolean') {
+      form.get('Tty').setValue(true);
+    }
+
+    // Custom fields
+    const portBindingsArray = this.fb.array([]);
+    const volumeBindingsArray = this.fb.array([]);
 
     if (data.HostConfig) {
       if (data.HostConfig.PortBindings) {
         for (const key in data.HostConfig.PortBindings) {
           if (data.HostConfig.PortBindings.hasOwnProperty(key)) {
-            const binding = data.HostConfig.PortBindings[key];
+            const bindings = data.HostConfig.PortBindings[key] as HostConfigPortBindings[];
             const containerPort = parseInt(key.slice(0, key.indexOf('/')), 10);
+            for (const binding of bindings) {
+              this.addPortBinding(portBindingsArray, {
+                containerPort: containerPort,
+                hostPort: binding.HostPort ? parseInt(binding.HostPort, 10) : null
+              });
+            }
+          }
+        }
+      }
 
+      if (data.HostConfig.Mounts) {
+        for (const mount of data.HostConfig.Mounts) {
+          switch (mount.Type) {
+            case VolumeBindingType.Bind:
+              this.addVolumeBinding(volumeBindingsArray, {
+                type: mount.Type,
+                containerPath: mount.Target,
+                hostPath: mount.Source,
+              });
+              break;
+            case VolumeBindingType.Volume:
+              this.addVolumeBinding(volumeBindingsArray, {
+                type: mount.Type,
+                volumeName: (mount as any).Name,
+                containerPath: (mount as any).Destination
+              });
+              break;
+          }
+        }
+      }
+
+      if (data.HostConfig.Binds) {
+        for (const bind of data.HostConfig.Binds) {
+          const split = bind.split(':');
+          const host = split[0];
+          const containerPath = split[1];
+          const readonly = split[3] === 'ro';
+          if (host.startsWith('/')) {
+            // Assume its a bind
+            this.addVolumeBinding(volumeBindingsArray, {
+              containerPath: containerPath,
+              hostPath: host,
+              type: VolumeBindingType.Bind,
+              readonly: readonly,
+            });
+          } else {
+            // Assume its a volume
+            this.addVolumeBinding(volumeBindingsArray, {
+              containerPath: containerPath,
+              type: VolumeBindingType.Volume,
+              volumeName: host,
+              readonly: readonly,
+            });
           }
         }
       }
     }
 
-    // for (const portMapping of portBindingsArray.controls.map(c => c.value as PortBinding)) {
-    //   data.HostConfig.PortBindings[`${portMapping.containerPort}/tcp`] = [{
-    //     HostPort: portMapping.assignRandomPort ? null : portMapping.hostPort.toString()
-    //   }] as any;
-    // }
-
+    form.setControl('portBindings', portBindingsArray);
+    form.setControl('volumeBindings', volumeBindingsArray);
     return form;
+  }
+
+  public formToData(form: FormGroup) {
+    const portBindingsArray = form.get('portBindings') as FormArray;
+    const volumeBindingsArray = form.get('volumeBindings') as FormArray;
+
+    const data: ContainerCreateBody = Object.assign(form.getRawValue());
+    delete data['portBindings'];
+    delete data['volumeBindings'];
+
+    // Required so that attach works.
+    data.OpenStdin = true;
+
+    if (!data.HostConfig) {
+      data.HostConfig = {};
+    }
+
+    if (!data.HostConfig.Binds) {
+      data.HostConfig.Binds = [];
+    }
+
+    if (!data.HostConfig.PortBindings) {
+      data.HostConfig.PortBindings = {};
+    }
+
+    if (!data.HostConfig.Mounts) {
+      data.HostConfig.Mounts = [];
+    }
+
+    for (const portMapping of portBindingsArray.controls.filter(c => c.valid).map(c => c.value as PortBinding)) {
+      data.HostConfig.PortBindings[`${portMapping.containerPort}/tcp`] = [{
+        HostPort: portMapping.assignRandomPort ? null : portMapping.hostPort.toString()
+      }] as any;
+    }
+
+    for (const volumeMapping of volumeBindingsArray.controls.map(c => c.value as VolumeBinding)) {
+      data.HostConfig.Mounts.push({
+        Target: volumeMapping.containerPath,
+        Source: volumeMapping.type === VolumeBindingType.Volume ? volumeMapping.volumeName : volumeMapping.hostPath,
+        Type: volumeMapping.type.toString(),
+        ReadOnly: volumeMapping.readonly
+      });
+    }
+
+    // Delete binds since we're using Mounts and they conflict
+    delete data.HostConfig.Binds;
+
+    if (data.Cmd && data.Cmd.length) {
+      data.Cmd = JSON.parse(data.Cmd as any);
+    }
+
+    return data;
+  }
+
+  /**
+   * Creates a FormGroup based on the provided object
+   * Recursively creates FormGroup, FormArray
+   * or FormControl accordingly
+   * @param obj The base object
+   */
+  protected createFormGroup(obj: any) {
+    const formGroup: { [id: string]: AbstractControl; } = {};
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key];
+      if (Array.isArray(value)) {
+        formGroup[key] = this.fb.array(value);
+      } else if (value instanceof Object) {
+        formGroup[key] = this.createFormGroup(value);
+      } else {
+        formGroup[key] = this.fb.control(obj[key]);
+      }
+    });
+
+    return this.fb.group(formGroup);
   }
 }

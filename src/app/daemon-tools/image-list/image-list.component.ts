@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject, Observable, throwError } from 'rxjs';
 import { takeUntil, catchError, map } from 'rxjs/operators';
-import { ImageInfo } from 'dockerode';
+import { ImageInfo, ContainerCreateBody } from 'dockerode';
 import { DockerImageService } from '../docker-image.service';
 import { DockerEventsService } from '../docker-events.service';
 import { TabService } from '../../tabs/tab.service';
@@ -75,7 +75,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   public createContainer(image: ImageInfo) {
     this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
-      params: image.RepoTags[0] || image.Id
+      params: {
+        Image: image.RepoTags[0] || image.Id
+      } as ContainerCreateBody
     });
   }
 

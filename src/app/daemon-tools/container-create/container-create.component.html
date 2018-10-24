@@ -2,7 +2,7 @@
       [formGroup]="form"
       (ngSubmit)="launch()">
 
-  <tim-image-selector-card formControlName="image"
+  <tim-image-selector-card formControlName="Image"
                            (imageLoaded)="imageSelected($event)">
   </tim-image-selector-card>
 
@@ -40,8 +40,7 @@
   <mat-card fxLayout="row"
             fxLayoutAlign="start center"
             fxLayoutGap="8px"
-            style="margin-bottom: 16px;"
-            [formGroup]="form.get('launchConfig')">
+            style="margin-bottom: 16px;">
 
     <mat-icon class="tim-icon-48 tim-text-primary">developer_mode</mat-icon>
 
@@ -55,8 +54,8 @@
         <mat-form-field>
           <input type="text"
                  matInput
-                 formControlName="command"
-                 placeholder="Command">
+                 formControlName="Cmd"
+                 placeholder="Command in JSON">
         </mat-form-field>
         <span *ngIf="imageData">
           Default:
@@ -67,11 +66,11 @@
       <mat-form-field>
         <input type="text"
                matInput
-               formControlName="containerName"
+               formControlName="name"
                placeholder="Container Name">
       </mat-form-field>
 
-      <mat-checkbox formControlName="tty"
+      <mat-checkbox formControlName="Tty"
                     style="margin-left:8px;">TTY</mat-checkbox>
     </div>
     <div>
@@ -86,3 +85,5 @@
   </mat-card>
 
 </form>
+
+<pre>{{form.getRawValue()|json}}</pre>

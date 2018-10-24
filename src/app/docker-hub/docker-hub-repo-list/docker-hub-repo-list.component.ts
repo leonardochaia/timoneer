@@ -6,6 +6,7 @@ import { DockerHubRepositoryResponse } from '../docker-hub.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImagePreviewContainerComponentData } from '../../docker-image-preview/image-preview-container/image-preview-container.component';
+import { ContainerCreateBody } from 'dockerode';
 
 @Component({
   selector: 'tim-docker-hub-repo-list',
@@ -43,7 +44,9 @@ export class DockerHubRepoListComponent implements OnInit, OnDestroy {
 
   public createContainer(repo: { namespace: string; name: string; }) {
     this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
-      params: `${repo.namespace}/${repo.name}`
+      params: {
+        Image: `${repo.namespace}/${repo.name}`
+      } as ContainerCreateBody
     });
   }
 

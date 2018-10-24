@@ -17,7 +17,7 @@
     </div>
   </mat-card>
 
-  <tim-container-create [initialImage]="application.image"
+  <tim-container-create [initialConfig]="{Image: application.image}"
                         [disableImage]="true"
                         [suggestedPorts]="application.ports"
                         [suggestedVolumes]="application.volumes"

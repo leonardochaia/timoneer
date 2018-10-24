@@ -5,6 +5,7 @@ import { TimoneerTabs } from '../../timoneer-tabs';
 import { ContainerCreationJob } from '../container-creation-job';
 import { JobInstance } from '../../jobs/job-instance';
 import { ContainerLauncherParams } from '../container-launcher/container-launcher.component';
+import { ContainerCreateBody } from 'dockerode';
 
 @Component({
   selector: 'tim-container-create-container',
@@ -16,7 +17,7 @@ export class ContainerCreateContainerComponent implements OnInit {
   constructor(
     private tabService: TabService,
     @Inject(TAB_DATA)
-    public initialImage: string) { }
+    public initialConfig: ContainerCreateBody) { }
 
   public ngOnInit() {
   }
