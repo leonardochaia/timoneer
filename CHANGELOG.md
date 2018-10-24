@@ -1,3 +1,15 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/leonardochaia/timoneer/compare/v0.5.0...v0.5.1) (2018-10-16)
+
+
+### Bug Fixes
+
+* do not append latest tag to what you type ([5017762](https://github.com/leonardochaia/timoneer/commit/5017762))
+* fixes registries not being saved ([67b75e8](https://github.com/leonardochaia/timoneer/commit/67b75e8))
+* include Material icon with Timoneer installation to support offline ([db02124](https://github.com/leonardochaia/timoneer/commit/db02124))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/leonardochaia/timoneer/compare/v0.4.1...v0.5.0) (2018-09-29)
 

@@ -1,4 +1,4 @@
-<div *ngFor="let log of logs; trackBy: trackByFn">
+<ng-container *ngFor="let log of logs; trackBy: trackByFn">
   <ng-container *ngIf="isUserFriendly(log)">
 
     <div fxLayout="row"
@@ -25,4 +25,4 @@
                         style="margin-top:8px;"></mat-progress-bar>
     </div>
   </ng-container>
-</div>
+</ng-container>
