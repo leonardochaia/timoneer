@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { takeWhile } from 'rxjs/operators';
+import { FormArray, AbstractControl } from '@angular/forms';
 import { ImageInspectInfo } from 'dockerode';
 import { ContainerCreationSuggestedPort, PortBinding } from '../docker-client.model';
+import { ContainerFormService } from '../container-form.service';
 
 @Component({
   selector: 'tim-container-create-port-mapping',
@@ -26,7 +26,7 @@ export class ContainerCreatePortMappingComponent implements OnInit, OnChanges {
 
   private availablePorts: ContainerCreationSuggestedPort[];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private containerForm: ContainerFormService) { }
 
   public ngOnInit() {
     this.availablePorts = this.suggestedPorts || [];
@@ -39,50 +39,19 @@ export class ContainerCreatePortMappingComponent implements OnInit, OnChanges {
   }
 
   public addPortBinding(binding: Partial<PortBinding> = null) {
-    binding = binding || {};
-    const group = this.fb.group({
-      'containerPort': [binding.containerPort, Validators.required],
-      'hostPort': [binding.hostPort || binding.containerPort, Validators.required],
-      'description': [binding.description],
-      'assignRandomPort': [binding.assignRandomPort || false, Validators.required]
-    });
-
-    this.portBindingsArray.push(group);
-
-    // Update hostPort with containerPort value
-    // while hostPort is dirty.
-    group.get('containerPort').valueChanges
-      .pipe(takeWhile(() => group.get('hostPort').pristine))
-      .subscribe(containerPort => {
-        group.get('hostPort').setValue(containerPort);
-      });
-
-    // Update hostPort validators when assignRandomPort changes.
-    group.get('assignRandomPort').valueChanges
-      .subscribe(assignRandomPort => {
-        if (assignRandomPort) {
-          group.get('hostPort').setValidators([]);
-        } else {
-          group.get('hostPort').setValidators([Validators.required]);
-        }
-        group.get('hostPort').updateValueAndValidity();
-      });
+    this.containerForm.addPortBinding(this.portBindingsArray, binding);
   }
 
   public removePortBinding(control: AbstractControl) {
-    this.portBindingsArray.removeAt(this.portBindingsArray.controls.indexOf(control));
+    this.containerForm.removePortBinding(this.portBindingsArray, control);
   }
 
   public canAddPortBinding() {
-    return !this.portBindingsArray.length || !this.portBindingsArray.controls.some(c => c.invalid);
-  }
-
-  protected clearPorts() {
-    this.portBindingsArray.controls.splice(0, this.portBindingsArray.length);
+    return this.containerForm.canAddPortBinding(this.portBindingsArray);
   }
 
   protected onImageChanged() {
-    this.clearPorts();
+    this.containerForm.clearPortBindings(this.portBindingsArray);
     if (this.image) {
 
       const exposedPorts = Object.keys(this.image.Config.ExposedPorts || {})
