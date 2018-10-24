@@ -21,7 +21,7 @@
       <li *ngFor="let mapping of portMappings">
         <span title="Container Port">{{mapping.containerPort}}</span>
         <mat-icon>arrow_right_alt</mat-icon>
-        <b title="HostPort">{{mapping.hostPort}}</b>
+        <b title="Host Port">{{mapping.hostPort}}</b>
       </li>
     </ul>
   </mat-card>
@@ -60,3 +60,7 @@
     </ul>
   </mat-card>
 </div>
+
+<pre>
+    {{containerInfo|json}}
+</pre>
