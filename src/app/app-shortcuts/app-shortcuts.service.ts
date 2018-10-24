@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { HotkeysService, Hotkey } from './hotkey.service';
 
 @Injectable()
 export class AppShortcutsService implements OnDestroy {

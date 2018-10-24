@@ -679,13 +679,6 @@ angular-pipes@^8.1.1:
   dependencies:
     tslib "^1.9.0"
 
-angular2-hotkeys@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/angular2-hotkeys/-/angular2-hotkeys-2.1.3.tgz#fd9d0ec7e5a087fd43b7efa33bda182c6471c522"
-  dependencies:
-    "@types/mousetrap" "^1.6.0"
-    mousetrap "^1.6.0"
-
 ansi-align@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-2.0.0.tgz#c36aeccba563b89ceb556f3690f0b1d9e3547f7f"
@@ -5065,7 +5058,7 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
 
-mousetrap@^1.6.0:
+mousetrap@^1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.2.tgz#caadd9cf886db0986fb2fee59a82f6bd37527587"
 

@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppShortcutsService } from './app-shortcuts.service';
-import { HotkeyModule } from 'angular2-hotkeys';
+import { HotkeysService } from './hotkey.service';
 
 @NgModule({
   imports: [
     CommonModule,
-    HotkeyModule,
   ],
   providers: [
+    HotkeysService,
     AppShortcutsService,
   ],
   declarations: []
