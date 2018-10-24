@@ -36,7 +36,7 @@ export class SettingsService {
       } else {
         this.settingsSubject.next(<ApplicationSettings>{
           registries: [{
-            url: 'https://docker.io/',
+            url: 'https://index.docker.io/',
             allowsCatalog: false,
             editable: false,
           }],
@@ -68,6 +68,8 @@ export class SettingsService {
           for (const registry of settings.registries) {
             if (registry.url) {
               registry.url = this.ensureEndingSlash(registry.url);
+            } else {
+              registry.url = 'https://index.docker.io/';
             }
           }
         }

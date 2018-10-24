@@ -30,6 +30,8 @@ import {
 } from './application-templates/application-edit-list-container/application-edit-list-container.component';
 import { ContainerLogsContainerComponent } from './daemon-tools/container-logs-container/container-logs-container.component';
 import { DockerHubRepoListContainerComponent } from './docker-hub/docker-hub-repo-list-container/docker-hub-repo-list-container.component';
+import { ImagePreviewContainerComponent } from './docker-image-preview/image-preview-container/image-preview-container.component';
+import { DockerImagePreviewModule } from './docker-image-preview/docker-image-preview.module';
 
 const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
@@ -102,6 +104,10 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
     component: DockerHubRepoListContainerComponent,
   },
   {
+    id: TimoneerTabs.IMAGE_PREVIEW,
+    component: ImagePreviewContainerComponent,
+  },
+  {
     id: TimoneerTabs.DASHBOARD,
     title: 'Dashboard',
     component: HomeContainerComponent,
@@ -120,6 +126,7 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
     ApplicationTemplatesModule,
     RegistryModule,
     SettingsModule,
+    DockerImagePreviewModule,
     TabsModule.forRoot(TIMONEER_AVAILABLE_TABS),
   ],
 })

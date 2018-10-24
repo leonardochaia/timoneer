@@ -25,7 +25,7 @@ export class RegistryAuthService {
     password: string) {
 
     const authHeader = btoa(`${username}:${password}`);
-    return this.httpClient.post<{ token: string }>(url, null, {
+    return this.httpClient.get<{ token: string }>(url, {
       params: {
         service: service,
         scope: scope,

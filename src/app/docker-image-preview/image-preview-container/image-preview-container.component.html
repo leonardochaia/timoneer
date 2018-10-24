@@ -1,0 +1,13 @@
+<div fxLayout="column"
+     style="padding:16px;">
+
+  <div *ngIf="manifest">
+    <tim-manifest-metadata [manifest]="manifest"></tim-manifest-metadata>
+
+    <h2 style="text-align: center">
+      History
+    </h2>
+
+    <tim-image-history [manifest]="manifest"></tim-image-history>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { map } from 'rxjs/operators';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
+import { ImagePreviewContainerComponentData } from '../../docker-image-preview/image-preview-container/image-preview-container.component';
 
 @Component({
   selector: 'tim-registry-list',
@@ -56,6 +57,17 @@ export class RegistryListComponent implements OnInit {
           params: image
         });
       });
+  }
+
+  public imagePreview(repo: string) {
+    this.tabService.add(TimoneerTabs.IMAGE_PREVIEW, {
+      title: repo,
+      params: {
+        image: repo,
+        registry: this.registryUrl,
+        tag: 'latest'
+      } as ImagePreviewContainerComponentData
+    });
   }
 
 }

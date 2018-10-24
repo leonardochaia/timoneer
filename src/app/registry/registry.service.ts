@@ -5,6 +5,7 @@ import { throwError, Observable, forkJoin, of } from 'rxjs';
 import { SettingsService } from '../settings/settings.service';
 import { DockerRegistrySettings } from '../settings/settings.model';
 import { RegistryAuthService } from './registry-auth.service';
+import { ImageManifest } from './registry.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class RegistryService {
   }
 
   public getImageManifest(registryUrl: string, name: string, reference: string) {
-    return this.get(registryUrl, `v2/${name}/manifests/${reference}`);
+    return this.get<ImageManifest>(registryUrl, `v2/${name}/manifests/${reference}`);
   }
 
   public getRepositoriesFromAllRegistries() {
