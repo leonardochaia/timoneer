@@ -56,14 +56,6 @@ export class ContainerCreatePortMappingComponent implements OnInit, OnChanges {
       const exposedPorts = Object.keys(this.image.Config.ExposedPorts || {})
         .map(k => parseInt(k.split('/')[0], 10));
 
-      // Remove bindings that are not in the new image
-      for (const control of this.portBindingsArray.controls) {
-        const value = control.value as PortBinding;
-        if (!exposedPorts.includes(value.containerPort)) {
-          this.containerForm.removePortBinding(this.portBindingsArray, control);
-        }
-      }
-
       const out = this.suggestedPorts || [];
       this.availablePorts = out.concat(exposedPorts.filter(p => !out.some(o => o.containerPort === p))
         .map(p => ({ containerPort: p })));

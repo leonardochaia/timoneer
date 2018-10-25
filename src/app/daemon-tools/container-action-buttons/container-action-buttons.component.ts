@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, take } from 'rxjs/operators';
 import { DockerContainerService } from '../docker-container.service';
 import { NotificationService } from '../../shared/notification.service';
+import { ContainerCreateBody } from 'dockerode';
 
 @Component({
   selector: 'tim-container-action-buttons',
@@ -75,11 +76,24 @@ export class ContainerActionButtonsComponent {
       });
   }
 
+  public clone() {
+    this.bindLoading(this.containerService.inspect(this.containerId))
+      .pipe(take(1))
+      .subscribe((containerInfo) => {
+        this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
+          params: {
+            ...containerInfo.Config,
+            HostConfig: containerInfo.HostConfig
+          } as ContainerCreateBody
+        });
+      });
+  }
+
   public isButtonVisible(key: string) {
     return !this.hiddenButtons || !this.hiddenButtons.includes(key);
   }
 
-  private bindLoading(obs: Observable<any>) {
+  private bindLoading<T>(obs: Observable<T>) {
     this.loading = true;
     return obs.pipe(
       catchError((e) => {

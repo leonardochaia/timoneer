@@ -2,14 +2,12 @@
   <tim-loading></tim-loading>
 </ng-template>
 <div *ngIf="!loading; else loadingTemplate"
-     fxLayout="row">
+     fxLayout="row"
+     fxLayoutAlign="start center"
+     fxLayoutGap="8px">
 
-  <div fxFlex="grow"
-       fxLayout="row"
-       fxLayoutAlign="start center"
-       fxLayoutGap="4px">
-
-    <ng-container *ngIf="containerState === 'running'; else notRunningTemplate">
+  <ng-container *ngIf="containerState === 'running'; else notRunningTemplate">
+    <div>
       <button type="button"
               *ngIf="isButtonVisible('attach')"
               (click)="attach()"
@@ -18,7 +16,8 @@
         <mat-icon>code</mat-icon>
         Attach
       </button>
-
+    </div>
+    <div>
       <button type="button"
               *ngIf="isButtonVisible('exec')"
               (click)="exec()"
@@ -26,10 +25,11 @@
         <mat-icon>settings_ethernet</mat-icon>
         Exec
       </button>
+    </div>
+  </ng-container>
 
-    </ng-container>
-
-    <ng-template #notRunningTemplate>
+  <ng-template #notRunningTemplate>
+    <div>
       <button type="button"
               *ngIf="isButtonVisible('start')"
               (click)="start()"
@@ -38,8 +38,9 @@
         <mat-icon>play_arrow</mat-icon>
         Start
       </button>
-    </ng-template>
-
+    </div>
+  </ng-template>
+  <div>
     <button type="button"
             *ngIf="isButtonVisible('logs')"
             (click)="logs()"
@@ -47,17 +48,28 @@
       <mat-icon>subject</mat-icon>
       Logs
     </button>
+  </div>
 
-    <ng-container *ngIf="containerState === 'running'">
-      <button type="button"
-              *ngIf="isButtonVisible('stop')"
-              (click)="stop()"
-              mat-raised-button>
-        <mat-icon>stop</mat-icon>
-        Stop
-      </button>
-    </ng-container>
+  <div *ngIf="containerState === 'running'">
+    <button type="button"
+            *ngIf="isButtonVisible('stop')"
+            (click)="stop()"
+            mat-raised-button>
+      <mat-icon>stop</mat-icon>
+      Stop
+    </button>
+  </div>
 
+  <div fxFlex="grow"></div>
+
+  <div>
+    <button type="button"
+            *ngIf="isButtonVisible('clone')"
+            (click)="clone()"
+            mat-raised-button>
+      <mat-icon>add_to_photos</mat-icon>
+      Clone
+    </button>
   </div>
 
   <div>
