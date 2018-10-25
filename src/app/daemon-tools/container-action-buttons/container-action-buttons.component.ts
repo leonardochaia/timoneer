@@ -80,9 +80,15 @@ export class ContainerActionButtonsComponent {
     this.bindLoading(this.containerService.inspect(this.containerId))
       .pipe(take(1))
       .subscribe((containerInfo) => {
+        let image = containerInfo.Config.Image;
+        if (image.startsWith('sha256')) {
+          image = containerInfo.Image;
+        }
+
         this.tabService.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
           params: {
             ...containerInfo.Config,
+            Image: image.replace('sha256:', ''),
             HostConfig: containerInfo.HostConfig
           } as ContainerCreateBody
         });
