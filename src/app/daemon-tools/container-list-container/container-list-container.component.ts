@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { TimoneerTabs } from '../../timoneer-tabs';
+import { TabService } from '../../tabs/tab.service';
 
 @Component({
   selector: 'tim-container-list-container',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class ContainerListContainerComponent {
 
+  constructor(private readonly tab: TabService) { }
+
+  public createContainer() {
+    this.tab.add(TimoneerTabs.DOCKER_CONTAINER_NEW);
+  }
 }

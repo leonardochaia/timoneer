@@ -1,5 +1,14 @@
-<div fxLayout="column"
-     style="padding:16px;">
+<div style="padding:16px;">
+
+  <div style="margin-bottom:16px; text-align: right">
+    <button type="button"
+            mat-raised-button
+            color="primary"
+            (click)="createContainer()">
+      <mat-icon>add_to_queue</mat-icon>
+      Create Container
+    </button>
+  </div>
 
   <div>
     <tim-container-list></tim-container-list>
