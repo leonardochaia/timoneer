@@ -10,7 +10,7 @@
               fxLayoutGap="8px">
 
       <div fxFlex="grow"
-           *ngIf="autoRemove; else noAutoRemoveTemplate"
+           *ngIf="!containerId || autoRemove; else noAutoRemoveTemplate"
            style="line-height: 36px;">
         Fix the configuration and launch the container again
       </div>

@@ -29,8 +29,7 @@ export class ContainerLauncherComponent implements OnInit, OnDestroy {
   public get autoRemove() {
     if (this.job) {
       return this.job.definition.creationData.HostConfig
-        && this.job.definition.creationData.HostConfig.AutoRemove
-        && this.containerId;
+        && this.job.definition.creationData.HostConfig.AutoRemove;
     } else {
       return false;
     }
