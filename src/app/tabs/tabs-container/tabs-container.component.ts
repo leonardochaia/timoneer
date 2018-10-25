@@ -110,6 +110,10 @@ export class TabsContainerComponent implements AfterViewInit {
           {
             provide: TAB_DATA,
             useValue: config.params
+          },
+          {
+            provide: Tab,
+            useValue: tab
           }
         ], template.parentInjector);
 
