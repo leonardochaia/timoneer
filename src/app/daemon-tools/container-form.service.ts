@@ -120,11 +120,15 @@ export class ContainerFormService {
     // We must set the controls that we do use though
     form.setControl('Image', this.fb.control(data.Image, Validators.required));
     form.setControl('name', this.fb.control(data.name));
-    form.setControl('Cmd', this.fb.control(JSON.stringify(data.Cmd)));
+    form.setControl('Cmd', this.fb.control(null));
     form.setControl('Tty', this.fb.control(data.Tty));
 
     if (typeof data.Tty !== 'boolean') {
       form.get('Tty').setValue(true);
+    }
+
+    if (data.Cmd && Array.isArray(data.Cmd) && data.Cmd.length) {
+      form.get('Cmd').setValue(JSON.stringify(data.Cmd));
     }
 
     // Custom fields
@@ -215,17 +219,12 @@ export class ContainerFormService {
       data.HostConfig = {};
     }
 
-    if (!data.HostConfig.Binds) {
-      data.HostConfig.Binds = [];
-    }
+    // Following fields are managed by the wrappers
+    data.HostConfig.PortBindings = {};
+    data.HostConfig.Mounts = [];
 
-    if (!data.HostConfig.PortBindings) {
-      data.HostConfig.PortBindings = {};
-    }
-
-    if (!data.HostConfig.Mounts) {
-      data.HostConfig.Mounts = [];
-    }
+    // Delete binds since we're using Mounts and they conflict
+    delete data.HostConfig.Binds;
 
     for (const portMapping of portBindingsArray.controls.filter(c => c.valid).map(c => c.value as PortBinding)) {
       data.HostConfig.PortBindings[`${portMapping.containerPort}/tcp`] = [{
@@ -241,9 +240,6 @@ export class ContainerFormService {
         ReadOnly: volumeMapping.readonly
       });
     }
-
-    // Delete binds since we're using Mounts and they conflict
-    delete data.HostConfig.Binds;
 
     if (data.Cmd && data.Cmd.length) {
       data.Cmd = JSON.parse(data.Cmd as any);
