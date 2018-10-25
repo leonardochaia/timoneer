@@ -76,7 +76,7 @@ export class ContainerActionButtonsComponent {
   }
 
   public isButtonVisible(key: string) {
-    return !this.hiddenButtons.includes(key);
+    return !this.hiddenButtons || !this.hiddenButtons.includes(key);
   }
 
   private bindLoading(obs: Observable<any>) {

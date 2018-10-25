@@ -1,16 +1,11 @@
-<div *ngIf="containerInfo"
-     fxLayout="column"
-     fxLayoutGap="16px">
-  <mat-card>
-    <h3>
-      <mat-icon class="tim-text-primary">computer</mat-icon>
-      {{containerInfo.Name}} ({{containerInfo.Id | slice:0:12}})
-    </h3>
-    <p>
-      <b>{{containerInfo.Config.Image}}</b>
-    </p>
+<div *ngIf="containerInfo">
 
-  </mat-card>
+  <tim-container-header-card [containerId]="containerInfo.Id"
+                             [containerName]="containerInfo.Name"
+                             [containerState]="containerInfo.State.Status"
+                             [imageName]="containerInfo.Image"
+                             [hiddenButtons]="hiddenButtons">
+  </tim-container-header-card>
 
   <mat-card *ngIf="portMappings && portMappings.length">
     <h3>
@@ -60,7 +55,3 @@
     </ul>
   </mat-card>
 </div>
-
-<pre>
-    {{containerInfo|json}}
-</pre>

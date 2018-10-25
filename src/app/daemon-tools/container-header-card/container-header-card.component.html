@@ -1,0 +1,40 @@
+<mat-card>
+  <div fxLayout="row"
+       fxLayoutAlign="start center"
+       fxLayoutGap="16px">
+
+    <mat-icon class="tim-text-primary tim-icon-48">computer</mat-icon>
+    <div fxFlex="grow">
+      <h2 style="margin-bottom: 0">
+        <span title="Name">
+          {{containerName}}
+        </span>
+
+        <small>
+          <code title="Id">{{containerId | slice:0:12}}</code>
+        </small>
+
+        <small title="State"
+               [ngClass]="containerState === 'running' ? 'tim-text-primary' : 'tim-text-accent'">
+          {{containerState}}
+        </small>
+
+        <br>
+
+        <code title="Image">
+          {{getImageName()}}
+        </code>
+      </h2>
+    </div>
+
+    <ng-content></ng-content>
+
+  </div>
+
+  <div>
+    <tim-container-action-buttons [containerId]="containerId"
+                                  [containerName]="containerName"
+                                  [containerState]="containerState"
+                                  [hiddenButtons]="hiddenButtons"></tim-container-action-buttons>
+  </div>
+</mat-card>

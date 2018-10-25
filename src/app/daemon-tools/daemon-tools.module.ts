@@ -51,6 +51,7 @@ import { TimDialogModule } from '../tim-dialog/tim-dialog.module';
 import { ContainerInspectCardsComponent } from './container-inspect-cards/container-inspect-cards.component';
 import { ContainerLogsContainerComponent } from './container-logs-container/container-logs-container.component';
 import { ContainerActionButtonsComponent } from './container-action-buttons/container-action-buttons.component';
+import { ContainerHeaderCardComponent } from './container-header-card/container-header-card.component';
 
 @NgModule({
   imports: [
@@ -106,6 +107,7 @@ import { ContainerActionButtonsComponent } from './container-action-buttons/cont
     ContainerInspectCardsComponent,
     ContainerLogsContainerComponent,
     ContainerActionButtonsComponent,
+    ContainerHeaderCardComponent,
   ],
   exports: [
     ContainerListComponent,

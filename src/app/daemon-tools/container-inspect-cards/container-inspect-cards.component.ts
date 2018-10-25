@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DockerContainerService } from '../docker-container.service';
-import { ContainerInspectInfo } from 'dockerode';
+import { ContainerInspectInfo, ContainerCreateBody } from 'dockerode';
+import { TabService } from '../../tabs/tab.service';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-container-inspect-cards',
@@ -12,11 +14,16 @@ export class ContainerInspectCardsComponent implements OnInit {
   @Input()
   public containerId: string;
 
+  @Input()
+  public hiddenButtons: string[];
+
   public containerInfo: ContainerInspectInfo;
   public portMappings: { containerPort: string, hostPort: string }[] = [];
   public labels: { key: string, value: string }[] = [];
 
-  constructor(private containerService: DockerContainerService) { }
+  constructor(
+    private readonly containerService: DockerContainerService,
+    private readonly tab: TabService) { }
 
   public ngOnInit() {
 
@@ -48,4 +55,12 @@ export class ContainerInspectCardsComponent implements OnInit {
       });
   }
 
+  public cloneContainer() {
+    this.tab.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
+      params: {
+        ...this.containerInfo.Config,
+        HostConfig: this.containerInfo.HostConfig
+      } as ContainerCreateBody
+    });
+  }
 }

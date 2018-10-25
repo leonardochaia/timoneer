@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy, ContentChild, TemplateRef, Input } from '@angular/core';
-import { Subject, Observable, throwError } from 'rxjs';
-import { takeUntil, take, catchError, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 import { NotificationService } from '../../shared/notification.service';
 import { ContainerInfo } from 'dockerode';
 import { DockerEventsService } from '../docker-events.service';
 import { DockerContainerService } from '../docker-container.service';
 import { ContainerMenuService } from '../container-menu.service';
-import { TabService } from '../../tabs/tab.service';
-import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
   selector: 'tim-container-list',
@@ -32,7 +30,6 @@ export class ContainerListComponent implements OnInit, OnDestroy {
   constructor(private containerService: DockerContainerService,
     private daemonEvents: DockerEventsService,
     private menuService: ContainerMenuService,
-    private tabService: TabService,
     private notificationService: NotificationService) { }
 
   public ngOnInit() {
@@ -60,14 +57,6 @@ export class ContainerListComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadingMap.set(container.Id, false);
       });
-  }
-
-  public getImageName(container: ContainerInfo) {
-    if (container.Image.startsWith('sha256:')) {
-      return container.Image.replace('sha256:', '').slice(0, 12);
-    } else {
-      return container.Image;
-    }
   }
 
   public getPortMappings(container: ContainerInfo) {
