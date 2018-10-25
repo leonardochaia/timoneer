@@ -34,7 +34,7 @@ export class ContainerListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
-    this.daemonEvents.bindAll(['destroy', 'start', 'stop', 'pause', 'unpause', 'restart', 'update'], 'container')
+    this.daemonEvents.bindAll(['create', 'destroy', 'start', 'stop', 'pause', 'unpause', 'restart', 'update'], 'container')
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(() => {
         this.reload();
