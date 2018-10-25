@@ -1,5 +1,52 @@
 <div fxLayout="column"
+     fxLayoutGap="16px"
+     *ngIf="job"
      style="padding: 16px; height:100%">
-  <tim-job-logs *ngIf="job"
-                [job]="job"></tim-job-logs>
+
+  <tim-job-logs [job]="job"></tim-job-logs>
+
+  <div *ngIf="job.status === JobStatus.Errored">
+    <mat-card fxLayout="row"
+              fxLayoutGap="8px">
+
+      <div fxFlex="grow"
+           *ngIf="autoRemove; else noAutoRemoveTemplate"
+           style="line-height: 36px;">
+        Fix the configuration and launch the container again
+      </div>
+
+      <ng-template #noAutoRemoveTemplate>
+        <div style="line-height: 36px;">
+          <mat-icon class="tim-text-warn tim-icon-36">warning</mat-icon>
+        </div>
+
+        <div fxFlex="grow"
+             style="line-height: 36px;">
+          <h3 class="tim-text-warn"
+              style="margin:0"></h3>
+          The container was not launched with Auto Remove.
+        </div>
+
+        <div>
+          <button type="button"
+                  mat-button
+                  (click)="deleteAndRetry()">
+            <mat-icon>delete</mat-icon>
+            Delete and retry
+          </button>
+        </div>
+      </ng-template>
+
+      <div>
+        <button type="button"
+                mat-raised-button
+                color="primary"
+                (click)="retry()">
+          <mat-icon>refresh</mat-icon>
+          Retry
+        </button>
+      </div>
+    </mat-card>
+
+  </div>
 </div>

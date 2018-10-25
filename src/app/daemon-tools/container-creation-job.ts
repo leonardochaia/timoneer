@@ -5,7 +5,7 @@ import { ContainerCreateBody, Container } from 'dockerode';
 import { DockerContainerService } from './docker-container.service';
 import { PullImageJobParams, PullImageJob } from './pull-image.job';
 import { DockerImageService } from './docker-image.service';
-import { throwError, from } from 'rxjs';
+import { throwError, from, Subject } from 'rxjs';
 
 export class ContainerCreationJobParams {
     constructor(public readonly creationData: ContainerCreateBody) { }
@@ -21,9 +21,15 @@ export class ContainerCreationJob extends JobDefinition<string> {
         }
     }
 
-    protected get creationData() {
+    public get creationData() {
         return this.params.creationData;
     }
+
+    public get containerCreated() {
+        return this.containerCreatedSubject.asObservable();
+    }
+
+    protected readonly containerCreatedSubject = new Subject<string>();
 
     constructor(protected params: ContainerCreationJobParams,
         protected imageService: DockerImageService,
@@ -46,6 +52,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
                                 percent: 80,
                                 message: `Starting container ${container.id}`
                             });
+                            this.containerCreatedSubject.next(container.id);
                             return from(container.start() as Promise<Container>);
                         })
                     );
@@ -100,7 +107,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
                         return throwError(error);
                     }
                 }),
-        );
+            );
 
     }
 

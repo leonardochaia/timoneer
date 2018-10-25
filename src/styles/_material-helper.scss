@@ -4,51 +4,68 @@
   width: 48px !important;
 }
 
+.tim-icon-36 {
+  font-size: 36px;
+  height: 36px !important;
+  width: 36px !important;
+}
+
 @mixin expose-material-theme-classes($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
+
   mat-card.cursor-pointer {
     &:hover {
       outline: 1px solid mat-color($primary);
     }
   }
+
   .tim-bg-primary {
     background-color: mat-color($primary);
     color: mat-color($foreground, text);
   }
+
   .tim-bg-accent {
     background-color: mat-color($accent);
     color: mat-color($foreground, text);
   }
+
   .tim-bg-warn {
     background-color: mat-color($warn);
     color: mat-color($foreground, text);
   }
+
   .tim-text-title,
   .tim-text-primary {
     color: mat-color($primary);
   }
+
   .tim-text-accent {
     color: mat-color($accent);
   }
+
   .tim-text-warn {
     color: mat-color($warn);
   }
+
   .tim-dialog-warn .mat-dialog-container {
     background-color: mat-color($warn);
     color: mat-color($foreground, text);
   }
+
   .tim-dialog-primary .mat-dialog-container {
     background-color: mat-color($primary);
     color: mat-color($foreground, text);
   }
+
   .tim-dialog-accent .mat-dialog-container {
     background-color: mat-color($accent);
     color: mat-color($foreground, text);
   }
+
   .tim-body-bg {
     background-color: mat-color($background, background);
     color: mat-color($foreground, text);
