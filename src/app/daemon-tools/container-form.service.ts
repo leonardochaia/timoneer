@@ -123,6 +123,16 @@ export class ContainerFormService {
     form.setControl('Cmd', this.fb.control(null));
     form.setControl('Tty', this.fb.control(data.Tty));
 
+    if (!data.HostConfig) {
+      form.setControl('HostConfig', this.fb.group({}));
+    }
+
+    // Setup some healthy deaults if not provided
+    if (!data.HostConfig
+      || typeof data.HostConfig.AutoRemove !== 'boolean') {
+      (form.get('HostConfig') as FormGroup).setControl('AutoRemove', this.fb.control(true));
+    }
+
     if (typeof data.Tty !== 'boolean') {
       form.get('Tty').setValue(true);
     }

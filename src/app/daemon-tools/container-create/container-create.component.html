@@ -71,7 +71,16 @@
       </mat-form-field>
 
       <mat-checkbox formControlName="Tty"
-                    style="margin-left:8px;">TTY</mat-checkbox>
+                    style="margin-left:8px;">
+        TTY
+      </mat-checkbox>
+
+      <ng-container formGroupName="HostConfig">
+        <mat-checkbox formControlName="AutoRemove"
+                      style="margin-left:8px;">
+          Auto Remove
+        </mat-checkbox>
+      </ng-container>
     </div>
     <div>
       <button mat-raised-button
@@ -85,3 +94,5 @@
   </mat-card>
 
 </form>
+
+<pre>{{form.value|json}}</pre>

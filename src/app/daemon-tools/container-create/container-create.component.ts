@@ -49,7 +49,6 @@ export class ContainerCreateComponent implements OnInit {
 
   public ngOnInit() {
     this.form = this.containerForm.createForm(this.initialConfig);
-    console.log(this.form.getRawValue());
     if (this.disableImage) {
       const imgCtrl = this.form.get('Image');
       imgCtrl.disable();
@@ -62,7 +61,6 @@ export class ContainerCreateComponent implements OnInit {
 
   public launch() {
     const data = this.containerForm.formToData(this.form);
-    console.log(data);
     const job = this.dockerJobs.createContainer(data);
     this.created.emit(job);
   }
