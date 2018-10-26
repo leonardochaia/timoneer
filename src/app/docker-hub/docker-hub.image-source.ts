@@ -1,9 +1,10 @@
 import { ImageSource, ImageListFilter, ImageListItemData } from '../docker-images/image-source.model';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of, combineLatest } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DockerHubService } from './docker-hub.service';
 import { map, switchMap } from 'rxjs/operators';
 import { SettingsService } from '../settings/settings.service';
+import { DockerImageService } from '../daemon-tools/docker-image.service';
 
 @Injectable()
 export class DockerHubImageSource extends ImageSource {
@@ -12,13 +13,19 @@ export class DockerHubImageSource extends ImageSource {
 
     constructor(
         private readonly settings: SettingsService,
+        private readonly dockerImages: DockerImageService,
         private readonly dockerHub: DockerHubService) {
         super();
     }
 
     public loadList(filter?: ImageListFilter): Observable<ImageListItemData[]> {
         filter = filter || {};
-        return this.settings.getDockerIOSettings()
+        const hubImages = this.dockerImages.searchDockerHub(filter.term || 'library')
+            .pipe(map(r => r.map(i => ({
+                name: i.name
+            } as ImageListItemData))));
+
+        const privateRepos = this.settings.getDockerIOSettings()
             .pipe(
                 switchMap(settings => {
                     if (settings && settings.username && settings.password) {
@@ -32,9 +39,14 @@ export class DockerHubImageSource extends ImageSource {
                                 ),
                             );
                     } else {
-                        return throwError('Docker Hub is not configured');
+                        return of([] as ImageListItemData[]);
+                        // return throwError('Docker Hub is not configured');
                     }
-                })
+                }),
             );
+        return of().pipe(
+            switchMap(() => combineLatest([hubImages, privateRepos])),
+            map(arr => [].concat.apply([], arr) as ImageListItemData[]),
+        );
     }
 }
