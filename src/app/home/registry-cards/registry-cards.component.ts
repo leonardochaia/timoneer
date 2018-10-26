@@ -31,7 +31,8 @@ export class RegistryCardsComponent implements OnInit, OnDestroy {
           .filter(r => r.allowsCatalog)
           .map(r => ({
             name: this.settingsService.getRegistryName(r),
-            url: r.url
+            url: r.url,
+            username: r.username
           }));
         this.loading = false;
       });

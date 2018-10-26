@@ -3,7 +3,10 @@
           fxLayoutAlign="start center"
           fxLayoutGap="8px"
           style="margin-bottom: 16px;">
-  <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
+
+  <div>
+    <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
+  </div>
 
   <div fxFlex="grow">
     <ng-container *ngIf="loading; else settingsTemplate">
@@ -14,25 +17,41 @@
         <span class="tim-text-title">
           Docker Hub is not Configured
         </span>
+        <br>
+        <small>
+          List private Docker Hub images
+        </small>
       </h2>
     </ng-template>
   </div>
-  <a fxFlex
-     mat-raised-button
-     (click)="openSettings()">
-    Configure
-  </a>
+
+  <div>
+    <a fxFlex
+       mat-raised-button
+       (click)="openSettings()">
+      Configure
+    </a>
+  </div>
 </mat-card>
 
 <ng-template #repoListTemplate>
-  <h2>
-    Docker Hub /{{hubSettings.username}}
-    <small>
-      <a (click)="openDockerHubList()"
-         style="float:right">
-        View all
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;">
+    <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+    <div fxFlex="grow">
+      <h2 style="margin: 0">
+        Docker Hub
+      </h2>
+      <small>{{hubSettings.username}}</small>
+    </div>
+
+    <div>
+      <a mat-raised-button
+         (click)="openDockerHubList()">
+        Images
       </a>
-    </small>
-  </h2>
-  <tim-docker-hub-repo-list amount="2"></tim-docker-hub-repo-list>
+    </div>
+  </mat-card>
 </ng-template>

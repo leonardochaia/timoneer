@@ -3,7 +3,9 @@
           fxLayoutGap="8px"
           *ngIf="loading || !registries.length"
           style="margin-bottom: 16px;">
-  <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+  <div>
+    <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+  </div>
   <div fxFlex="grow">
 
     <ng-container *ngIf="loading">
@@ -17,31 +19,39 @@
       </span>
       <br>
       <small>
-        You can add your custom registry so we can list your images.
+        List private registry images
       </small>
     </h2>
   </div>
 
-  <a fxFlex
-     *ngIf="!loading"
-     mat-raised-button
-     (click)="openSettings()">
-    Add
-  </a>
+  <div>
+    <a *ngIf="!loading"
+       mat-raised-button
+       (click)="openSettings()">
+      Add
+    </a>
+  </div>
 </mat-card>
 
 <ng-container *ngIf="registries && registries.length">
-  <div *ngFor="let registry of registries">
-    <h2>
-      {{registry.name}}
-      <small>
-        <a (click)="openRegistry(registry.name)"
-           style="float:right">
-          View all
-        </a>
-      </small>
-    </h2>
-    <tim-registry-list [registryUrl]="registry.url"
-                       [amount]="2"></tim-registry-list>
-  </div>
+  <mat-card fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            style="margin-bottom: 16px;"
+            *ngFor="let registry of registries">
+    <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+    <div fxFlex="grow">
+      <h2 style="margin: 0">
+        {{registry.name}}
+      </h2>
+      <small>{{registry.username}}</small>
+    </div>
+
+    <div>
+      <a mat-raised-button
+         (click)="openRegistry(registry.name)">
+        Images
+      </a>
+    </div>
+  </mat-card>
 </ng-container>
