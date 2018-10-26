@@ -23,4 +23,4 @@ import { SharedModule } from '../shared/shared.module';
     ManifestMetadataComponent,
   ]
 })
-export class DockerImagePreviewModule { }
+export class DockerImagesModule { }

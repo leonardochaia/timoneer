@@ -5,8 +5,8 @@ import { SettingsService } from '../../settings/settings.service';
 import { map } from 'rxjs/operators';
 import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
-import { ImagePreviewContainerComponentData } from '../../docker-image-preview/image-preview-container/image-preview-container.component';
 import { ContainerCreateBody } from 'dockerode';
+import { ImagePreviewContainerComponentData } from '../../docker-images/image-preview-container/image-preview-container.component';
 
 @Component({
   selector: 'tim-registry-list',
