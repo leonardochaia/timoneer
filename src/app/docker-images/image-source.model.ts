@@ -1,4 +1,4 @@
-import { Observable, of, observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
 
 export interface ImageListItemData {
@@ -21,7 +21,11 @@ export abstract class ImageSource {
 }
 
 export interface ImageSourceDeletion {
-    deleteImage(image: ImageListItemData): Observable<void>;
+    deleteImage?(image: ImageListItemData): Observable<void>;
+}
+
+export interface ImageSourceAuthenticated {
+    username?: string;
 }
 
 export abstract class ImageSourceMultiple {

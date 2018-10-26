@@ -1,14 +1,18 @@
-import { ImageSource, ImageListFilter, ImageListItemData } from '../docker-images/image-source.model';
-import { Observable, throwError, of, combineLatest } from 'rxjs';
+import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceAuthenticated } from '../docker-images/image-source.model';
+import { Observable, of, combineLatest } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DockerHubService } from './docker-hub.service';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { SettingsService } from '../settings/settings.service';
 import { DockerImageService } from '../daemon-tools/docker-image.service';
 
 @Injectable()
-export class DockerHubImageSource extends ImageSource {
+export class DockerHubImageSource
+    extends ImageSource
+    implements ImageSourceAuthenticated {
+
     public priority = 1;
+    public username = 'loading..';
     public readonly name = 'Docker Hub';
 
     constructor(
@@ -16,6 +20,11 @@ export class DockerHubImageSource extends ImageSource {
         private readonly dockerImages: DockerImageService,
         private readonly dockerHub: DockerHubService) {
         super();
+        this.settings.getDockerIOSettings()
+            .pipe(take(1))
+            .subscribe(config => {
+                this.username = config.username;
+            });
     }
 
     public loadList(filter?: ImageListFilter): Observable<ImageListItemData[]> {
@@ -45,7 +54,7 @@ export class DockerHubImageSource extends ImageSource {
                 }),
             );
         return of(filter).pipe(
-            switchMap(f => combineLatest([hubImages, privateRepos])),
+            switchMap(() => combineLatest([hubImages, privateRepos])),
             map(arr => [].concat.apply([], arr) as ImageListItemData[]),
         );
     }

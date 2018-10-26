@@ -1,4 +1,4 @@
-import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceMultiple } from '../docker-images/image-source.model';
+import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceMultiple, ImageSourceAuthenticated } from '../docker-images/image-source.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -25,17 +25,22 @@ export class RegistryImageSourceMultiple extends ImageSourceMultiple {
     }
 }
 
-export class RegistryImageSource extends ImageSource {
+export class RegistryImageSource
+    extends ImageSource
+    implements ImageSourceAuthenticated {
 
     public get name() {
         return this.settings.getRegistryName(this.registrySettings).replace('/', '');
     }
+
+    public readonly username;
 
     constructor(
         protected readonly registrySettings: DockerRegistrySettings,
         protected readonly registry: RegistryService,
         protected readonly settings: SettingsService) {
         super();
+        this.username = registrySettings.username;
     }
 
     public loadList(filter?: ImageListFilter): Observable<ImageListItemData[]> {

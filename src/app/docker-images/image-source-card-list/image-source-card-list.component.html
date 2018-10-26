@@ -1,0 +1,23 @@
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;"
+          *ngFor="let source of sources">
+  <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+  <div fxFlex="grow">
+    <h2 style="margin: 0">
+      {{source.name}}
+    </h2>
+    <small *ngIf="source.username">
+      {{source.username}}
+    </small>
+  </div>
+
+  <div>
+    <a mat-raised-button
+       color="primary"
+       (click)="openImageList(source)">
+      Images
+    </a>
+  </div>
+</mat-card>

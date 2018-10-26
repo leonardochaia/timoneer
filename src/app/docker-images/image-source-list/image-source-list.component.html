@@ -2,7 +2,6 @@
                (selectedTabChange)="onTabChanged($event)">
   <mat-tab *ngFor="let source of sources"
            [label]="getSourceLabel(source, imageList?.images?.length)">
-    <ng-content></ng-content>
     <div style="padding:16px 0;">
       <tim-image-list [source]="source"
                       #imageList

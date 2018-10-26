@@ -21,6 +21,7 @@ import { ImageSourceListContainerComponent } from './image-source-list-container
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ImageSourceMultiple, GlobalImageSources } from './image-source.model';
+import { ImageSourceCardListComponent } from './image-source-card-list/image-source-card-list.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,10 @@ import { ImageSourceMultiple, GlobalImageSources } from './image-source.model';
     ImageListComponent,
     ImageSourceListComponent,
     ImageSourceListContainerComponent,
+    ImageSourceCardListComponent,
+  ],
+  exports: [
+    ImageSourceCardListComponent
   ]
 })
 export class DockerImagesModule { }
