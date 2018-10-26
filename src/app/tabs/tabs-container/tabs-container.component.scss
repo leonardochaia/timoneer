@@ -1,21 +1,21 @@
-::ng-deep .mat-tab-header {
+::ng-deep .tim-main-tabs>.mat-tab-header {
   position: fixed !important;
   width: 100%;
   z-index: 12;
 }
 
-::ng-deep .mat-tab-body-wrapper {
+::ng-deep .tim-main-tabs>.mat-tab-body-wrapper {
   margin-top: 50px;
+
+  .mat-tab-body {
+    overflow-y: auto !important;
+  }
+
+  .mat-tab-body-content {
+    overflow-y: auto !important;
+  }
 }
 
 mat-tab-group {
   height: 100%;
-}
-
-::ng-deep .mat-tab-body {
-  overflow-y: auto !important;
-}
-
-::ng-deep .mat-tab-body-content {
-  overflow-y: auto !important;
 }

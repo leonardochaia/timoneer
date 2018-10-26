@@ -2,7 +2,8 @@
                [dynamicHeight]="true"
                (focusChange)="tabFocusChanged($event)"
                (animationDone)="animationDone()"
-               [@.disabled]="true">
+               [@.disabled]="true"
+               class="tim-main-tabs">
   <mat-tab *ngFor="let tab of tabs">
 
     <ng-template mat-tab-label>
