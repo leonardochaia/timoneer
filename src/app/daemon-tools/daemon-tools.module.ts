@@ -20,8 +20,6 @@ import {
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
-import { ImageListComponent } from './image-list/image-list.component';
-import { ImageListContainerComponent } from './image-list-container/image-list-container.component';
 import { NgObjectPipesModule } from 'angular-pipes';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContainerAttacherComponent } from './container-attacher/container-attacher.component';
@@ -88,13 +86,11 @@ import { DockerDaemonImageSource } from './docker-daemon.image-source';
   ],
   declarations: [
     ContainerListComponent,
-    ImageListComponent,
     ContainerAttacherComponent,
     ImageSelectorCardComponent,
     ContainerCreateComponent,
     ContainerCreatePortMappingComponent,
     ContainerCreateVolumeMappingComponent,
-    ImageListContainerComponent,
     ContainerAttacherContainerComponent,
     ContainerExecContainerComponent,
     ContainerCreateContainerComponent,
@@ -113,8 +109,6 @@ import { DockerDaemonImageSource } from './docker-daemon.image-source';
   ],
   exports: [
     ContainerListComponent,
-    ImageListComponent,
-    ImageListContainerComponent,
     ContainerAttacherComponent,
     ContainerAttacherContainerComponent,
     ContainerCreateComponent,
