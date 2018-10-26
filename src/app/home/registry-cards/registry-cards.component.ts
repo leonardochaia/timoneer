@@ -14,7 +14,7 @@ export class RegistryCardsComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
 
-  public registries: { name: string, url: string }[];
+  public registries: { name: string, url: string, username: string }[];
   private componetDestroyed = new Subject();
 
   constructor(private settingsService: SettingsService,
