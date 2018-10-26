@@ -44,8 +44,8 @@ export class DockerHubImageSource extends ImageSource {
                     }
                 }),
             );
-        return of().pipe(
-            switchMap(() => combineLatest([hubImages, privateRepos])),
+        return of(filter).pipe(
+            switchMap(f => combineLatest([hubImages, privateRepos])),
             map(arr => [].concat.apply([], arr) as ImageListItemData[]),
         );
     }

@@ -1,6 +1,7 @@
 <div style="padding:16px;">
 
-  <mat-card fxLayout="row">
+  <mat-card fxLayout="row"
+            fxLayoutGap="8px">
     <div>
       <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
     </div>
@@ -14,18 +15,16 @@
         </mat-form-field>
       </form>
     </div>
-  </mat-card>
-
-  <tim-image-source-list (sourceChanged)="sourceChanged($event)"
-                         [filterForm]="filterForm">
-
-    <div *ngIf="currentSource && currentSource.name === 'Docker Daemon'"
-         style="padding:16px 0; text-align: right"
+    <div style="padding-top:16px; text-align: right"
          [formGroup]="filterForm">
 
       <mat-checkbox formControlName="displayDanglingImages">
         Show Dangling Images
       </mat-checkbox>
     </div>
+  </mat-card>
+
+  <tim-image-source-list (sourceChanged)="sourceChanged($event)"
+                         [filterForm]="filterForm">
   </tim-image-source-list>
 </div>

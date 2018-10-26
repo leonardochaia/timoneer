@@ -4,6 +4,7 @@ import { ImageSource, ImageListFilter } from '../image-source.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'tim-image-source-list',
@@ -29,7 +30,6 @@ export class ImageSourceListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(sources => {
         this.sources = sources;
-        this.onTabChanged(0);
       });
   }
 
@@ -41,8 +41,8 @@ export class ImageSourceListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onTabChanged(index: number) {
-    this.sourceChanged.emit(this.sources[index]);
+  public onTabChanged(event: MatTabChangeEvent) {
+    this.sourceChanged.emit(this.sources[event.index]);
   }
 
   public ngOnDestroy() {
