@@ -5,13 +5,11 @@ import { SystemContainerComponent } from './daemon-tools/system-container/system
 import {
   ApplicationListContainerComponent
 } from './application-templates/application-list-container/application-list-container.component';
-import { ImageListContainerComponent } from './daemon-tools/image-list-container/image-list-container.component';
 import { SettingsContainerComponent } from './settings/settings-container/settings-container.component';
 import {
   ApplicationLaunchContainerComponent
 } from './application-templates/application-launch-container/application-launch-container.component';
 import { ContainerCreateContainerComponent } from './daemon-tools/container-create-container/container-create-container.component';
-import { RegistryListContainerComponent } from './registry/registry-list-container/registry-list-container.component';
 import { HomeContainerComponent } from './home/home-container/home-container.component';
 import { TimoneerTabs } from './timoneer-tabs';
 import { VolumeListContainerComponent } from './daemon-tools/volume-list-container/volume-list-container.component';
@@ -29,9 +27,9 @@ import {
   ApplicationEditListContainerComponent
 } from './application-templates/application-edit-list-container/application-edit-list-container.component';
 import { ContainerLogsContainerComponent } from './daemon-tools/container-logs-container/container-logs-container.component';
-import { DockerHubRepoListContainerComponent } from './docker-hub/docker-hub-repo-list-container/docker-hub-repo-list-container.component';
 import { ImagePreviewContainerComponent } from './docker-images/image-preview-container/image-preview-container.component';
 import { DockerImagesModule } from './docker-images/docker-image.module';
+import { ImageSourceListContainerComponent } from './docker-images/image-source-list-container/image-source-list-container.component';
 
 const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
@@ -54,7 +52,7 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
     id: TimoneerTabs.DOCKER_IMAGES,
     title: 'Images',
-    component: ImageListContainerComponent,
+    component: ImageSourceListContainerComponent,
   },
   {
     id: TimoneerTabs.DOCKER_CONTAINER_LIST,
@@ -94,14 +92,6 @@ const TIMONEER_AVAILABLE_TABS: TabConfiguration[] = [
   {
     id: TimoneerTabs.APPLICATION_LAUNCH,
     component: ApplicationLaunchContainerComponent,
-  },
-  {
-    id: TimoneerTabs.REGISTRY_IMAGES,
-    component: RegistryListContainerComponent,
-  },
-  {
-    id: TimoneerTabs.DOCKERHUB_IMAGES,
-    component: DockerHubRepoListContainerComponent,
   },
   {
     id: TimoneerTabs.IMAGE_PREVIEW,

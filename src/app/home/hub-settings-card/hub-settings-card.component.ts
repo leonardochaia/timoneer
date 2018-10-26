@@ -34,8 +34,6 @@ export class HubSettingsCardComponent implements OnInit {
   }
 
   public openDockerHubList() {
-    this.tabService.add(TimoneerTabs.DOCKERHUB_IMAGES, {
-      title: `Docker Hub /${this.hubSettings.username}`
-    });
+    this.tabService.add(TimoneerTabs.DOCKER_IMAGES);
   }
 }

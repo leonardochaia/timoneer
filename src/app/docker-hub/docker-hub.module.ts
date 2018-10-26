@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DockerHubRepoListComponent } from './docker-hub-repo-list/docker-hub-repo-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule, MatIconModule, MatButtonModule } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { DockerHubRepoListContainerComponent } from './docker-hub-repo-list-container/docker-hub-repo-list-container.component';
+import { ImageSource } from '../docker-images/image-source.model';
+import { DockerHubImageSource } from './docker-hub.image-source';
 
 @NgModule({
   imports: [
@@ -17,15 +17,14 @@ import { DockerHubRepoListContainerComponent } from './docker-hub-repo-list-cont
     MatButtonModule,
     FlexLayoutModule,
 
-    SharedModule,
-
+    SharedModule
   ],
-  declarations: [
-    DockerHubRepoListComponent,
-    DockerHubRepoListContainerComponent
-  ],
-  exports: [
-    DockerHubRepoListComponent
+  providers: [
+    {
+      provide: ImageSource,
+      useClass: DockerHubImageSource,
+      multi: true
+    }
   ]
 })
 export class DockerHubModule { }

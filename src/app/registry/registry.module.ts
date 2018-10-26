@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { RegistryListComponent } from './registry-list/registry-list.component';
 import { MatIconModule, MatCardModule, MatButtonModule } from '@angular/material';
 import { SettingsModule } from '../settings/settings.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
-import { RegistryListContainerComponent } from './registry-list-container/registry-list-container.component';
+import { ImageSourceMultiple } from '../docker-images/image-source.model';
+import { RegistryImageSourceMultiple } from './registry.image-source';
 
 @NgModule({
   imports: [
@@ -21,12 +21,16 @@ import { RegistryListContainerComponent } from './registry-list-container/regist
     SharedModule,
     SettingsModule,
   ],
+  providers: [
+    {
+      provide: ImageSourceMultiple,
+      useClass: RegistryImageSourceMultiple,
+      multi: true,
+    }
+  ],
   declarations: [
-    RegistryListComponent,
-    RegistryListContainerComponent
   ],
   exports: [
-    RegistryListComponent
   ],
 })
 export class RegistryModule { }

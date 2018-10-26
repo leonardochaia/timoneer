@@ -1,0 +1,31 @@
+<div style="padding:16px;">
+
+  <mat-card fxLayout="row">
+    <div>
+      <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+    </div>
+    <div fxFlex="grow">
+      <form [formGroup]="filterForm">
+        <mat-form-field style="width: 99%">
+          <input type="search"
+                 placeholder="Type to search.."
+                 formControlName="term"
+                 matInput>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-card>
+
+  <tim-image-source-list (sourceChanged)="sourceChanged($event)"
+                         [filterForm]="filterForm">
+
+    <div *ngIf="currentSource && currentSource.name === 'Docker Daemon'"
+         style="padding:16px 0; text-align: right"
+         [formGroup]="filterForm">
+
+      <mat-checkbox formControlName="displayDanglingImages">
+        Show Dangling Images
+      </mat-checkbox>
+    </div>
+  </tim-image-source-list>
+</div>

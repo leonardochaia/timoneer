@@ -52,6 +52,8 @@ import { ContainerInspectCardsComponent } from './container-inspect-cards/contai
 import { ContainerLogsContainerComponent } from './container-logs-container/container-logs-container.component';
 import { ContainerActionButtonsComponent } from './container-action-buttons/container-action-buttons.component';
 import { ContainerHeaderCardComponent } from './container-header-card/container-header-card.component';
+import { ImageSource } from '../docker-images/image-source.model';
+import { DockerDaemonImageSource } from './docker-daemon.image-source';
 
 @NgModule({
   imports: [
@@ -125,6 +127,11 @@ import { ContainerHeaderCardComponent } from './container-header-card/container-
     DockerSystemService,
     DockerContainerService,
     DockerVolumeService,
+    {
+      provide: ImageSource,
+      useClass: DockerDaemonImageSource,
+      multi: true
+    }
   ],
   entryComponents: [
     PullImageJobLogsComponent,

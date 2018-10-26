@@ -1,0 +1,56 @@
+<tim-loading *ngIf="loading"></tim-loading>
+<mat-card *ngIf="error"
+          class="tim-bg-warn">
+  {{error}}
+</mat-card>
+<mat-card *ngFor="let image of images">
+  <div fxLayout="row"
+       fxLayoutAlign="start center"
+       fxLayoutGap="8px">
+    <div>
+      <mat-icon class="tim-text-primary tim-icon-48">iso</mat-icon>
+    </div>
+
+    <div fxFlex="grow">
+      <h2 style="margin-bottom: 0">
+        {{image.displayName || image.name}}
+        <br>
+        <code>{{image.id | slice:7:19}}</code>
+      </h2>
+    </div>
+
+    <div class="text-nowrap"
+         *ngIf="image.size">
+      <b>{{image.size | bytesToHuman}}</b>
+    </div>
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutGap="8px">
+    <div>
+      <a mat-raised-button
+         (click)="imageInfo(image)">
+        <mat-icon>find_in_page</mat-icon>
+        Inspect
+      </a>
+    </div>
+    <div>
+      <button type="button"
+              (click)="createContainer(image)"
+              mat-raised-button
+              color="primary">
+        <mat-icon>add_to_queue</mat-icon>
+        Create Container
+      </button>
+    </div>
+    <div fxFlex="grow"></div>
+    <div *ngIf="source.deleteImage">
+      <button type="button"
+              (click)="deleteImage(image)"
+              mat-raised-button>
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </div>
+  </div>
+</mat-card>

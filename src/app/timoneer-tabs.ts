@@ -13,8 +13,6 @@ export class TimoneerTabs {
     public static APPLICATION_LIST = 'application-list';
     public static APPLICATION_EDIT_LIST = 'application-edit-list';
     public static APPLICATION_LAUNCH = 'application-launch';
-    public static REGISTRY_IMAGES = 'registry-images';
-    public static DOCKERHUB_IMAGES = 'dockerhub-images';
     public static IMAGE_PREVIEW = 'image-preview';
     public static SETTINGS = 'settings';
 }

@@ -17,3 +17,9 @@ export interface DockerRegistrySettings {
     editable: boolean;
     allowsCatalog: boolean;
 }
+
+export interface ImageConfig {
+    registry: DockerRegistrySettings;
+    repository: string;
+    tag: string;
+}

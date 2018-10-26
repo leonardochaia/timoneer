@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApplicationSettings, DockerRegistrySettings, DockerClientSettings } from './settings.model';
-import { of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ElectronService } from '../electron-tools/electron.service';
 
@@ -110,7 +110,7 @@ export class SettingsService {
   public getRegistrySettingsForName(name: string) {
     return this.getSettings()
       .pipe(
-        map(settings => settings.registries.filter(x => x.url && x.url.includes(name))[0])
+        map(settings => settings.registries.find(x => x.url && x.url.includes(name)))
       );
   }
 
@@ -152,6 +152,68 @@ export class SettingsService {
       tlsVerify: process.env.DOCKER_TLS_VERIFY === '1',
       certPath: process.env.DOCKER_CERT_PATH,
     };
+  }
+
+  public getImageConfig(image: string) {
+    const registryName = this.getNamespaceOrRegistry(image);
+    let registry: Observable<DockerRegistrySettings> = of(null);
+
+    if (registryName) {
+      registry = this.getRegistrySettingsForName(registryName);
+    }
+
+    let repo: string;
+    return registry
+      .pipe(
+        switchMap(reg => {
+          if (reg) {
+            repo = image.replace(this.getRegistryName(reg), '');
+            return of(reg);
+          } else {
+            if (!image.includes('/')) {
+              repo = 'library/' + image;
+            } else {
+              repo = image;
+            }
+            return this.getDockerIOSettings();
+          }
+        }),
+        map(r => {
+          let tag = 'latest';
+          if (repo.includes(':')) {
+            const split = repo.split(':');
+            repo = split[0];
+            tag = split[1];
+          }
+          return {
+            registry: r,
+            repository: repo,
+            tag: tag
+          };
+        }));
+  }
+
+  protected getRepository(image: string) {
+    if (image.includes('/')) {
+      return image.slice(image.lastIndexOf('/'));
+    }
+
+    return image;
+  }
+
+  protected getNamespaceOrRegistry(image: string) {
+    if (image.includes('/')) {
+      return image.slice(0, image.indexOf('/'));
+    }
+    return null;
+  }
+
+  protected getTag(image: string) {
+    if (image.includes(':')) {
+      return image.split(':')[1];
+    } else {
+      return 'latest';
+    }
   }
 
   private ensureEndingSlash(str: string) {

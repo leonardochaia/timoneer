@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { Subject, combineLatest } from 'rxjs';
 import { DockerEvent } from 'dockerode';
-import { switchMap, takeUntil, startWith, throttle, throttleTime } from 'rxjs/operators';
+import { switchMap, takeUntil, startWith, throttle, throttleTime, debounceTime } from 'rxjs/operators';
 import { DockerService } from './docker.service';
 import { streamToObservable } from './stream-to-observable';
 import { ElectronService } from '../electron-tools/electron.service';
@@ -50,7 +50,7 @@ export class DockerEventsService implements OnDestroy {
       const subject = new Subject<DockerEvent>();
       this.events.set(event, subject);
       return subject.asObservable()
-        .pipe(throttleTime(500));
+        .pipe(debounceTime(250));
     }
   }
 

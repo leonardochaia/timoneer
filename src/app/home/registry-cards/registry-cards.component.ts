@@ -43,10 +43,7 @@ export class RegistryCardsComponent implements OnInit, OnDestroy {
   }
 
   public openRegistry(registry: string) {
-    this.tabService.add(TimoneerTabs.REGISTRY_IMAGES, {
-      title: registry,
-      params: registry
-    });
+    this.tabService.add(TimoneerTabs.DOCKER_IMAGES);
   }
 
   public ngOnDestroy() {
