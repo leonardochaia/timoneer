@@ -25,6 +25,7 @@
   </mat-card>
 
   <tim-image-source-list (sourceChanged)="sourceChanged($event)"
+                         [initialSource]="initialSource"
                          [filterForm]="filterForm">
   </tim-image-source-list>
 </div>

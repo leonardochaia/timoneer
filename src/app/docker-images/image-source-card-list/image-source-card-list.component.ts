@@ -32,6 +32,10 @@ export class ImageSourceCardListComponent implements OnInit {
   }
 
   public openImageList(source: ImageSource) {
-    this.tab.add(TimoneerTabs.DOCKER_IMAGES);
+    this.tab.add(TimoneerTabs.DOCKER_IMAGES, {
+      params: {
+        name: source.name
+      }
+    });
   }
 }

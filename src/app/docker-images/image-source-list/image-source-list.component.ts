@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Output, Input } from '@angular/core';
 import { ImageSourceService } from '../image-source.service';
-import { ImageSource, ImageListFilter } from '../image-source.model';
+import { ImageSource } from '../image-source.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
@@ -14,12 +14,17 @@ import { MatTabChangeEvent } from '@angular/material';
 export class ImageSourceListComponent implements OnInit, OnDestroy {
 
   @Input()
+  public initialSource: string;
+
+  @Input()
   public filterForm: FormGroup;
 
   @Output()
   public sourceChanged = new EventEmitter<ImageSource>();
 
   public sources: ImageSource[];
+
+  public initialIndex: number;
 
   protected readonly componetDestroyed = new Subject();
 
@@ -30,6 +35,11 @@ export class ImageSourceListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(sources => {
         this.sources = sources;
+        if (this.initialSource) {
+          this.initialIndex = this.sources.findIndex(s => s.name === this.initialSource);
+        } else {
+          this.initialIndex = 0;
+        }
       });
   }
 
