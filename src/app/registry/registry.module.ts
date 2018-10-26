@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
 import { ImageSourceMultiple } from '../docker-images/image-source.model';
 import { RegistryImageSourceMultiple } from './registry.image-source';
+import { RegistryConfigStatusComponent } from './registry-config-status/registry-config-status.component';
 
 @NgModule({
   imports: [
@@ -29,8 +30,9 @@ import { RegistryImageSourceMultiple } from './registry.image-source';
     }
   ],
   declarations: [
-  ],
+    RegistryConfigStatusComponent],
   exports: [
+    RegistryConfigStatusComponent
   ],
 })
 export class RegistryModule { }

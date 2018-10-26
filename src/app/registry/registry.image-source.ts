@@ -1,4 +1,10 @@
-import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceMultiple, ImageSourceAuthenticated } from '../docker-images/image-source.model';
+import {
+    ImageSource,
+    ImageListFilter,
+    ImageListItemData,
+    ImageSourceMultiple,
+    ImageSourceAuthenticated
+} from '../docker-images/image-source.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';

@@ -1,0 +1,35 @@
+<mat-card *ngIf="!valid"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;">
+  <div>
+    <mat-icon class="tim-icon-48 tim-text-primary">settings</mat-icon>
+  </div>
+
+  <div fxFlex="grow">
+    <ng-container *ngIf="loading; else settingsTemplate">
+      <div>
+        <tim-loading></tim-loading>
+      </div>
+    </ng-container>
+    <ng-template #settingsTemplate>
+      <h2 style="margin: 0">
+        <span class="tim-text-title">
+          Docker Hub is not Configured
+        </span>
+      </h2>
+      <small>
+        List private Docker Hub images
+      </small>
+    </ng-template>
+  </div>
+
+  <div>
+    <a fxFlex
+       mat-raised-button
+       (click)="openSettings()">
+      Configure
+    </a>
+  </div>
+</mat-card>

@@ -1,39 +1,31 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
 import { SettingsService } from '../../settings/settings.service';
 import { TabService } from '../../tabs/tab.service';
-import { TimoneerTabs } from '../../timoneer-tabs';
-import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
-  selector: 'tim-registry-cards',
-  templateUrl: './registry-cards.component.html',
-  styleUrls: ['./registry-cards.component.scss']
+  selector: 'tim-registry-config-status',
+  templateUrl: './registry-config-status.component.html',
+  styleUrls: ['./registry-config-status.component.scss']
 })
-export class RegistryCardsComponent implements OnInit, OnDestroy {
+export class RegistryConfigStatusComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
+  public valid: boolean;
 
-  public registries: { name: string, url: string, username: string }[];
   private componetDestroyed = new Subject();
 
   constructor(private settingsService: SettingsService,
     private tabService: TabService) { }
 
   public ngOnInit() {
-
-    this.registries = [];
     this.loading = true;
     this.settingsService.getSettings()
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(settings => {
-        this.registries = settings.registries
-          .filter(r => r.allowsCatalog)
-          .map(r => ({
-            name: this.settingsService.getRegistryName(r),
-            url: r.url,
-            username: r.username
-          }));
+        this.valid = settings.registries.length > 1;
         this.loading = false;
       });
   }

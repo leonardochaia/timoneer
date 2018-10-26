@@ -1,0 +1,32 @@
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          *ngIf="!valid"
+          style="margin-bottom: 16px;">
+  <div>
+    <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+  </div>
+
+  <div fxFlex="grow">
+    <ng-container *ngIf="loading">
+      <tim-loading></tim-loading>
+    </ng-container>
+
+    <h2 style="margin: 0">
+      <span class="tim-text-title">
+        Add Registries
+      </span>
+    </h2>
+    <small>
+      List private registry images
+    </small>
+  </div>
+
+  <div>
+    <a *ngIf="!loading"
+       mat-raised-button
+       (click)="openSettings()">
+      Add
+    </a>
+  </div>
+</mat-card>

@@ -5,11 +5,11 @@ import { TabService } from '../../tabs/tab.service';
 import { TimoneerTabs } from '../../timoneer-tabs';
 
 @Component({
-  selector: 'tim-hub-settings-card',
-  templateUrl: './hub-settings-card.component.html',
-  styleUrls: ['./hub-settings-card.component.scss']
+  selector: 'tim-docker-hub-config-status',
+  templateUrl: './docker-hub-config-status.component.html',
+  styleUrls: ['./docker-hub-config-status.component.scss']
 })
-export class HubSettingsCardComponent implements OnInit {
+export class DockerHubConfigStatusComponent implements OnInit {
   public hubSettings: DockerRegistrySettings;
 
   public valid: boolean;
@@ -31,9 +31,5 @@ export class HubSettingsCardComponent implements OnInit {
 
   public openSettings() {
     this.tabService.add(TimoneerTabs.SETTINGS);
-  }
-
-  public openDockerHubList() {
-    this.tabService.add(TimoneerTabs.DOCKER_IMAGES);
   }
 }

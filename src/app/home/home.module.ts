@@ -7,9 +7,8 @@ import { MatButtonModule, MatIconModule, MatCardModule } from '@angular/material
 import { ApplicationTemplatesModule } from '../application-templates/application-templates.module';
 import { DaemonStatusCardComponent } from './daemon-status-card/daemon-status-card.component';
 import { SharedModule } from '../shared/shared.module';
-import { HubSettingsCardComponent } from './hub-settings-card/hub-settings-card.component';
-import { RegistryCardsComponent } from './registry-cards/registry-cards.component';
 import { DockerHubModule } from '../docker-hub/docker-hub.module';
+import { DockerImagesModule } from '../docker-images/docker-image.module';
 
 @NgModule({
   imports: [
@@ -23,13 +22,12 @@ import { DockerHubModule } from '../docker-hub/docker-hub.module';
     RegistryModule,
     ApplicationTemplatesModule,
     DockerHubModule,
+    DockerImagesModule,
     SharedModule,
   ],
   declarations: [
     HomeContainerComponent,
     DaemonStatusCardComponent,
-    HubSettingsCardComponent,
-    RegistryCardsComponent
   ]
 })
 export class HomeModule { }
