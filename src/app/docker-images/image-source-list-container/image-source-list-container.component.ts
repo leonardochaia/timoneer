@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Optional } from '@angular/core';
 import { ImageSource } from '../image-source.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class ImageSourceListContainerComponent implements OnInit, OnDestroy {
   });
 
   public get initialSource() {
-    return this.tabData.name;
+    return this.tabData ? this.tabData.name : null;
   }
 
   protected readonly componetDestroyed = new Subject();
@@ -28,6 +28,7 @@ export class ImageSourceListContainerComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     @Inject(TAB_DATA)
+    @Optional()
     private tabData: { name: string }) { }
 
   public ngOnInit() {
