@@ -72,7 +72,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   public deleteImage(image: ImageListItemData) {
-    this.source.deleteImage(image)
+    this.source.deleteImage(image.id || image.name)
       .subscribe(() => {
         this.notification.open(`${image.name} has been removed.`);
       }, e => {

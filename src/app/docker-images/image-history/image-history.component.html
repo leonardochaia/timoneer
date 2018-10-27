@@ -1,13 +1,19 @@
-<mat-card *ngFor="let row of history"
-          style="position:relative">
-  <code *ngFor="let cmd of row.container_config.Cmd">
+<ng-template #loadingTemplate>
+  <tim-loading></tim-loading>
+</ng-template>
+
+<ng-container *ngIf="!loading; else loadingTemplate">
+  <mat-card *ngFor="let row of history"
+            style="position:relative">
+    <code *ngFor="let cmd of row.container_config.Cmd">
     {{getCommand(cmd)}}
   </code>
 
-  <div style="position: absolute; bottom: 2px; right: 4px;">
-    <small>
-      {{row.os}} {{row.architecture}}
-      {{row.created|date:'short'}}
-    </small>
-  </div>
-</mat-card>
+    <div style="position: absolute; bottom: 2px; right: 4px;">
+      <small>
+        {{row.os}} {{row.architecture}}
+        {{row.created|date:'short'}}
+      </small>
+    </div>
+  </mat-card>
+</ng-container>

@@ -1,18 +1,10 @@
-<ng-template #loadingTemplate>
-  <tim-loading></tim-loading>
-</ng-template>
+<div style="padding:16px;">
 
-<div fxLayout="column"
-     *ngIf="!loading; else loadingTemplate"
-     style="padding:16px;">
+  <tim-image-info-cards [image]="image"></tim-image-info-cards>
 
-  <div *ngIf="manifest">
-    <tim-manifest-metadata [manifest]="manifest"></tim-manifest-metadata>
+  <h2 style="text-align: center">
+    History
+  </h2>
 
-    <h2 style="text-align: center">
-      History
-    </h2>
-
-    <tim-image-history [manifest]="manifest"></tim-image-history>
-  </div>
+  <tim-image-history [image]="image"></tim-image-history>
 </div>

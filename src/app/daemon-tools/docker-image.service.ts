@@ -76,4 +76,8 @@ export class DockerImageService {
   public removeImage(image: string) {
     return this.daemon.docker(d => d.getImage(encodeURI(image)).remove());
   }
+
+  public getHistory(image: string) {
+    return this.daemon.docker(d => d.getImage(encodeURI(image)).history());
+  }
 }

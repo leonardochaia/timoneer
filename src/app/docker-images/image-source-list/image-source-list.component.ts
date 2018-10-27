@@ -31,7 +31,7 @@ export class ImageSourceListComponent implements OnInit, OnDestroy {
   constructor(private readonly imageSource: ImageSourceService) { }
 
   public ngOnInit() {
-    return this.imageSource.loadSources()
+    return this.imageSource.sources
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(sources => {
         this.sources = sources;

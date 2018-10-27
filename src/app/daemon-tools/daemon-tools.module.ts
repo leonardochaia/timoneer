@@ -26,7 +26,6 @@ import { ContainerAttacherComponent } from './container-attacher/container-attac
 import { ContainerAttacherContainerComponent } from './container-attacher-container/container-attacher-container.component';
 import { ContainerExecContainerComponent } from './container-exec-container/container-exec-container.component';
 import { ContainerCreateComponent } from './container-create/container-create.component';
-import { ImageSelectorCardComponent } from './image-selector-card/image-selector-card.component';
 import { ContainerCreateContainerComponent } from './container-create-container/container-create-container.component';
 import { DockerService } from './docker.service';
 import { DockerEventsService } from './docker-events.service';
@@ -52,6 +51,7 @@ import { ContainerActionButtonsComponent } from './container-action-buttons/cont
 import { ContainerHeaderCardComponent } from './container-header-card/container-header-card.component';
 import { ImageSource } from '../docker-images/image-source.model';
 import { DockerDaemonImageSource } from './docker-daemon.image-source';
+import { DockerImagesModule } from '../docker-images/docker-image.module';
 
 @NgModule({
   imports: [
@@ -81,13 +81,13 @@ import { DockerDaemonImageSource } from './docker-daemon.image-source';
     TimDialogModule,
     SettingsModule,
     JobsModule,
+    DockerImagesModule,
 
     NgObjectPipesModule,
   ],
   declarations: [
     ContainerListComponent,
     ContainerAttacherComponent,
-    ImageSelectorCardComponent,
     ContainerCreateComponent,
     ContainerCreatePortMappingComponent,
     ContainerCreateVolumeMappingComponent,
@@ -112,7 +112,6 @@ import { DockerDaemonImageSource } from './docker-daemon.image-source';
     ContainerAttacherComponent,
     ContainerAttacherContainerComponent,
     ContainerCreateComponent,
-    ImageSelectorCardComponent,
   ],
   providers: [
     DockerService,

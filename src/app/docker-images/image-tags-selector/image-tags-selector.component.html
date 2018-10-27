@@ -1,0 +1,20 @@
+<mat-chip-list multiple="false"
+               *ngIf="truncatedTags">
+
+  <mat-chip *ngFor="let tag of truncatedTags"
+            (click)="tagSelected(tag)"
+            [ngClass]="{'tim-bg-primary': selectedTag === tag}">{{tag}}</mat-chip>
+
+  <mat-chip class="tim-bg-accent"
+            *ngIf="truncatedTags && truncatedTags.length != allTags.length">
+    View {{allTags.length - truncatedTags.length}} more
+  </mat-chip>
+
+  <mat-chip class="tim-bg-accent"
+            title="Loading tags.."
+            *ngIf="loading">
+    ...
+  </mat-chip>
+  <span *ngIf="error"
+        class="tim-text-warn">{{error}}</span>
+</mat-chip-list>

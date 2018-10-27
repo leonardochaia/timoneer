@@ -1,22 +1,42 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ImageManifest, ImageLayerHistoryV1Compatibility } from '../../registry/registry.model';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { ImageLayerHistoryV1Compatibility } from '../../registry/registry.model';
+import { Subject } from 'rxjs';
+import { ImageSourceService } from '../image-source.service';
+import { takeUntil, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'tim-image-history',
   templateUrl: './image-history.component.html',
   styleUrls: ['./image-history.component.scss']
 })
-export class ImageHistoryComponent implements OnInit {
+export class ImageHistoryComponent implements OnInit, OnDestroy {
 
   @Input()
-  public manifest: ImageManifest;
+  public image: string;
 
   public history: ImageLayerHistoryV1Compatibility[];
+  public loading: boolean;
 
-  constructor() { }
+  protected readonly componetDestroyed = new Subject();
+
+  constructor(private readonly imageSource: ImageSourceService) { }
 
   public ngOnInit() {
-    this.history = this.manifest.history.map(h => JSON.parse(h.v1Compatibility) as ImageLayerHistoryV1Compatibility);
+    this.loading = true;
+    this.imageSource.getForImage(this.image)
+      .pipe(
+        takeUntil(this.componetDestroyed),
+        switchMap(source => source.loadImageHistory(this.image))
+      )
+      .subscribe(history => {
+        this.loading = false;
+        this.history = history;
+      });
+  }
+
+  public ngOnDestroy() {
+    this.componetDestroyed.next();
+    this.componetDestroyed.unsubscribe();
   }
 
   public getCommand(cmd: string) {

@@ -1,0 +1,72 @@
+<!-- Image Data -->
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;">
+  <mat-icon class="tim-icon-48 tim-text-primary">iso</mat-icon>
+  <div fxFlex="fill">
+    <ng-content></ng-content>
+    <ng-template #disabledTemplate>
+      <h2 style="margin: 0"
+          class="tim-text-title">
+        {{imageSelectControl.value}}
+      </h2>
+    </ng-template>
+    <mat-form-field style="width:100%"
+                    *ngIf="!disabled; else disabledTemplate">
+      <input type="text"
+             matInput
+             autocomplete="off"
+             placeholder="Select a Repository"
+             [formControl]="imageSelectControl"
+             [matAutocomplete]="autoGroup"
+             #trigger="matAutocompleteTrigger"
+             (click)="trigger.openPanel()">
+      <mat-autocomplete #autoGroup="matAutocomplete"
+                        [displayWith]="optionToDisplayName"
+                        (optionSelected)="imageSelected($event)"
+                        (closed)="onSelectClosed()">
+
+        <mat-optgroup *ngFor="let item of currentSelectItems"
+                      [label]="item.source.name">
+
+          <mat-option *ngFor="let image of item.images"
+                      [value]="image.name">
+            {{image.displayName || image.name}}
+          </mat-option>
+
+          <mat-option *ngIf="item.loading"
+                      disabled>
+            Loading...
+          </mat-option>
+          <mat-option *ngIf="item.error"
+                      disabled>
+            <span class="tim-text-warn">{{item.error}}</span>
+          </mat-option>
+
+        </mat-optgroup>
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+    <div style="margin-bottom: 6px">
+      <tim-image-tags-selector [formControl]="tagControl"
+                               [repository]="currentImage">
+      </tim-image-tags-selector>
+    </div>
+    <div *ngIf="currentImage && !checkingImageExistance && !imageExistsOnDaemon"
+         style="position: absolute;right: 6px;bottom: 4px;">
+      Image does not exist on daemon
+    </div>
+
+  </div>
+  <div *ngIf="imageSelectControl.valid">
+    <button matSuffix
+            mat-raised-button
+            (click)="pullImage()"
+            type="button"
+            color="primary">
+      Pull
+    </button>
+  </div>
+</mat-card>

@@ -21,7 +21,7 @@ export class ImageSourceCardListComponent implements OnInit {
     private readonly tab: TabService) { }
 
   public ngOnInit() {
-    this.imageSource.loadSources()
+    this.imageSource.sources
       .subscribe(sources => {
         if (typeof this.minPriority === 'number') {
           this.sources = sources.filter(s => s.priority > this.minPriority);

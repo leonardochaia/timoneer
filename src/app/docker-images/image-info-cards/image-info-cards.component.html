@@ -1,0 +1,50 @@
+<mat-card>
+  <h2>
+    <mat-icon class="tim-text-primary">iso</mat-icon>
+    {{imageData.reference}}:{{imageData.tag}}
+  </h2>
+
+  <ng-template #loadingTemplate>
+    <tim-loading></tim-loading>
+  </ng-template>
+
+  <ng-container *ngIf="!loading; else loadingTemplate">
+
+    <p *ngIf="imageInfo.Author">
+      Author: {{imageInfo.Author}}
+    </p>
+    <p *ngIf="imageInfo.Created">
+      Created: {{imageInfo.Created | date:'short'}}
+    </p>
+    <p *ngIf="imageInfo.Os">
+      OS: {{imageInfo.Os}} {{imageInfo.Architecture}}
+    </p>
+    <p *ngIf="imageInfo.DockerVersion">
+      Built with Docker v{{imageInfo.DockerVersion}}
+    </p>
+  </ng-container>
+
+</mat-card>
+
+<ng-container *ngIf="!loading">
+
+  <mat-card *ngIf="imageInfo.Config.Labels && (imageInfo.Config.Labels|keys).length">
+    <h3>
+      <mat-icon class="tim-text-primary">label</mat-icon>
+      Labels
+    </h3>
+    <div *ngFor="let label of imageInfo.Config.Labels | keyvalue">
+      <b>{{label.key | titlecase}}</b>
+      {{label.value}}
+    </div>
+  </mat-card>
+
+  <mat-card *ngIf="imageInfo.Config.Env && imageInfo.Config.Env.length">
+    <h3>
+      <mat-icon class="tim-text-primary">confirmation_number</mat-icon>
+      Environment Variables
+    </h3>
+    <pre><ng-container *ngFor="let env of imageInfo.Config.Env">{{env+"\n"}}</ng-container></pre>
+  </mat-card>
+
+</ng-container>

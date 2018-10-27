@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormArray, AbstractControl } from '@angular/forms';
-import { ImageInspectInfo } from 'dockerode';
 import { ContainerCreationSuggestedPort, PortBinding } from '../docker-client.model';
 import { ContainerFormService } from '../container-form.service';
+import { ImageInfoContainerConfig } from '../../docker-images/image-source.model';
 
 @Component({
   selector: 'tim-container-create-port-mapping',
@@ -15,7 +15,7 @@ export class ContainerCreatePortMappingComponent implements OnInit, OnChanges {
   public portBindingsArray: FormArray;
 
   @Input()
-  public image: ImageInspectInfo;
+  public imageInfo: ImageInfoContainerConfig;
 
   @Input()
   public suggestedPorts: ContainerCreationSuggestedPort[];
@@ -33,7 +33,7 @@ export class ContainerCreatePortMappingComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes['image']) {
+    if (changes['imageInfo']) {
       this.onImageChanged();
     }
   }
@@ -51,9 +51,9 @@ export class ContainerCreatePortMappingComponent implements OnInit, OnChanges {
   }
 
   protected onImageChanged() {
-    if (this.image) {
+    if (this.imageInfo) {
 
-      const exposedPorts = Object.keys(this.image.Config.ExposedPorts || {})
+      const exposedPorts = Object.keys(this.imageInfo.ExposedPorts || {})
         .map(k => parseInt(k.split('/')[0], 10));
 
       const out = this.suggestedPorts || [];

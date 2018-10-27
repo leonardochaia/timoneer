@@ -2,9 +2,9 @@
       [formGroup]="form"
       (ngSubmit)="launch()">
 
-  <tim-image-selector-card formControlName="Image"
-                           (imageLoaded)="imageSelected($event)">
-  </tim-image-selector-card>
+  <tim-image-select-card formControlName="Image"
+                         (imageChanged)="imageSelected($event)">
+  </tim-image-select-card>
 
   <div fxLayout="column"
        fxLayout.gt-xs="row"
@@ -18,7 +18,7 @@
         <mat-icon>network_wifi</mat-icon>
         Ports Mapping
       </h2>
-      <tim-container-create-port-mapping [image]="imageData"
+      <tim-container-create-port-mapping [imageInfo]="imageData?.Config"
                                          [portBindingsArray]="portBindingsArray"
                                          [suggestedPorts]="suggestedPorts">
       </tim-container-create-port-mapping>
@@ -59,7 +59,7 @@
         </mat-form-field>
         <span *ngIf="imageData">
           Default:
-          <code>{{imageData.Config.Cmd|json}}</code>
+          <code>{{imageData.Config.Cmd | json}}</code>
         </span>
       </div>
 
@@ -94,3 +94,5 @@
   </mat-card>
 
 </form>
+
+<pre>{{form.getRawValue()|json}}</pre>

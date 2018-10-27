@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { ImageInspectInfo, ContainerCreateBody } from 'dockerode';
+import { ContainerCreateBody } from 'dockerode';
 import {
   ContainerCreationSuggestedPort, ContainerCreationSuggestedVolume
 } from '../docker-client.model';
@@ -8,6 +8,7 @@ import { DockerJobsService } from '../docker-jobs.service';
 import { JobInstance } from '../../jobs/job-instance';
 import { ContainerCreationJob } from '../container-creation-job';
 import { ContainerFormService } from '../container-form.service';
+import { ImageInfo } from '../../docker-images/image-source.model';
 
 @Component({
   selector: 'tim-container-create',
@@ -41,7 +42,7 @@ export class ContainerCreateComponent implements OnInit {
     return this.form.get('volumeBindings') as FormArray;
   }
 
-  public imageData: ImageInspectInfo;
+  public imageData: ImageInfo;
 
   constructor(private dockerJobs: DockerJobsService,
     private containerForm: ContainerFormService) {
@@ -55,7 +56,7 @@ export class ContainerCreateComponent implements OnInit {
     }
   }
 
-  public imageSelected(image: ImageInspectInfo) {
+  public imageSelected(image: ImageInfo) {
     this.imageData = image;
   }
 

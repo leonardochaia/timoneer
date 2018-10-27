@@ -8,8 +8,8 @@
     <h2 style="margin: 0">
       {{source.name}}
     </h2>
-    <small *ngIf="source.username">
-      {{source.username}}
+    <small *ngIf="source?.credentials?.username">
+      {{source.credentials.username}}
     </small>
   </div>
 

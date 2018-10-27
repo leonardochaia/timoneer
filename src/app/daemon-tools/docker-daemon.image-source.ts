@@ -1,7 +1,7 @@
-import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceDeletion } from '../docker-images/image-source.model';
+import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceDeletion, ImageInfo } from '../docker-images/image-source.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { DockerImageService } from './docker-image.service';
 import { DockerEventsService } from './docker-events.service';
 
@@ -12,6 +12,7 @@ export class DockerDaemonImageSource
 
     public priority = 0;
     public readonly name = 'Docker Daemon';
+    public readonly registryDNS = null;
 
     constructor(
         private readonly dockerEvents: DockerEventsService,
@@ -26,8 +27,29 @@ export class DockerDaemonImageSource
             );
     }
 
-    public deleteImage(image: ImageListItemData): Observable<void> {
-        return this.dockerImage.removeImage(image.id);
+    public loadImageInfo(image: string): Observable<ImageInfo> {
+        return this.dockerImage.inspectImage(image)
+            .pipe(
+                map(i => i)
+            );
+    }
+
+    public deleteImage(image: string): Observable<void> {
+        return this.dockerImage.removeImage(image);
+    }
+
+    public loadImageHistory(image: string) {
+        return this.dockerImage.getHistory(image)
+            .pipe(
+                tap(h => console.log(h))
+            );
+    }
+
+    public loadImageTags(image: string) {
+        return this.dockerImage.inspectImage(image)
+            .pipe(
+                map(i => i.RepoTags)
+            );
     }
 
     protected getImages(filter?: ImageListFilter) {
@@ -46,4 +68,5 @@ export class DockerDaemonImageSource
             } as ImageListItemData)))
         );
     }
+
 }
