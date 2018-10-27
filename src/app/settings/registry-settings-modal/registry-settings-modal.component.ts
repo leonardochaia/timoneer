@@ -67,7 +67,6 @@ export class RegistrySettingsModalComponent implements OnInit {
         this.registryFormGroup.enable();
         if (!this.registryFormGroup.value.url) {
           this.registryFormGroup.get('url').disable();
-          this.registryFormGroup.get('allowsCatalog').disable();
         }
         console.error(error);
       });

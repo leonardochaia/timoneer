@@ -156,7 +156,6 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
       url: 'https://',
       username: '',
       password: '',
-      allowsCatalog: true,
       editable: true,
     };
     return this.fb.group({
@@ -164,7 +163,6 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
       Validators.compose([Validators.required, Validators.pattern('https?://.+')])],
       'username': [registrySettings.username],
       'password': [registrySettings.password],
-      'allowsCatalog': [{ value: registrySettings.allowsCatalog, disabled: !registrySettings.editable }, Validators.required],
       'editable': [registrySettings.editable, Validators.required],
     });
   }

@@ -15,7 +15,6 @@ export interface DockerRegistrySettings {
     username: string;
     password: string;
     editable: boolean;
-    allowsCatalog: boolean;
 }
 
 export interface ImageConfig {

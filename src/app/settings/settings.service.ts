@@ -39,7 +39,6 @@ export class SettingsService {
         this.settingsSubject.next(<ApplicationSettings>{
           registries: [{
             url: `https://${DOCKER_HUB_REGISTRY_DNS}/`,
-            allowsCatalog: false,
             editable: false,
           }],
           dockerClientSettings: {
