@@ -34,17 +34,18 @@ export class DockerHubService {
   protected get<T>(url: string, params?: any) {
     const loginIfNeeded = (settings: DockerRegistrySettings) => {
       if (settings.username && settings.password) {
-        return this.logIn(settings.username, settings.password);
+        return this.logIn(settings.username, settings.password)
+          .pipe(map(t => t.token));
       } else {
-        return of(null);
+        return of(null as string);
       }
     };
 
     return this.settings.getDockerIOSettings()
       .pipe(
-        switchMap(settings => loginIfNeeded(settings).pipe(map(info => ({ info, settings })))),
-        switchMap(r => this.httpClient.get<T>(url, {
-          headers: r.info ? { Authorization: `JWT ${r.info.token}` } : null,
+        switchMap(settings => loginIfNeeded(settings)),
+        switchMap(token => this.httpClient.get<T>(url, {
+          headers: token ? { Authorization: `JWT ${token}` } : null,
           params: params
         }))
       );
