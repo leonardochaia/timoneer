@@ -4,6 +4,7 @@ import { of, BehaviorSubject, throwError, forkJoin } from 'rxjs';
 import { ElectronService } from '../electron-tools/electron.service';
 import { map, switchMap, startWith } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { flatten } from '../shared/array-tools';
 
 const INITIAL_APPLICATIONS: Application[] = [
   {
@@ -97,7 +98,7 @@ export class ApplicationService {
       .pipe(
         map(config => config.externalSources),
         switchMap(sources => sources.length ? forkJoin(sources.map(s => this.httpClient.get<Application[]>(s.url))) : of([[]])),
-        map(arrays => [].concat.apply([], arrays) as Application[]),
+        map(arrays => flatten<Application>(arrays)),
       );
   }
 

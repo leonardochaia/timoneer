@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { ImageSourceMultiple, ImageSource } from './image-source.model';
 import { of, combineLatest, BehaviorSubject } from 'rxjs';
 import { switchMap, map, take } from 'rxjs/operators';
+import { flatten } from '../shared/array-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class ImageSourceService {
     of(sources)
       .pipe(
         switchMap(s => combineLatest(s.map(so => so.loadImageSources()))),
-        map(arr => [].concat.apply([], arr) as ImageSource[]),
+        map(arr => flatten(arr)),
         map(arr => arr.sort((a, b) => (a.priority > b.priority) ? 1 : ((b.priority > a.priority) ? -1 : 0))),
         // take(1),
       )

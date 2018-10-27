@@ -10,7 +10,7 @@ import { RegistryImageSource } from '../registry/registry.image-source';
 import { explodeImage } from '../docker-images/image-tools';
 import { DockerRegistrySettings } from '../settings/settings.model';
 import { RegistryService } from '../registry/registry.service';
-import { DOCKER_HUB_REGISTRY_DNS } from '../settings/settings.service';
+import { flatten } from '../shared/array-tools';
 
 @Injectable()
 export class DockerHubImageSource extends RegistryImageSource {
@@ -50,7 +50,7 @@ export class DockerHubImageSource extends RegistryImageSource {
 
         return of(filter).pipe(
             switchMap(() => combineLatest([privateRepos, publicImages])),
-            map(arr => [].concat.apply([], arr) as ImageListItemData[]),
+            map(arr => flatten(arr)),
         );
     }
 
