@@ -157,14 +157,14 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
       url: 'https://',
       username: '',
       password: '',
-      editable: true,
+      isDockerHub: false,
     };
     return this.fb.group({
-      'url': [{ value: registrySettings.url, disabled: !registrySettings.editable },
+      'url': [{ value: registrySettings.url, disabled: !registrySettings.isDockerHub },
       Validators.compose([Validators.required, Validators.pattern('https?://.+')])],
       'username': [registrySettings.username],
       'password': [registrySettings.password],
-      'editable': [registrySettings.editable, Validators.required],
+      'isDockerHub': [registrySettings.isDockerHub],
     });
   }
 

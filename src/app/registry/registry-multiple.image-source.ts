@@ -29,9 +29,8 @@ export class RegistryImageSourceMultiple extends ImageSourceMultiple {
             .pipe(
                 map(settings => settings.registries
                     .map(r => {
-                        // Create instances according to URLs
-                        // TODO: Improve this
-                        if (r.url.includes(DOCKER_HUB_REGISTRY_DNS)) {
+                        // Create instances accordingly
+                        if (r.isDockerHub) {
                             return new DockerHubImageSource(r, this.registry, this.dockerImage, this.dockerHub);
                         } else {
                             return new RegistryImageSource(r, this.registry);

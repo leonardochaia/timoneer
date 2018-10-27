@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApplicationSettings, DockerClientSettings } from './settings.model';
-import { of, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { of, BehaviorSubject, Observable } from 'rxjs';
+import { map, tap, switchMap } from 'rxjs/operators';
 import { ElectronService } from '../electron-tools/electron.service';
 
 export const DOCKER_HUB_REGISTRY_DNS = 'index.docker.io';
@@ -31,51 +31,40 @@ export class SettingsService {
   }
 
   public getSettings() {
+    let upTodate = of({});
     if (!this.settingsSubject.value) {
-      if (this.electronSettings.has(SETTINGS_KEY)) {
-        const fromLocal = this.electronSettings.get(SETTINGS_KEY) as any as ApplicationSettings;
-        this.settingsSubject.next(fromLocal);
-      } else {
-        this.settingsSubject.next(<ApplicationSettings>{
-          registries: [{
-            url: `https://${DOCKER_HUB_REGISTRY_DNS}/`,
-            editable: false,
-          }],
-          dockerClientSettings: {
-            fromEnvironment: true,
-          }
-        });
-      }
+      upTodate = this.ensureSettingsUpToDate();
     }
 
-    return this.settingsSubject.asObservable()
-      .pipe(map(settings => {
-        if (settings.dockerClientSettings) {
-          const clientSettings = settings.dockerClientSettings;
-          if (clientSettings.fromEnvironment) {
-            settings.dockerClientSettings = this.getDockerClientConfigFromEnvironment();
-          } else {
-            if (settings.dockerClientSettings.url && settings.dockerClientSettings.url.endsWith('/')) {
-              settings.dockerClientSettings.url.slice(settings.dockerClientSettings.url.length - 1);
-            }
-          }
-        } else {
-          settings.dockerClientSettings = {
-            fromEnvironment: true
-          };
-        }
-
-        if (settings.registries && settings.registries.length) {
-          for (const registry of settings.registries) {
-            if (registry.url) {
-              registry.url = this.ensureEndingSlash(registry.url);
+    return upTodate
+      .pipe(
+        switchMap(() => this.settingsSubject.asObservable()),
+        map(settings => {
+          // Sanitize settings
+          if (settings.dockerClientSettings) {
+            const clientSettings = settings.dockerClientSettings;
+            if (clientSettings.fromEnvironment) {
+              settings.dockerClientSettings = this.getDockerClientConfigFromEnvironment();
             } else {
-              registry.url = `https://${DOCKER_HUB_REGISTRY_DNS}/`;
+              if (settings.dockerClientSettings.url && settings.dockerClientSettings.url.endsWith('/')) {
+                settings.dockerClientSettings.url.slice(settings.dockerClientSettings.url.length - 1);
+              }
+            }
+          } else {
+            settings.dockerClientSettings = {
+              fromEnvironment: true
+            };
+          }
+
+          if (settings.registries && settings.registries.length) {
+            for (const registry of settings.registries) {
+              if (registry.url) {
+                registry.url = this.ensureEndingSlash(registry.url);
+              }
             }
           }
-        }
-        return settings;
-      }));
+          return settings;
+        }));
   }
 
   public areDaemonSettingsValid() {
@@ -98,6 +87,43 @@ export class SettingsService {
       tlsVerify: process.env.DOCKER_TLS_VERIFY === '1',
       certPath: process.env.DOCKER_CERT_PATH,
     };
+  }
+
+  private ensureSettingsUpToDate() {
+    let settings: Observable<ApplicationSettings>;
+    if (this.electronSettings.has(SETTINGS_KEY)) {
+      const storedSettings = this.electronSettings.get(SETTINGS_KEY) as any as ApplicationSettings;
+      settings = this.migrateSettingsIfNeeded(storedSettings);
+    } else {
+      settings = of({
+        registries: [{
+          url: `https://${DOCKER_HUB_REGISTRY_DNS}/`,
+          isDockerHub: true,
+        }],
+        dockerClientSettings: {
+          fromEnvironment: true,
+        }
+      } as ApplicationSettings);
+    }
+
+    return settings
+      .pipe(tap(migrated => this.settingsSubject.next(migrated)));
+  }
+
+  private migrateSettingsIfNeeded(settings: ApplicationSettings) {
+    const dockerHub = settings.registries[0];
+    const expectedUrl = `https://${DOCKER_HUB_REGISTRY_DNS}/`;
+    if (dockerHub.url !== expectedUrl) {
+      dockerHub.url = expectedUrl;
+      dockerHub.isDockerHub = true;
+      for (const registry of settings.registries) {
+        delete registry['allowsCatalog'];
+        delete registry['editable'];
+      }
+      return this.saveSettings(settings);
+    } else {
+      return of(settings);
+    }
   }
 
   private ensureEndingSlash(str: string) {

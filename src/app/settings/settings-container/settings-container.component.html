@@ -76,7 +76,7 @@
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-mini-fab
-                      *ngIf="registry.editable"
+                      *ngIf="!registry.isDockerHub"
                       color="warn"
                       (click)="removeRegistry(registry)"
                       type="button">

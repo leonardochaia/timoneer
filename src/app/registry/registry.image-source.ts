@@ -13,7 +13,7 @@ import { DockerRegistrySettings } from '../settings/settings.model';
 import { ImageLayerHistoryV1Compatibility } from './registry.model';
 
 import { explodeImage } from '../docker-images/image-tools';
-import { getRegistryDNSName } from './registry-tools';
+import { getRegistryDNSName, getRegistryName } from './registry-tools';
 
 export class RegistryImageSource
     extends ImageSource
@@ -31,7 +31,8 @@ export class RegistryImageSource
             username: this.registrySettings.username,
             password: this.registrySettings.password,
         };
-        this.name = this.registryDNS = getRegistryDNSName(registrySettings.url);
+        this.name = getRegistryName(registrySettings);
+        this.registryDNS = getRegistryDNSName(registrySettings.url);
     }
 
     public loadList(filter?: ImageListFilter): Observable<ImageListItemData[]> {

@@ -17,9 +17,6 @@ export class DockerHubImageSource extends RegistryImageSource {
 
     public priority = 1;
 
-    public readonly name = 'Docker Hub';
-    public readonly registryDNS = DOCKER_HUB_REGISTRY_DNS;
-
     constructor(
         registrySettings: DockerRegistrySettings,
         registry: RegistryService,

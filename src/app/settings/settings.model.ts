@@ -14,7 +14,7 @@ export interface DockerRegistrySettings {
     url: string;
     username: string;
     password: string;
-    editable: boolean;
+    isDockerHub: boolean;
 }
 
 export interface ImageConfig {
