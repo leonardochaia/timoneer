@@ -14,7 +14,7 @@ export class ImageSourceCardListComponent implements OnInit {
   @Input()
   public minPriority?: number;
 
-  public sources: (ImageSource & ImageSourceAuthenticated)[];
+  public sources: (ImageSource & Partial<ImageSourceAuthenticated>)[];
 
   constructor(
     private readonly imageSource: ImageSourceService,

@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { UpdaterService } from '../../electron-tools/updater.service';
 import { timoneerVersion } from '../../../tim-version';
 import { SettingsDialogService } from '../settings-dialog.service';
+import { getRegistryDNSName } from '../../registry/registry-tools';
 
 @Component({
   selector: 'tim-settings-container',
@@ -110,7 +111,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   }
 
   public getRegistryName(registry: DockerRegistrySettings) {
-    return this.settingsService.getRegistryName(registry);
+    return getRegistryDNSName(registry.url);
   }
 
   private setClientSettings(settings: DockerClientSettings) {

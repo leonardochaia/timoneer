@@ -12,8 +12,8 @@ import { RegistryService } from './registry.service';
 import { DockerRegistrySettings } from '../settings/settings.model';
 import { ImageLayerHistoryV1Compatibility } from './registry.model';
 
-import * as urlParse from 'url-parse';
 import { explodeImage } from '../docker-images/image-tools';
+import { getRegistryDNSName } from './registry-tools';
 
 export class RegistryImageSource
     extends ImageSource
@@ -23,17 +23,15 @@ export class RegistryImageSource
     public readonly name: string;
     public readonly registryDNS: string;
 
-
     constructor(
         protected readonly registrySettings: DockerRegistrySettings,
         protected readonly registry: RegistryService) {
         super();
-        const urlInfo = urlParse(registrySettings.url, {});
         this.credentials = {
             username: this.registrySettings.username,
             password: this.registrySettings.password,
         };
-        this.name = this.registryDNS = urlInfo.host;
+        this.name = this.registryDNS = getRegistryDNSName(registrySettings.url);
     }
 
     public loadList(filter?: ImageListFilter): Observable<ImageListItemData[]> {
@@ -75,6 +73,14 @@ export class RegistryImageSource
     public loadImageTags(image: string) {
         const imageData = this.explode(image);
         return this.registry.getRepoTags(this.registrySettings, imageData.reference);
+    }
+
+    public getBasicAuth() {
+        const auth = JSON.stringify({
+            Username: this.credentials.username,
+            Password: this.credentials.password
+        });
+        return btoa(auth);
     }
 
     /**

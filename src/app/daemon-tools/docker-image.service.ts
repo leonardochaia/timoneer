@@ -1,18 +1,18 @@
 import { Injectable, NgZone } from '@angular/core';
 import { DockerService } from './docker.service';
-import { SettingsService } from '../settings/settings.service';
 import { switchMap, map, take, materialize, dematerialize } from 'rxjs/operators';
 import { IncomingMessage } from 'http';
 import { Observable } from 'rxjs';
 import { DockerStreamResponse } from './docker-client.model';
 import { ImageSearchResult } from 'dockerode';
+import { ImageSource, ImageSourceAuthenticated } from '../docker-images/image-source.model';
 
 @Injectable()
 export class DockerImageService {
 
-  constructor(private daemon: DockerService,
-    private ngZone: NgZone,
-    private settingsService: SettingsService) { }
+  constructor(
+    private readonly daemon: DockerService,
+    private readonly ngZone: NgZone) { }
 
   public imageList(options?: { all?: boolean, filters?: string, digests?: boolean, options?: any }) {
     return this.daemon.docker(d => d.listImages(options));
@@ -24,18 +24,18 @@ export class DockerImageService {
     }) as Promise<ImageSearchResult[]>);
   }
 
-  public pullImage(image: string) {
+  public pullImage(image: string, source: ImageSource & Partial<ImageSourceAuthenticated>) {
     if (!image.includes(':')) {
       image += ':latest';
     }
-    return this.settingsService.getRegistryAuthForImage(image)
+    const auth = source.getBasicAuth ? source.getBasicAuth() : null;
+    return this.daemon.docker(d => d.pull(image, { 'authconfig': { key: auth } }))
       .pipe(
         take(1),
-        switchMap(auth => this.daemon.docker(d => d.pull(image, { 'authconfig': { key: auth } }))),
         map(msg => <IncomingMessage>msg),
         switchMap(msg => this.daemon.modem().pipe(map(m => ({ message: msg, modem: m })))),
         switchMap(response => new Observable<DockerStreamResponse>(observer => {
-          const onFinished = (error, output) => {
+          const onFinished = (error) => {
             this.ngZone.run(() => {
               if (error) {
                 observer.error(error);

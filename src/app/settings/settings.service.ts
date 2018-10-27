@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApplicationSettings, DockerRegistrySettings, DockerClientSettings } from './settings.model';
+import { ApplicationSettings, DockerClientSettings } from './settings.model';
 import { of, BehaviorSubject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ElectronService } from '../electron-tools/electron.service';
 
 export const DOCKER_HUB_REGISTRY_DNS = 'index.docker.io';
@@ -84,15 +84,6 @@ export class SettingsService {
       .pipe(map(settings => settings && !!settings.url));
   }
 
-  public getRegistryAuthForImage(image: string) {
-    return this.getRegistrySettingsForImage(image)
-      .pipe(map(settings => this.getRegistryAuth(settings)));
-  }
-
-  public getRegistryName(settings: DockerRegistrySettings) {
-    return settings.url ? settings.url.replace('https://', '').replace('http://', '') : 'Docker Hub';
-  }
-
   public getDockerIOSettings() {
     return this.getSettings()
       .pipe(
@@ -107,33 +98,6 @@ export class SettingsService {
       tlsVerify: process.env.DOCKER_TLS_VERIFY === '1',
       certPath: process.env.DOCKER_CERT_PATH,
     };
-  }
-
-  protected getRegistrySettingsForImage(image: string) {
-    if (image.includes('/')) {
-      return this.getSettings()
-        .pipe(switchMap(settings => {
-          const registry = settings.registries.find(x => image.includes(this.getRegistryName(x)));
-          // If no registry, asume Docker Hub username
-          if (registry) {
-            return of(registry);
-          } else {
-            return this.getDockerIOSettings();
-          }
-        }));
-    } else {
-      return this.getDockerIOSettings();
-    }
-  }
-
-  protected getRegistryAuth(settings: DockerRegistrySettings) {
-    if (!settings) {
-      return null;
-    }
-    const auth = JSON.stringify({
-      Username: settings.username, Password: settings.password
-    });
-    return btoa(auth);
   }
 
   private ensureEndingSlash(str: string) {

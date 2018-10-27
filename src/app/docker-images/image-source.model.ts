@@ -71,6 +71,7 @@ export interface ImageSourceDeletion {
 
 export interface ImageSourceAuthenticated {
     credentials?: ImageSourceCredentials;
+    getBasicAuth(): string;
 }
 export interface ImageSourceCredentials {
     username?: string;

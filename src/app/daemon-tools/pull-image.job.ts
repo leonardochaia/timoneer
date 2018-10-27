@@ -1,10 +1,11 @@
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { DockerImageService } from '../daemon-tools/docker-image.service';
 import { DockerStreamResponse } from '../daemon-tools/docker-client.model';
 import { JobDefinition } from '../jobs/job-definition';
 import { Job } from '../jobs/job.decorator';
 import { JobProgress } from '../jobs/jobs.model';
 import { PullImageJobLogsComponent } from './pull-image-job-logs/pull-image-job-logs.component';
+import { ImageSourceService } from '../docker-images/image-source.service';
 
 export class PullImageJobParams {
     constructor(public readonly image: string) { }
@@ -32,6 +33,7 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     }
 
     constructor(protected params: PullImageJobParams,
+        protected imageSource: ImageSourceService,
         protected imageService: DockerImageService) {
         super();
     }
@@ -39,8 +41,11 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
     public start() {
         this.log(`Pulling from ${this.image}`);
 
-        this.imageService.pullImage(this.image)
-            .pipe(takeUntil(this.cancelled))
+        this.imageSource.getForImage(this.image)
+            .pipe(
+                switchMap(source => this.imageService.pullImage(this.image, source)),
+                takeUntil(this.cancelled)
+            )
             .subscribe(response => {
                 const jobProgress = Object.assign({}, response, <JobProgress>{
                     message: response.status,
