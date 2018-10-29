@@ -1,8 +1,9 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'tim-image-tags-selector-modal',
@@ -14,6 +15,9 @@ export class ImageTagsSelectorModalComponent implements OnInit, OnDestroy {
   public readonly searchFormControl = new FormControl('');
 
   public tags: string[];
+
+  @ViewChild(CdkVirtualScrollViewport)
+  private scrollViewport: CdkVirtualScrollViewport;
 
   private componentDestroyed = new Subject<void>();
 
@@ -34,6 +38,7 @@ export class ImageTagsSelectorModalComponent implements OnInit, OnDestroy {
       )
       .subscribe(term => {
         this.tags = this.data.tags.filter(t => t.includes(term));
+        this.scrollViewport.scrollToIndex(0);
       });
   }
 

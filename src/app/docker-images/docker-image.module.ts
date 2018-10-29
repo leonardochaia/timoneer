@@ -29,6 +29,7 @@ import { ImageSelectCardComponent } from './image-select-card/image-select-card.
 import { ImageTagsSelectorComponent } from './image-tags-selector/image-tags-selector.component';
 import { ImageInfoCardsComponent } from './image-info-cards/image-info-cards.component';
 import { ImageTagsSelectorModalComponent } from './image-tags-selector-modal/image-tags-selector-modal.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ImageTagsSelectorModalComponent } from './image-tags-selector-modal/ima
     MatListModule,
     MatDialogModule,
     FlexLayoutModule,
+    ScrollingModule,
 
     RegistryModule,
     SharedModule,

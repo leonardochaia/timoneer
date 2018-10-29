@@ -146,6 +146,9 @@ export class ImageSelectCardComponent implements OnInit, OnDestroy, ControlValue
   }
 
   protected selectImage(image: string) {
+    if (!image) {
+      return;
+    }
     this.imageSource.getForImage(image)
       .subscribe(source => {
         this.currentImageSource = source;

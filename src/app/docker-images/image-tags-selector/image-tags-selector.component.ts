@@ -91,13 +91,15 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
       .afterClosed()
       .pipe(take(1))
       .subscribe(tag => {
-        this.tagSelected(tag);
+        if (tag && tag.length) {
+          this.tagSelected(tag);
+          this.updateTruncatedTags();
+        }
       });
   }
 
   protected tagsObtained(tags: string[], desiredTag?: string) {
     this.allTags = tags;
-
     // Determine a tag
     if (!desiredTag || desiredTag === 'latest') {
       if (this.allTags.includes('latest')) {
@@ -108,19 +110,21 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
     }
 
     this.tagSelected(desiredTag);
+    this.updateTruncatedTags();
+  }
 
-    const minLength = 5;
+  protected updateTruncatedTags() {
+    const tagIndex = this.allTags.indexOf(this.selectedTag);
+    const start = tagIndex >= 2 ? 2 : tagIndex;
+    const end = tagIndex + 3 < this.allTags.length ? 3 : this.allTags.length - tagIndex;
 
-    if (this.allTags.length > minLength) {
-      this.truncatedTags = this.allTags
-        .sort(t => t.includes(this.selectedTag) ? 1 : 0)
-        .slice(0, minLength);
-    } else {
-      this.truncatedTags = this.allTags.slice();
-    }
+    this.truncatedTags = this.allTags
+      .slice(tagIndex - start, tagIndex + end)
+      .sort()
+      .sort(t => t === 'latest' ? 0 : t === this.selectedTag ? 1 : 99);
 
-    if (this.selectedTag && !this.truncatedTags.includes(this.selectedTag)) {
-      this.truncatedTags.unshift(this.selectedTag);
+    if (!this.truncatedTags.includes('latest') && this.allTags.includes('latest')) {
+      this.truncatedTags.unshift('latest');
     }
   }
 

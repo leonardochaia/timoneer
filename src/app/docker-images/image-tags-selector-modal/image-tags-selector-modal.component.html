@@ -8,10 +8,14 @@
            [formControl]="searchFormControl"
            matInput>
   </mat-form-field>
-  <mat-nav-list style="max-height:50vh; overflow-y:auto">
-    <mat-list-item *ngFor="let tag of tags"
-                   (click)="tagSelected(tag)">
-      {{tag}}
-    </mat-list-item>
-  </mat-nav-list>
+
+  <cdk-virtual-scroll-viewport itemSize="50"
+                               style="min-height: 20vh; ">
+    <mat-nav-list>
+      <mat-list-item *cdkVirtualFor="let tag of tags"
+                     (click)="tagSelected(tag)">
+        {{tag}}
+      </mat-list-item>
+    </mat-nav-list>
+  </cdk-virtual-scroll-viewport>
 </div>
