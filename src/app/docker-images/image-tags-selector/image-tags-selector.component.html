@@ -3,9 +3,10 @@
 
   <mat-chip *ngFor="let tag of truncatedTags"
             (click)="tagSelected(tag)"
-            [ngClass]="{'tim-bg-primary': selectedTag === tag}">{{tag}}</mat-chip>
+            class="cursor-pointer"
+            [ngClass]="{'tim-bg-primary chips-active': selectedTag === tag}">{{tag}}</mat-chip>
 
-  <mat-chip class="tim-bg-accent"
+  <mat-chip class="tim-bg-accent cursor-pointer"
             *ngIf="truncatedTags && truncatedTags.length != allTags.length">
     View {{allTags.length - truncatedTags.length}} more
   </mat-chip>
