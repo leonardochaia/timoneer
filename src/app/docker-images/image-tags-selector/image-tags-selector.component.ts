@@ -1,8 +1,10 @@
 import { Component, Input, OnChanges, SimpleChanges, forwardRef } from '@angular/core';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { explodeImage } from '../image-tools';
 import { ImageSourceService } from '../image-source.service';
+import { MatDialog } from '@angular/material';
+import { ImageTagsSelectorModalComponent } from '../image-tags-selector-modal/image-tags-selector-modal.component';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -32,7 +34,9 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
 
   private onChanges: (image: string) => void;
 
-  constructor(private readonly imageSource: ImageSourceService) { }
+  constructor(
+    private readonly imageSource: ImageSourceService,
+    private readonly matDialog: MatDialog) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['repository'] && this.repository) {
@@ -76,6 +80,19 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
 
   public setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  public viewAllTabs() {
+    this.matDialog.open(ImageTagsSelectorModalComponent, {
+      data: {
+        tags: this.allTags
+      }
+    })
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(tag => {
+        this.tagSelected(tag);
+      });
   }
 
   protected tagsObtained(tags: string[], desiredTag?: string) {

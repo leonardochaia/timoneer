@@ -11,7 +11,9 @@ import {
   MatCheckboxModule,
   MatButtonModule,
   MatAutocompleteModule,
-  MatChipsModule
+  MatChipsModule,
+  MatListModule,
+  MatDialogModule
 } from '@angular/material';
 import { ImageHistoryComponent } from './image-history/image-history.component';
 import { NgObjectPipesModule } from 'angular-pipes';
@@ -26,6 +28,7 @@ import { ImageSourceCardListComponent } from './image-source-card-list/image-sou
 import { ImageSelectCardComponent } from './image-select-card/image-select-card.component';
 import { ImageTagsSelectorComponent } from './image-tags-selector/image-tags-selector.component';
 import { ImageInfoCardsComponent } from './image-info-cards/image-info-cards.component';
+import { ImageTagsSelectorModalComponent } from './image-tags-selector-modal/image-tags-selector-modal.component';
 
 @NgModule({
   imports: [
@@ -43,6 +46,8 @@ import { ImageInfoCardsComponent } from './image-info-cards/image-info-cards.com
     MatButtonModule,
     MatAutocompleteModule,
     MatChipsModule,
+    MatListModule,
+    MatDialogModule,
     FlexLayoutModule,
 
     RegistryModule,
@@ -65,10 +70,14 @@ import { ImageInfoCardsComponent } from './image-info-cards/image-info-cards.com
     ImageSelectCardComponent,
     ImageTagsSelectorComponent,
     ImageInfoCardsComponent,
+    ImageTagsSelectorModalComponent,
   ],
   exports: [
     ImageSourceCardListComponent,
     ImageSelectCardComponent
+  ],
+  entryComponents: [
+    ImageTagsSelectorModalComponent
   ]
 })
 export class DockerImagesModule { }

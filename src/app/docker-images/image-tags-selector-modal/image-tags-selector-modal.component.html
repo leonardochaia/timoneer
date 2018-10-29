@@ -1,0 +1,17 @@
+<div style="min-width: 25vw">
+  <h3>
+    Select a Tag
+  </h3>
+  <mat-form-field style="width: 99%">
+    <input type="search"
+           placeholder="Type to search.."
+           [formControl]="searchFormControl"
+           matInput>
+  </mat-form-field>
+  <mat-nav-list style="max-height:50vh; overflow-y:auto">
+    <mat-list-item *ngFor="let tag of tags"
+                   (click)="tagSelected(tag)">
+      {{tag}}
+    </mat-list-item>
+  </mat-nav-list>
+</div>

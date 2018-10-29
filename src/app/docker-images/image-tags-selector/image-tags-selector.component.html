@@ -7,7 +7,8 @@
             [ngClass]="{'tim-bg-primary chips-active': selectedTag === tag}">{{tag}}</mat-chip>
 
   <mat-chip class="tim-bg-accent cursor-pointer"
-            *ngIf="truncatedTags && truncatedTags.length != allTags.length">
+            (click)="viewAllTabs()"
+            *ngIf="!loading && truncatedTags && truncatedTags.length != allTags.length">
     View {{allTags.length - truncatedTags.length}} more
   </mat-chip>
 
