@@ -7,6 +7,7 @@ import { debounceTime, distinct, switchMap, takeUntil, map } from 'rxjs/operator
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { DockerJobsService } from '../../daemon-tools/docker-jobs.service';
 import { DockerImageService } from '../../daemon-tools/docker-image.service';
+import { explodeImage } from '../image-tools';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -154,8 +155,11 @@ export class ImageSelectCardComponent implements OnInit, OnDestroy, ControlValue
         this.currentImageSource = source;
         this.currentImage = image;
 
-        // Clear the image until a tag is selected
-        this.triggerOnChanges(null);
+        const imageData = explodeImage(this.currentImage);
+
+        // Update controls
+        this.triggerOnChanges(imageData.reference);
+        this.tagControl.setValue(imageData.tag);
 
         if (this.infoCancellationToken) {
           this.infoCancellationToken.next();
@@ -181,7 +185,6 @@ export class ImageSelectCardComponent implements OnInit, OnDestroy, ControlValue
     this.dockerImage.inspectImage(image)
       .pipe(
         takeUntil(this.componetDestroyed),
-        takeUntil(this.infoCancellationToken)
       ).subscribe(() => {
         this.checkingImageExistance = false;
         this.imageExistsOnDaemon = true;
