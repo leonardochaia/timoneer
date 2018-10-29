@@ -5,7 +5,7 @@ import {
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { SettingsService, DOCKER_HUB_REGISTRY_DNS } from '../settings/settings.service';
+import { SettingsService } from '../settings/settings.service';
 import { RegistryService } from './registry.service';
 
 import { DockerHubImageSource } from '../docker-hub/docker-hub.image-source';
