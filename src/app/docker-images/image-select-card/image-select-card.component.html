@@ -39,9 +39,15 @@
                       disabled>
             Loading...
           </mat-option>
+
           <mat-option *ngIf="item.error"
                       disabled>
             <span class="tim-text-warn">{{item.error}}</span>
+          </mat-option>
+
+          <mat-option *ngIf="!item.loading && !item.error && !item.images?.length"
+                      disabled>
+            No results
           </mat-option>
 
         </mat-optgroup>
