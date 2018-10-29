@@ -8,6 +8,7 @@ import { TabService } from '../../tabs/tab.service';
 import { FormGroup } from '@angular/forms';
 import { ContainerCreateBody } from 'dockerode';
 import { NotificationService } from '../../shared/notification.service';
+import { isValidImageName } from '../image-tools';
 
 @Component({
   selector: 'tim-image-list',
@@ -58,7 +59,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
     this.tab.add(TimoneerTabs.IMAGE_PREVIEW, {
       title: image.name,
       params: {
-        image: image.name,
+        image: isValidImageName(image.name) ? image.name : image.id,
+        registryDNS: this.source.registryDNS
       } as ImagePreviewContainerComponentData
     });
   }
@@ -66,7 +68,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public createContainer(image: ImageListItemData) {
     this.tab.add(TimoneerTabs.DOCKER_CONTAINER_NEW, {
       params: {
-        Image: image.name
+        Image: isValidImageName(image.name) ? image.name : image.id
       } as ContainerCreateBody
     });
   }

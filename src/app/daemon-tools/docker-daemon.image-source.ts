@@ -1,9 +1,16 @@
-import { ImageSource, ImageListFilter, ImageListItemData, ImageSourceDeletion, ImageInfo } from '../docker-images/image-source.model';
+import {
+    ImageSource, ImageListFilter,
+    ImageListItemData,
+    ImageSourceDeletion, ImageInfo
+} from '../docker-images/image-source.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { DockerImageService } from './docker-image.service';
 import { DockerEventsService } from './docker-events.service';
+import { ImageLayerHistoryV1Compatibility } from '../registry/registry.model';
+import { isValidImageName } from '../docker-images/image-tools';
+import { flatten } from '../shared/array-tools';
 
 @Injectable()
 export class DockerDaemonImageSource
@@ -41,7 +48,13 @@ export class DockerDaemonImageSource
     public loadImageHistory(image: string) {
         return this.dockerImage.getHistory(image)
             .pipe(
-                tap(h => console.log(h))
+                map(all => all.map(h => ({
+                    id: h.Id,
+                    created: h.Created,
+                    container_config: {
+                        Cmd: [h.CreatedBy]
+                    }
+                } as ImageLayerHistoryV1Compatibility)))
             );
     }
 
@@ -54,18 +67,22 @@ export class DockerDaemonImageSource
 
     protected getImages(filter?: ImageListFilter) {
         let dockerFilter: any;
-        if (filter && filter.term) {
+        filter = filter || {};
+        if (filter.term) {
             dockerFilter = { reference: { [`*${filter.term}*`]: true } };
         }
         return this.dockerImage.imageList({
             all: filter ? filter.displayDanglingImages : false,
             filters: dockerFilter,
         }).pipe(
-            map(r => r.map(i => ({
-                name: i.RepoTags ? i.RepoTags.join(', ') : i.Id,
-                id: i.Id,
-                size: i.Size
-            } as ImageListItemData)))
+            map(r => flatten(
+                r.map(i => i.RepoTags
+                    .filter(t => filter.displayDanglingImages ? true : isValidImageName(t))
+                    .map(t => ({
+                        name: t,
+                        id: i.Id,
+                        size: i.Size
+                    } as ImageListItemData)))))
         );
     }
 

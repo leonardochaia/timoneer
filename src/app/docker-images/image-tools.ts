@@ -1,5 +1,15 @@
 
 export function explodeImage(image: string) {
+
+  if (image.startsWith('sha256:')) {
+    return {
+      registry: null,
+      reference: image.replace('sha256:', ''),
+      tag: 'latest',
+      isDefaultTag: true
+    };
+  }
+
   const matches = image.match(/(.+\/)?([^:]+)(:.+)?/);
 
   let registryOrNamespace = matches[1];
@@ -38,4 +48,8 @@ export function buildImageString(info: { registry: string, reference: string, ta
     base += `${info.registry}/`;
   }
   return base + `${info.reference}:${info.tag}`;
+}
+
+export function isValidImageName(image: string) {
+  return !image.includes('<none>:<none>');
 }
