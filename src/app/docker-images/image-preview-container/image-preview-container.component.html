@@ -1,10 +1,13 @@
-<div style="padding:16px;">
+<div style="padding:16px;"
+     *ngIf="source">
 
-  <tim-image-info-cards [image]="image"></tim-image-info-cards>
+  <tim-image-info-cards [image]="image"
+                        [source]="source"></tim-image-info-cards>
 
   <h2 style="text-align: center">
     History
   </h2>
 
-  <tim-image-history [image]="image"></tim-image-history>
+  <tim-image-history [image]="image"
+                     [source]="source"></tim-image-history>
 </div>

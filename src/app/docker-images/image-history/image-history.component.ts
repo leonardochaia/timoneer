@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ImageLayerHistoryV1Compatibility } from '../../registry/registry.model';
 import { Subject } from 'rxjs';
-import { ImageSourceService } from '../image-source.service';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { ImageSource } from '../image-source.model';
 
 @Component({
   selector: 'tim-image-history',
@@ -14,20 +14,18 @@ export class ImageHistoryComponent implements OnInit, OnDestroy {
   @Input()
   public image: string;
 
+  @Input()
+  public source: ImageSource;
+
   public history: ImageLayerHistoryV1Compatibility[];
   public loading: boolean;
 
   protected readonly componetDestroyed = new Subject();
 
-  constructor(private readonly imageSource: ImageSourceService) { }
-
   public ngOnInit() {
     this.loading = true;
-    this.imageSource.getForImage(this.image)
-      .pipe(
-        takeUntil(this.componetDestroyed),
-        switchMap(source => source.loadImageHistory(this.image))
-      )
+    this.source.loadImageHistory(this.image)
+      .pipe(takeUntil(this.componetDestroyed))
       .subscribe(history => {
         this.loading = false;
         this.history = history;
