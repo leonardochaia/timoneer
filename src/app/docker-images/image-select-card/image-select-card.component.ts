@@ -3,7 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, Validators } from
 import { Subject, Observable, throwError } from 'rxjs';
 import { ImageSourceService } from '../image-source.service';
 import { ImageSource, ImageListFilter, ImageListItemData, ImageInfo } from '../image-source.model';
-import { debounceTime, distinct, switchMap, takeUntil, map } from 'rxjs/operators';
+import { debounceTime, switchMap, takeUntil, map } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { DockerJobsService } from '../../daemon-tools/docker-jobs.service';
 import { DockerImageService } from '../../daemon-tools/docker-image.service';
@@ -78,7 +78,6 @@ export class ImageSelectCardComponent implements OnInit, OnDestroy, ControlValue
     this.imageSelectControl.valueChanges
       .pipe(
         debounceTime(500),
-        distinct(),
         switchMap((term: string) => {
           // When a new search happens, cancel pending searches
           this.cancelListLoads();
