@@ -5,18 +5,19 @@ import { TimoneerTabs } from '../timoneer-tabs';
 import { DockerContainerService } from './docker-container.service';
 import { NotificationService } from '../shared/notification.service';
 import { ContextMenuService, ContextMenuConstructor } from '../electron-tools/context-menu.service';
-import { TimDialogService } from '../tim-dialog/tim-dialog.service';
+import { ContainerDeletionService } from './container-deletion.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContainerMenuService {
 
-  constructor(private menu: ContextMenuService,
-    private containerService: DockerContainerService,
-    private notificationService: NotificationService,
-    private tabService: TabService,
-    private timDialog: TimDialogService) { }
+  constructor(
+    private readonly menu: ContextMenuService,
+    private readonly containerService: DockerContainerService,
+    private readonly notificationService: NotificationService,
+    private readonly tabService: TabService,
+    private readonly containerDeletion: ContainerDeletionService) { }
 
   public open(container: ContainerInfo) {
 
@@ -83,35 +84,10 @@ export class ContainerMenuService {
     template.push({
       label: 'Remove',
       click: () => {
-        if (isRunning) {
-          this.timDialog.openMessageModal({
-            title: `Force remove ${container.Names[0]}`,
-            message: 'The container is running and must be forced to be removed.',
-            confirmButton: {
-              color: 'warn',
-              icon: 'delete',
-              text: 'Force Removal',
-              action: () => {
-                this.deleteContainer(container, true);
-              }
-            }
-          });
-        } else {
-          this.deleteContainer(container);
-        }
+        this.containerDeletion.deleteContainer(container.Id, container.State, container.Names[0]);
       }
     });
 
     return this.menu.open(template);
-  }
-
-  protected deleteContainer(container: ContainerInfo, force = false) {
-    const obs = this.containerService.remove(container.Id, {
-      force: force
-    });
-    obs.subscribe(() => {
-      this.notificationService.open(`${container.Names[0]} has been removed`);
-    });
-    return obs;
   }
 }

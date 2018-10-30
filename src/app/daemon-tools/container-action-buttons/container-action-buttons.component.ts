@@ -6,6 +6,7 @@ import { catchError, map, take } from 'rxjs/operators';
 import { DockerContainerService } from '../docker-container.service';
 import { NotificationService } from '../../shared/notification.service';
 import { ContainerCreateBody } from 'dockerode';
+import { ContainerDeletionService } from '../container-deletion.service';
 
 @Component({
   selector: 'tim-container-action-buttons',
@@ -31,6 +32,7 @@ export class ContainerActionButtonsComponent {
   constructor(
     private readonly tabService: TabService,
     private readonly containerService: DockerContainerService,
+    private readonly containerDeletion: ContainerDeletionService,
     private readonly notificationService: NotificationService) { }
 
   public attach() {
@@ -70,10 +72,7 @@ export class ContainerActionButtonsComponent {
   }
 
   public remove() {
-    this.bindLoading(this.containerService.remove(this.containerId))
-      .subscribe(() => {
-        this.notificationService.open(`${this.containerName} removed`);
-      });
+    this.containerDeletion.deleteContainer(this.containerId, this.containerState, this.containerName);
   }
 
   public clone() {
