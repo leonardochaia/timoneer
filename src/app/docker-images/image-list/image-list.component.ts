@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ImageSource, ImageListItemData } from '../image-source.model';
-import { Subject } from 'rxjs';
-import { takeUntil, startWith, switchMap, debounceTime } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { takeUntil, startWith, switchMap, debounceTime, take, retryWhen, catchError } from 'rxjs/operators';
 import { TimoneerTabs } from '../../timoneer-tabs';
 import { ImagePreviewContainerComponentData } from '../image-preview-container/image-preview-container.component';
 import { TabService } from '../../tabs/tab.service';
@@ -31,6 +31,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public error: string;
 
   protected readonly componetDestroyed = new Subject();
+  protected readonly retrySubject = new Subject();
 
   constructor(
     protected readonly tab: TabService,
@@ -42,23 +43,32 @@ export class ImageListComponent implements OnInit, OnDestroy {
       .valueChanges
       .pipe(
         debounceTime(250),
-        takeUntil(this.componetDestroyed),
         startWith(null),
         switchMap((v) => {
           this.loading = true;
           return this.source.loadList(v);
-        })
+        }),
+        catchError(e => {
+          this.loading = false;
+          this.error = e.message;
+          this.setTitle('errored');
+          console.error(e);
+          return throwError(e);
+        }),
+        retryWhen(errors => errors.pipe(switchMap(() => this.retrySubject.asObservable()))),
+        takeUntil(this.componetDestroyed),
       )
       .subscribe(list => {
         this.loading = false;
         this.images = list;
         this.setTitle(this.images.length.toString());
-      }, e => {
-        this.loading = false;
-        this.error = e.message;
-        this.setTitle('errored');
-        console.error(e);
       });
+  }
+
+  public retry() {
+    this.loading = false;
+    this.error = null;
+    this.retrySubject.next();
   }
 
   public imageInfo(image: ImageListItemData) {

@@ -1,8 +1,18 @@
 <tim-loading *ngIf="loading"></tim-loading>
-<mat-card *ngIf="error"
-          class="tim-bg-warn">
-  {{error}}
-</mat-card>
+<ng-container *ngIf="error">
+  <mat-card class="tim-bg-warn">
+    {{error}}
+  </mat-card>
+  <div style="text-align: right">
+    <button type="button"
+            mat-raised-button
+            (click)="retry()"
+            color="primary">
+      <mat-icon>refresh</mat-icon>
+      Retry
+    </button>
+  </div>
+</ng-container>
 <mat-card *ngFor="let image of images">
   <div fxLayout="row"
        fxLayoutAlign="start center"
