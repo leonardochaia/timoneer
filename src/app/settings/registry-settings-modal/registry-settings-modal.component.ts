@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { DockerHubService } from '../../docker-hub/docker-hub.service';
 import { NotificationService } from '../../shared/notification.service';
 import { RegistryService } from '../../registry/registry.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { take, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DockerRegistrySettings } from '../settings.model';
@@ -39,14 +39,17 @@ export class RegistrySettingsModalComponent implements OnInit {
     if (registrySettings.isDockerHub) {
       const username = registrySettings.username;
       const password = registrySettings.password;
-      obs = this.dockerHub.logIn(username, password)
-        .pipe(catchError((error: HttpErrorResponse) => {
-          this.notification.open(error.error.detail || error.message, null, {
-            panelClass: 'tim-bg-warn'
-          });
-          return throwError(error);
-        }));
-
+      if (username) {
+        obs = this.dockerHub.logIn(username, password)
+          .pipe(catchError((error: HttpErrorResponse) => {
+            this.notification.open(error.error.detail || error.message, null, {
+              panelClass: 'tim-bg-warn'
+            });
+            return throwError(error);
+          }));
+      } else {
+        obs = of(null);
+      }
     } else {
       obs = this.registry.testRegistrySettings(registrySettings)
         .pipe(catchError((error: HttpErrorResponse) => {
