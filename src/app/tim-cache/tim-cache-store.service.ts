@@ -10,4 +10,5 @@ export abstract class TimCacheStoreService {
     public abstract set(key: string, contents: CacheContent): Observable<void>;
     public abstract has(key: string): Observable<boolean>;
     public abstract evict(key: string): Observable<void>;
+    public abstract clear(): Observable<void>;
 }

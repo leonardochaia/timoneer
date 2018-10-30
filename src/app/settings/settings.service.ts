@@ -3,6 +3,7 @@ import { ApplicationSettings, DockerClientSettings } from './settings.model';
 import { of, BehaviorSubject, Observable } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
 import { ElectronService } from '../electron-tools/electron.service';
+import { TimCacheService } from '../tim-cache/tim-cache.service';
 
 export const DOCKER_HUB_REGISTRY_DNS = 'index.docker.io';
 
@@ -25,12 +26,17 @@ export class SettingsService {
     return this.electronService.electronSettings;
   }
 
-  constructor(private electronService: ElectronService) { }
+  constructor(
+    private readonly electronService: ElectronService,
+    private readonly cache: TimCacheService) { }
 
   public saveSettings(settings: ApplicationSettings) {
     this.electronSettings.set(SETTINGS_KEY, settings as any);
     this.settingsSubject.next(settings);
-    return of(settings);
+
+    // Clear cache when settings are saved
+    return this.cache.clear()
+      .pipe(map(() => settings));
   }
 
   public getSettings() {

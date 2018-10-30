@@ -50,6 +50,10 @@ export class TimCacheService {
     return this.cache.set(key, this.createCacheContents(value, durationInMinutes));
   }
 
+  public clear() {
+    return this.cache.clear();
+  }
+
   /**
    * Publishes the value to all observers of the given
    * in progress observables if observers exist.

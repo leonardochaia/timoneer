@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TimCacheStoreService, CacheContent } from './tim-cache-store.service';
 import { Observable, from } from 'rxjs';
-import { set, get, del, Store } from 'idb-keyval';
+import { set, get, del, Store, clear } from 'idb-keyval';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -24,5 +24,9 @@ export class TimIndexedDBCacheStore extends TimCacheStoreService {
 
     public evict(key: string): Observable<void> {
         return from(del(key, this.store));
+    }
+
+    public clear() {
+        return from(clear(this.store));
     }
 }
