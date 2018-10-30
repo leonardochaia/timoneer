@@ -26,6 +26,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public images: ImageListItemData[];
   public loading: boolean;
   public error: string;
+  public title: string;
 
   protected readonly componetDestroyed = new Subject();
 
@@ -34,6 +35,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
     protected readonly notification: NotificationService) { }
 
   public ngOnInit() {
+    this.title = `${this.source.name} (..)`;
     this.filterForm
       .valueChanges
       .pipe(
@@ -48,9 +50,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
       .subscribe(list => {
         this.loading = false;
         this.images = list;
+        this.title = `${this.source.name} (${this.images.length})`;
       }, e => {
         this.loading = false;
         this.error = e.message;
+        this.title = `${this.source.name} (errored)`;
         console.error(e);
       });
   }

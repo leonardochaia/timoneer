@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material';
-import { ImageListComponent } from '../image-list/image-list.component';
 
 @Component({
   selector: 'tim-image-source-list',
@@ -42,16 +41,6 @@ export class ImageSourceListComponent implements OnInit, OnDestroy {
           this.initialIndex = 0;
         }
       });
-  }
-
-  public getSourceLabel(source: ImageSource, imageList: ImageListComponent) {
-    if (!imageList || imageList.loading) {
-      return `${source.name} (..)`;
-    } else if (imageList.error || !imageList.images) {
-      return `${source.name} (errored)`;
-    } else {
-      return `${source.name} (${imageList.images.length})`;
-    }
   }
 
   public onTabChanged(event: MatTabChangeEvent) {
