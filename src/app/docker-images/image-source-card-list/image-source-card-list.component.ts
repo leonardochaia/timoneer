@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ImageSourceService } from '../image-source.service';
-import { ImageSourceAuthenticated, ImageSource } from '../image-source.model';
+import { ImageSource } from '../image-source.model';
 import { TimoneerTabs } from '../../timoneer-tabs';
 import { TabService } from '../../tabs/tab.service';
 
@@ -14,7 +14,7 @@ export class ImageSourceCardListComponent implements OnInit {
   @Input()
   public minPriority?: number;
 
-  public sources: (ImageSource & Partial<ImageSourceAuthenticated>)[];
+  public sources: ImageSource[];
 
   constructor(
     private readonly imageSource: ImageSourceService,

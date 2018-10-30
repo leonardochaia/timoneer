@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ImageSource, ImageListItemData, ImageSourceDeletion } from '../image-source.model';
+import { ImageSource, ImageListItemData } from '../image-source.model';
 import { Subject } from 'rxjs';
 import { takeUntil, startWith, switchMap, debounceTime } from 'rxjs/operators';
 import { TimoneerTabs } from '../../timoneer-tabs';
@@ -21,7 +21,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public filterForm: FormGroup;
 
   @Input()
-  public source: ImageSource & ImageSourceDeletion;
+  public source: ImageSource;
 
   public images: ImageListItemData[];
   public loading: boolean;

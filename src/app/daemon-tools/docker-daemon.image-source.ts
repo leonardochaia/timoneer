@@ -1,7 +1,8 @@
 import {
-    ImageSource, ImageListFilter,
+    ImageSource,
+    ImageListFilter,
     ImageListItemData,
-    ImageSourceDeletion, ImageInfo
+    ImageInfo
 } from '../docker-images/image-source.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -9,13 +10,12 @@ import { map, switchMap } from 'rxjs/operators';
 import { DockerImageService } from './docker-image.service';
 import { DockerEventsService } from './docker-events.service';
 import { ImageLayerHistoryV1Compatibility } from '../registry/registry.model';
-import { isValidImageName } from '../docker-images/image-tools';
+import { isValidImageName, explodeImage } from '../docker-images/image-tools';
 import { flatten } from '../shared/array-tools';
 
 @Injectable()
 export class DockerDaemonImageSource
-    extends ImageSource
-    implements ImageSourceDeletion {
+    extends ImageSource {
 
     public priority = 0;
     public readonly name = 'Docker Daemon';
@@ -25,6 +25,7 @@ export class DockerDaemonImageSource
         private readonly dockerEvents: DockerEventsService,
         private readonly dockerImage: DockerImageService) {
         super();
+        this.supportsDeletions = true;
     }
 
     public loadList(filter?: ImageListFilter): Observable<ImageListItemData[]> {
@@ -61,7 +62,10 @@ export class DockerDaemonImageSource
     public loadImageTags(image: string) {
         return this.dockerImage.inspectImage(image)
             .pipe(
-                map(i => i.RepoTags)
+                map(i => i.RepoTags
+                    .filter(r => isValidImageName(r))
+                    .map(r => explodeImage(r).tag)
+                )
             );
     }
 

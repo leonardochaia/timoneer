@@ -8,7 +8,7 @@
     <h2 style="margin: 0">
       {{source.name}}
     </h2>
-    <small *ngIf="source?.credentials?.username">
+    <small *ngIf="source?.hasAuthentication &&  source?.credentials?.username">
       {{source.credentials.username}}
     </small>
   </div>

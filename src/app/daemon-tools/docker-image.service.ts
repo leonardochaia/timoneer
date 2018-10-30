@@ -5,7 +5,7 @@ import { IncomingMessage } from 'http';
 import { Observable } from 'rxjs';
 import { DockerStreamResponse } from './docker-client.model';
 import { ImageSearchResult } from 'dockerode';
-import { ImageSource, ImageSourceAuthenticated } from '../docker-images/image-source.model';
+import { ImageSource } from '../docker-images/image-source.model';
 
 @Injectable()
 export class DockerImageService {
@@ -24,11 +24,11 @@ export class DockerImageService {
     }) as Promise<ImageSearchResult[]>);
   }
 
-  public pullImage(image: string, source: ImageSource & Partial<ImageSourceAuthenticated>) {
+  public pullImage(image: string, source: ImageSource) {
     if (!image.includes(':')) {
       image += ':latest';
     }
-    const auth = source.getBasicAuth ? source.getBasicAuth() : null;
+    const auth = source.hasAuthentication ? source.getBasicAuth() : null;
     return this.daemon.docker(d => d.pull(image, { 'authconfig': { key: auth } }))
       .pipe(
         take(1),

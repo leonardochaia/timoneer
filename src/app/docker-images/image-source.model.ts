@@ -40,6 +40,10 @@ export abstract class ImageSource {
     public priority = 99;
     public abstract get name(): string;
 
+    public supportsDeletions = false;
+    public hasAuthentication = false;
+    public credentials?: ImageSourceCredentials;
+
     public abstract get registryDNS(): string;
 
     public abstract loadList(filter?: ImageListFilter): Observable<ImageListItemData[]>;
@@ -49,6 +53,10 @@ export abstract class ImageSource {
     public abstract loadImageHistory(image: string): Observable<ImageLayerHistoryV1Compatibility[]>;
 
     public abstract loadImageTags(image: string): Observable<string[]>;
+
+    public deleteImage?(image: string): Observable<void>;
+
+    public getBasicAuth?(): string;
 
     public isImageOwner(image: string) {
         if (!this.registryDNS) {
@@ -65,14 +73,6 @@ export abstract class ImageSource {
     }
 }
 
-export interface ImageSourceDeletion {
-    deleteImage?(image: string): Observable<void>;
-}
-
-export interface ImageSourceAuthenticated {
-    credentials?: ImageSourceCredentials;
-    getBasicAuth(): string;
-}
 export interface ImageSourceCredentials {
     username?: string;
     password?: string;

@@ -44,7 +44,7 @@
       </button>
     </div>
     <div fxFlex="grow"></div>
-    <div *ngIf="source.deleteImage">
+    <div *ngIf="source.supportsDeletions">
       <button type="button"
               (click)="deleteImage(image)"
               mat-raised-button>

@@ -2,9 +2,7 @@ import {
     ImageSource,
     ImageListFilter,
     ImageListItemData,
-    ImageSourceAuthenticated,
-    ImageInfo,
-    ImageSourceCredentials
+    ImageInfo
 } from '../docker-images/image-source.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,11 +13,8 @@ import { ImageLayerHistoryV1Compatibility } from './registry.model';
 import { explodeImage } from '../docker-images/image-tools';
 import { getRegistryDNSName, getRegistryName } from './registry-tools';
 
-export class RegistryImageSource
-    extends ImageSource
-    implements ImageSourceAuthenticated {
+export class RegistryImageSource extends ImageSource {
 
-    public readonly credentials: ImageSourceCredentials;
     public readonly name: string;
     public readonly registryDNS: string;
 
@@ -31,6 +26,7 @@ export class RegistryImageSource
             username: this.registrySettings.username,
             password: this.registrySettings.password,
         };
+        this.hasAuthentication = true;
         this.name = getRegistryName(registrySettings);
         this.registryDNS = getRegistryDNSName(registrySettings.url);
     }
