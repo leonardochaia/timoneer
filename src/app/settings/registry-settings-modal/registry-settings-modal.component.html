@@ -26,6 +26,31 @@
   <p>
     This password is stored in plain text!
   </p>
+
+  <div fxLayout="row"
+       fxLayoutAlign="start center"
+       fxLayoutGap="8px">
+
+    <div fxFlex="30">
+      <mat-checkbox formControlName='enableCaching'>
+        Enable Cache
+      </mat-checkbox>
+    </div>
+
+    <div fxFlex="grow">
+      <mat-form-field>
+        <input type="number"
+               matInput
+               formControlName="cacheDurationInMinutes"
+               placeholder="Cache Duration in Minutes">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <p *ngIf="registryFormGroup.value.enableCaching">
+    Data from this registry will be cached for the amount of minutes you specify.
+  </p>
+
 </form>
 
 <div style="margin:16px 0"

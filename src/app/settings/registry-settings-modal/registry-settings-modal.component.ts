@@ -7,6 +7,7 @@ import { RegistryService } from '../../registry/registry.service';
 import { Observable, throwError } from 'rxjs';
 import { take, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DockerRegistrySettings } from '../settings.model';
 
 @Component({
   selector: 'tim-registry-settings-modal',
@@ -33,9 +34,11 @@ export class RegistrySettingsModalComponent implements OnInit {
     this.registryFormGroup.disable();
     let obs: Observable<any>;
 
-    if (!this.registryFormGroup.value.url) {
-      const username = this.registryFormGroup.value.username;
-      const password = this.registryFormGroup.value.password;
+    const registrySettings = this.registryFormGroup.getRawValue() as DockerRegistrySettings;
+
+    if (registrySettings.isDockerHub) {
+      const username = registrySettings.username;
+      const password = registrySettings.password;
       obs = this.dockerHub.logIn(username, password)
         .pipe(catchError((error: HttpErrorResponse) => {
           this.notification.open(error.error.detail || error.message, null, {
@@ -45,7 +48,7 @@ export class RegistrySettingsModalComponent implements OnInit {
         }));
 
     } else {
-      obs = this.registry.testRegistrySettings(this.registryFormGroup.value)
+      obs = this.registry.testRegistrySettings(registrySettings)
         .pipe(catchError((error: HttpErrorResponse) => {
           this.notification.open(error.error || error.message, null, {
             panelClass: 'tim-bg-warn'
@@ -65,9 +68,11 @@ export class RegistrySettingsModalComponent implements OnInit {
       }, error => {
         this.loading = false;
         this.registryFormGroup.enable();
-        if (!this.registryFormGroup.value.url) {
+
+        if (this.registryFormGroup.value.isDockerHub) {
           this.registryFormGroup.get('url').disable();
         }
+
         console.error(error);
       });
   }

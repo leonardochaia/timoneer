@@ -7,6 +7,7 @@ import { AppTabsModule } from './app-tabs.module';
 import { GlobalShortcutsModule } from './global-shortcuts.module';
 import { AppMenuModule } from './app-menu/app-menu.module';
 import { JobsModule } from './jobs/jobs.module';
+import { TimCacheModule } from './tim-cache/tim-cache.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { JobsModule } from './jobs/jobs.module';
     AppTabsModule,
     AppMenuModule,
     GlobalShortcutsModule,
+    TimCacheModule.forRoot(),
 
     NavigationModule,
   ],

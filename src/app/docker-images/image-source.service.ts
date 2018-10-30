@@ -24,7 +24,6 @@ export class ImageSourceService {
         switchMap(s => combineLatest(s.map(so => so.loadImageSources()))),
         map(arr => flatten(arr)),
         map(arr => arr.sort((a, b) => (a.priority > b.priority) ? 1 : ((b.priority > a.priority) ? -1 : 0))),
-        // take(1),
       )
       .subscribe((srcs) => {
         this.sourcesSubject.next(srcs);

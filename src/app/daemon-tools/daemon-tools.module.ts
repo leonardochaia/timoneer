@@ -120,11 +120,14 @@ import { DockerImagesModule } from '../docker-images/docker-image.module';
     DockerSystemService,
     DockerContainerService,
     DockerVolumeService,
+
+    DockerDaemonImageSource,
     {
       provide: ImageSource,
-      useClass: DockerDaemonImageSource,
+      useExisting: DockerDaemonImageSource,
       multi: true
-    }
+    },
+
   ],
   entryComponents: [
     PullImageJobLogsComponent,

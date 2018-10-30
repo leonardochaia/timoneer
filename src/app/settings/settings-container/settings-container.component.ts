@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DockerRegistrySettings, DockerClientSettings } from '../settings.model';
-import { SettingsService, TIM_LOGO } from '../settings.service';
+import { SettingsService, TIM_LOGO, DEFAULT_REGISTRY_CACHE } from '../settings.service';
 import { MatSnackBar } from '@angular/material';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -158,14 +158,31 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
       username: '',
       password: '',
       isDockerHub: false,
+      enableCaching: true,
+      cacheDurationInMinutes: DEFAULT_REGISTRY_CACHE
     };
-    return this.fb.group({
+    const formGroup = this.fb.group({
       'url': [{ value: registrySettings.url, disabled: registrySettings.isDockerHub },
       Validators.compose([Validators.required, Validators.pattern('https?://.+')])],
       'username': [registrySettings.username],
       'password': [registrySettings.password],
       'isDockerHub': [registrySettings.isDockerHub],
+      'enableCaching': [registrySettings.enableCaching, Validators.required],
+      'cacheDurationInMinutes': [registrySettings.cacheDurationInMinutes]
     });
+
+    formGroup.get('enableCaching')
+      .valueChanges
+      .subscribe(enabled => {
+        const durationControl = formGroup.get('cacheDurationInMinutes');
+        if (enabled) {
+          durationControl.enable();
+        } else {
+          durationControl.disable();
+        }
+      });
+
+    return formGroup;
   }
 
   private addRegistry(registrySettings?: DockerRegistrySettings) {

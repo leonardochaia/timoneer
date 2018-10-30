@@ -15,6 +15,8 @@ export interface DockerRegistrySettings {
     username: string;
     password: string;
     isDockerHub: boolean;
+    enableCaching: boolean;
+    cacheDurationInMinutes?: number;
 }
 
 export interface ImageConfig {
