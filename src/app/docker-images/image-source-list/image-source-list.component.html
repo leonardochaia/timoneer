@@ -1,11 +1,12 @@
 <mat-tab-group *ngIf="sources && sources.length"
                [selectedIndex]="initialIndex"
                (selectedTabChange)="onTabChanged($event)">
-  <mat-tab *ngFor="let source of sources"
-           [label]="imageList?.title">
+  <mat-tab *ngFor="let source of sources; let index = index"
+           #matTab
+           [label]="titles[index]">
     <div style="padding:16px 0;">
       <tim-image-list [source]="source"
-                      #imageList
+                      (titleChange)="titles[index] = $event"
                       [filterForm]="filterForm"></tim-image-list>
     </div>
   </mat-tab>

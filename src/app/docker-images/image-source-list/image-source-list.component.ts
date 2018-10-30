@@ -22,6 +22,8 @@ export class ImageSourceListComponent implements OnInit, OnDestroy {
   @Output()
   public sourceChanged = new EventEmitter<ImageSource>();
 
+  public titles: string[] = [];
+
   public sources: ImageSource[];
 
   public initialIndex: number;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ImageSource, ImageListItemData } from '../image-source.model';
 import { Subject } from 'rxjs';
 import { takeUntil, startWith, switchMap, debounceTime } from 'rxjs/operators';
@@ -23,10 +23,12 @@ export class ImageListComponent implements OnInit, OnDestroy {
   @Input()
   public source: ImageSource;
 
+  @Output()
+  public readonly titleChange = new EventEmitter<string>();
+
   public images: ImageListItemData[];
   public loading: boolean;
   public error: string;
-  public title: string;
 
   protected readonly componetDestroyed = new Subject();
 
@@ -35,7 +37,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
     protected readonly notification: NotificationService) { }
 
   public ngOnInit() {
-    this.title = `${this.source.name} (..)`;
+    this.setTitle('..');
     this.filterForm
       .valueChanges
       .pipe(
@@ -50,11 +52,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
       .subscribe(list => {
         this.loading = false;
         this.images = list;
-        this.title = `${this.source.name} (${this.images.length})`;
+        this.setTitle(this.images.length.toString());
       }, e => {
         this.loading = false;
         this.error = e.message;
-        this.title = `${this.source.name} (errored)`;
+        this.setTitle('errored');
         console.error(e);
       });
   }
@@ -91,5 +93,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+  }
+
+  protected setTitle(status: string) {
+    this.titleChange.emit(`${this.source.name} (${status})`);
   }
 }
