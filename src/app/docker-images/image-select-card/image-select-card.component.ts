@@ -143,6 +143,7 @@ export class ImageSelectCardComponent implements OnInit, OnDestroy, ControlValue
   public ngOnDestroy() {
     this.componetDestroyed.next();
     this.componetDestroyed.unsubscribe();
+    this.cancelListLoads();
   }
 
   protected selectImage(image: string) {

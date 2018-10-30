@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges, forwardRef } from '@angular/core';
-import { switchMap, take } from 'rxjs/operators';
+import { Component, Input, OnChanges, SimpleChanges, forwardRef, OnDestroy } from '@angular/core';
+import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { explodeImage } from '../image-tools';
 import { ImageSourceService } from '../image-source.service';
 import { MatDialog } from '@angular/material';
 import { ImageTagsSelectorModalComponent } from '../image-tags-selector-modal/image-tags-selector-modal.component';
+import { Subject } from 'rxjs';
 
 export const DEFAULT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -18,7 +19,8 @@ export const DEFAULT_VALUE_ACCESSOR: any = {
   styleUrls: ['./image-tags-selector.component.scss'],
   providers: [DEFAULT_VALUE_ACCESSOR]
 })
-export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccessor {
+export class ImageTagsSelectorComponent
+  implements OnDestroy, OnChanges, ControlValueAccessor {
 
   @Input()
   public repository: string;
@@ -33,6 +35,7 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
   public error: string;
 
   private onChanges: (image: string) => void;
+  private componentDestroyed = new Subject<void>();
 
   constructor(
     private readonly imageSource: ImageSourceService,
@@ -48,7 +51,8 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
 
       this.imageSource.getForImage(this.repository)
         .pipe(
-          switchMap(source => source.loadImageTags(this.repository))
+          switchMap(source => source.loadImageTags(this.repository)),
+          takeUntil(this.componentDestroyed),
         )
         .subscribe(tags => {
           this.error = null;
@@ -96,6 +100,11 @@ export class ImageTagsSelectorComponent implements OnChanges, ControlValueAccess
           this.updateTruncatedTags();
         }
       });
+  }
+
+  public ngOnDestroy() {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 
   protected tagsObtained(tags: string[], desiredTag?: string) {
