@@ -1,0 +1,25 @@
+<mat-card fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          style="margin-bottom: 16px;">
+  <mat-icon class="tim-icon-48 tim-text-primary">cached</mat-icon>
+
+  <div fxFlex="fill">
+    <h3 class="tim-text-title"
+        style="margin:0">
+      Cache
+    </h3>
+  </div>
+
+  <div [fxFlex]="loading ? '20' : ''">
+    <button mat-button
+            *ngIf="!loading; else loadingTemplate"
+            (click)="clearCache()">
+      <mat-icon>delete_forever</mat-icon>
+      Clear Cache
+    </button>
+    <ng-template #loadingTemplate>
+      <tim-loading></tim-loading>
+    </ng-template>
+  </div>
+</mat-card>
