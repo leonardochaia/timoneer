@@ -24,17 +24,23 @@ export class RegistryAuthService {
     username: string,
     password: string) {
 
-    const authHeader = btoa(`${username}:${password}`);
-    return this.httpClient.get<{ token: string }>(url, {
-      params: {
-        service: service,
-        scope: scope,
-        clientId: clientId,
-      }, headers: {
-        Authorization: `Basic ${authHeader}`
-      }
-    }).pipe(map(r => {
-      return r.token;
-    }));
+    let headers: { Authorization: string };
+    if (username && password) {
+      const basic = btoa(`${username}:${password}`);
+      headers = {
+        Authorization: `Basic ${basic}`
+      };
+    }
+    return this.httpClient.get<{ token: string }>(url,
+      {
+        params: {
+          service: service,
+          scope: scope,
+          clientId: clientId,
+        },
+        headers: headers
+      }).pipe(map(r => {
+        return r.token;
+      }));
   }
 }
