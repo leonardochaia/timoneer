@@ -91,7 +91,7 @@ export class SettingsContainerComponent implements OnInit, OnDestroy {
   }
 
   public save() {
-    this.settingsService.saveSettings(this.form.value)
+    this.settingsService.saveSettings(this.form.getRawValue())
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe(() => {
         this.snackBar.open('Settings saved.', null, {

@@ -1,4 +1,4 @@
-import { takeUntil, map, catchError, switchMap } from 'rxjs/operators';
+import { takeUntil, map, catchError, switchMap, take } from 'rxjs/operators';
 import { JobDefinition } from '../jobs/job-definition';
 import { Job } from '../jobs/job.decorator';
 import { ContainerCreateBody, Container } from 'dockerode';
@@ -54,7 +54,8 @@ export class ContainerCreationJob extends JobDefinition<string> {
                             });
                             this.containerCreatedSubject.next(container.id);
                             return from(container.start() as Promise<Container>);
-                        })
+                        }),
+                        take(1)
                     );
             }))
             .subscribe(container => {
@@ -107,6 +108,7 @@ export class ContainerCreationJob extends JobDefinition<string> {
                         return throwError(error);
                     }
                 }),
+                take(1),
             );
 
     }

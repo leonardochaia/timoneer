@@ -1,4 +1,4 @@
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { takeUntil, switchMap, take } from 'rxjs/operators';
 import { DockerImageService } from '../daemon-tools/docker-image.service';
 import { DockerStreamResponse } from '../daemon-tools/docker-client.model';
 import { JobDefinition } from '../jobs/job-definition';
@@ -44,7 +44,8 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
         this.imageSource.getForImage(this.image)
             .pipe(
                 switchMap(source => this.imageService.pullImage(this.image, source)),
-                takeUntil(this.cancelled)
+                takeUntil(this.cancelled),
+                take(1)
             )
             .subscribe(response => {
                 const jobProgress = Object.assign({}, response, <JobProgress>{
