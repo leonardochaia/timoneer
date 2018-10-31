@@ -12,18 +12,23 @@ export function explodeImage(image: string) {
 
   const matches = image.match(/(.+\/)?([^:]+)(:.+)?/);
 
-  let registryOrNamespace = matches[1];
+  const registryOrNamespace = matches[1];
   let registry: string;
   let reference = matches[2];
   let tag = matches[3];
 
   if (registryOrNamespace) {
-    registryOrNamespace = registryOrNamespace.replace('/', '');
 
-    // Determine registry vs namespace
-    if (registryOrNamespace.includes('.')) {
+    if (registryOrNamespace.includes('/')) {
+      // Registry and namespace
+      const split = registryOrNamespace.split('/');
+      registry = split[0];
+      reference = `${split[1]}/${reference}`;
+    } else if (registryOrNamespace.includes('.')) {
+      // Registry only
       registry = registryOrNamespace;
     } else {
+      // Namespace only
       reference = `${registryOrNamespace}/${reference}`;
     }
   }

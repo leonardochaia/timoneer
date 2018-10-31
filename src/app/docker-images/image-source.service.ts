@@ -3,6 +3,10 @@ import { ImageSourceMultiple, ImageSource } from './image-source.model';
 import { of, combineLatest, BehaviorSubject } from 'rxjs';
 import { switchMap, map, take } from 'rxjs/operators';
 import { flatten } from '../shared/array-tools';
+import { explodeImage } from './image-tools';
+import { GenericImageSource } from './generic-image-source';
+import { RegistryService } from '../registry/registry.service';
+import { TimCacheService } from '../tim-cache/tim-cache.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +21,9 @@ export class ImageSourceService {
 
   constructor(
     @Inject(ImageSourceMultiple)
-    sources: ImageSourceMultiple[]) {
+    sources: ImageSourceMultiple[],
+    private readonly registry: RegistryService,
+    private readonly cache: TimCacheService) {
 
     of(sources)
       .pipe(
@@ -34,6 +40,7 @@ export class ImageSourceService {
     return this.sources
       .pipe(
         map(sources => sources.find(s => s.isImageOwner(image))),
+        map(source => !source ? this.createGenericImageSourceForImage(image) : source),
         take(1),
       );
   }
@@ -41,8 +48,19 @@ export class ImageSourceService {
   public getForDNS(registryDNS: string) {
     return this.sources.pipe(
       map(srcs => srcs.find(s => s.isRegistryOwner(registryDNS))),
+      map(source => !source ? this.createGenericImageSource(registryDNS) : source),
       take(1),
     );
   }
 
+  protected createGenericImageSourceForImage(image: string): ImageSource {
+    const imageInfo = explodeImage(image);
+    if (imageInfo.registry) {
+      return this.createGenericImageSource(imageInfo.registry);
+    }
+  }
+
+  protected createGenericImageSource(registryDNS: string): ImageSource {
+    return new GenericImageSource(registryDNS, this.registry, this.cache);
+  }
 }
