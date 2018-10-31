@@ -31,52 +31,62 @@ export class RegistrySettingsModalComponent implements OnInit {
 
   public confirm() {
     this.loading = true;
+    this.dialogRef.disableClose = true;
+
     this.registryFormGroup.disable();
-    let obs: Observable<any>;
+    let obs: Observable<any> = of(null);
 
-    const registrySettings = this.registryFormGroup.getRawValue() as DockerRegistrySettings;
+    const credentialsNeedTesting = this.registryFormGroup.get('username').dirty
+      || this.registryFormGroup.get('url').dirty
+      || this.registryFormGroup.get('password').dirty;
 
-    if (registrySettings.isDockerHub) {
-      const username = registrySettings.username;
-      const password = registrySettings.password;
-      if (username) {
-        obs = this.dockerHub.logIn(username, password)
+    if (!credentialsNeedTesting) {
+      // If username/password did not change, do not revalidate them
+      this.registryFormGroup.enable();
+      this.dialogRef.close(this.registryFormGroup);
+    } else {
+      const registrySettings = this.registryFormGroup.getRawValue() as DockerRegistrySettings;
+      if (registrySettings.isDockerHub) {
+        const username = registrySettings.username;
+        const password = registrySettings.password;
+        if (username) {
+          obs = this.dockerHub.logIn(username, password)
+            .pipe(catchError((error: HttpErrorResponse) => {
+              this.notification.open(error.error.detail || error.message, null, {
+                panelClass: 'tim-bg-warn'
+              });
+              return throwError(error);
+            }));
+        } else {
+          obs = of(null);
+        }
+      } else {
+        obs = this.registry.testRegistrySettings(registrySettings)
           .pipe(catchError((error: HttpErrorResponse) => {
-            this.notification.open(error.error.detail || error.message, null, {
+            this.notification.open(error.error || error.message, null, {
               panelClass: 'tim-bg-warn'
             });
             return throwError(error);
           }));
-      } else {
-        obs = of(null);
       }
-    } else {
-      obs = this.registry.testRegistrySettings(registrySettings)
-        .pipe(catchError((error: HttpErrorResponse) => {
-          this.notification.open(error.error || error.message, null, {
-            panelClass: 'tim-bg-warn'
+      obs
+        .pipe(take(1))
+        .subscribe(() => {
+          this.registryFormGroup.enable();
+          this.dialogRef.close(this.registryFormGroup);
+          this.notification.open('Login succeded', null, {
+            panelClass: 'tim-bg-primary'
           });
-          return throwError(error);
-        }));
-    }
+        }, error => {
+          this.loading = false;
+          this.registryFormGroup.enable();
 
-    obs
-      .pipe(take(1))
-      .subscribe(() => {
-        this.registryFormGroup.enable();
-        this.dialogRef.close(this.registryFormGroup);
-        this.notification.open('Login succeded', null, {
-          panelClass: 'tim-bg-primary'
+          if (this.registryFormGroup.value.isDockerHub) {
+            this.registryFormGroup.get('url').disable();
+          }
+
+          console.error(error);
         });
-      }, error => {
-        this.loading = false;
-        this.registryFormGroup.enable();
-
-        if (this.registryFormGroup.value.isDockerHub) {
-          this.registryFormGroup.get('url').disable();
-        }
-
-        console.error(error);
-      });
+    }
   }
 }
