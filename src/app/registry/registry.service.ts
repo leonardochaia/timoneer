@@ -30,7 +30,7 @@ export class RegistryService {
   }
 
   public testRegistrySettings(settings: DockerRegistrySettings) {
-    return this.get<void>(settings, `v2/_catalog`, { n: '1' });
+    return this.get<void>(settings, `v2/`);
   }
 
   protected get<T>(registrySettings: DockerRegistrySettings,

@@ -31,13 +31,17 @@ export class RegistryAuthService {
         Authorization: `Basic ${basic}`
       };
     }
+    const params: any = {
+      service: service,
+      clientId: clientId,
+    };
+    if (scope) {
+      params.scope = scope;
+    }
+
     return this.httpClient.get<{ token: string }>(url,
       {
-        params: {
-          service: service,
-          scope: scope,
-          clientId: clientId,
-        },
+        params: params,
         headers: headers
       }).pipe(map(r => {
         return r.token;
