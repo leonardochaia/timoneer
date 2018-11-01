@@ -1,3 +1,33 @@
+# [0.6.0](https://github.com/leonardochaia/timoneer/compare/v0.5.1...v0.6.0) (2018-11-01)
+
+
+### Bug Fixes
+
+* fixes container list not being updated when a container is created ([929a639](https://github.com/leonardochaia/timoneer/commit/929a639))
+* image selector not working for docker hub ([29554ad](https://github.com/leonardochaia/timoneer/commit/29554ad))
+* log out from docker hub ([092b7c7](https://github.com/leonardochaia/timoneer/commit/092b7c7))
+* test registry credentials only when needed ([30e2224](https://github.com/leonardochaia/timoneer/commit/30e2224))
+* use v2/ instead of catalog for testing registries ([5b9c80b](https://github.com/leonardochaia/timoneer/commit/5b9c80b))
+
+
+### Features
+
+* added link to create a container in container list ([60c79a7](https://github.com/leonardochaia/timoneer/commit/60c79a7))
+* adds a Retry button when a container fails to create ([6215aba](https://github.com/leonardochaia/timoneer/commit/6215aba))
+* adds auto remove falg ([eebc027](https://github.com/leonardochaia/timoneer/commit/eebc027))
+* adds registry cache and fallback to local daemon ([a88b6c5](https://github.com/leonardochaia/timoneer/commit/a88b6c5))
+* adds registry image history view ([33c8948](https://github.com/leonardochaia/timoneer/commit/33c8948))
+* adds Retry button when loading image list fails ([f30183a](https://github.com/leonardochaia/timoneer/commit/f30183a))
+* centralized image view ([514ae08](https://github.com/leonardochaia/timoneer/commit/514ae08))
+* centralized search public docker hub ([041bb20](https://github.com/leonardochaia/timoneer/commit/041bb20))
+* clear cache on demand in settings page ([b352952](https://github.com/leonardochaia/timoneer/commit/b352952))
+* clone containers ([f04901f](https://github.com/leonardochaia/timoneer/commit/f04901f))
+* image info for docker hub images ([0ddfd75](https://github.com/leonardochaia/timoneer/commit/0ddfd75))
+* improved container action buttons ([631771c](https://github.com/leonardochaia/timoneer/commit/631771c))
+* use same header for container list and inspect ([9c9a23d](https://github.com/leonardochaia/timoneer/commit/9c9a23d))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/leonardochaia/timoneer/compare/v0.5.0...v0.5.1) (2018-10-16)
 
