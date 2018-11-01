@@ -2,7 +2,6 @@ import {
     ImageListFilter, ImageListItemData
 } from '../docker-images/image-source.model';
 import { Observable, of, combineLatest } from 'rxjs';
-import { Injectable } from '@angular/core';
 import { DockerHubService } from './docker-hub.service';
 import { map, switchMap } from 'rxjs/operators';
 import { DockerImageService } from '../daemon-tools/docker-image.service';
@@ -12,7 +11,6 @@ import { DockerRegistrySettings } from '../settings/settings.model';
 import { RegistryService } from '../registry/registry.service';
 import { flatten } from '../shared/array-tools';
 
-@Injectable()
 export class DockerHubImageSource extends RegistryImageSource {
 
     public priority = 1;
