@@ -106,6 +106,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   protected setTitle(status: string) {
-    this.titleChange.emit(`${this.source.name} (${status})`);
+    setTimeout(() => {
+      this.titleChange.emit(`${this.source.name} (${status})`);
+    });
   }
 }

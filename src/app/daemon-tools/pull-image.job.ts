@@ -45,7 +45,6 @@ export class PullImageJob extends JobDefinition<void, PullImageJobProgress> {
             .pipe(
                 switchMap(source => this.imageService.pullImage(this.image, source)),
                 takeUntil(this.cancelled),
-                take(1)
             )
             .subscribe(response => {
                 const jobProgress = Object.assign({}, response, <JobProgress>{
