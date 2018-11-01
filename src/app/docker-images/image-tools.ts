@@ -12,12 +12,22 @@ export function explodeImage(image: string) {
 
   const matches = image.match(/(.+\/)?([^:]+)(:.+)?/);
 
-  const registryOrNamespace = matches[1];
+  let registryOrNamespace = matches[1];
   let registry: string;
   let reference = matches[2];
   let tag = matches[3];
 
   if (registryOrNamespace) {
+
+    // Make sure it's a valid slash
+    if (registryOrNamespace.includes('/')) {
+      const split = registryOrNamespace.split('/');
+
+      if (!split[1] || !split[1].length) {
+        registryOrNamespace = registryOrNamespace.replace('/', '');
+      }
+
+    }
 
     if (registryOrNamespace.includes('/')) {
       // Registry and namespace
