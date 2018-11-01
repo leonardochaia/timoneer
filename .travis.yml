@@ -38,7 +38,7 @@ matrix:
             -v ~/.cache/electron:/root/.cache/electron \
             -v ~/.cache/electron-builder:/root/.cache/electron-builder \
             electronuserland/builder:wine \
-            /bin/bash -c 'yarn travis-pre-build && yarn test && yarn release --linux --win'
+            /bin/bash -c 'apt-get install libxss1 && yarn travis-pre-build && yarn test && yarn release --linux --win'
 
     - os: linux
       services: docker
@@ -52,7 +52,7 @@ matrix:
             -v ~/.cache/electron:/root/.cache/electron \
             -v ~/.cache/electron-builder:/root/.cache/electron-builder \
             electronuserland/builder:wine \
-            /bin/bash -c 'yarn travis-pre-build && yarn test && yarn electron:build --linux --win'
+            /bin/bash -c 'apt-get install libxss1 && yarn travis-pre-build && yarn test && yarn electron:build --linux --win'
 
 before_script:
   - yarn global add @commitlint/travis-cli @commitlint/config-angular
