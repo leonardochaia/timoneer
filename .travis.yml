@@ -66,3 +66,10 @@ cache:
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
+
+addons:
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
