@@ -21,7 +21,6 @@ export class TimCacheService {
       .pipe(
         switchMap(contents => {
           if (contents) {
-            console.log(`%cGetting from cache ${key}`, 'color: green');
             return this.cache.get(key).pipe(map(c => c.value));
           } else {
 
@@ -30,7 +29,6 @@ export class TimCacheService {
             } else {
               if (fallback) {
                 this.inFlightObservables.set(key, new Subject());
-                console.log(`%c Executing Fallback for ${key}`, 'color: purple');
                 return fallback().pipe(asyncTap((value) => this.set(key, value, maxAge)));
               } else {
                 return throwError('Invalid fallback provided');
@@ -63,7 +61,6 @@ export class TimCacheService {
       const inFlight = this.inFlightObservables.get(key);
       const observersCount = inFlight.observers.length;
       if (observersCount) {
-        console.log(`%cNotifying ${inFlight.observers.length} flight subscribers for ${key}`, 'color: blue');
         inFlight.next(value);
       }
       inFlight.complete();
