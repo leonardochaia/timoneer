@@ -32,7 +32,9 @@
     "electron:build": "yarn build:prod && npx electron-builder build --publish never",
     "release": "yarn build:prod && electron-builder",
     "travis-pre-build": "yarn install",
-    "bump-version": "node bump-version && yarn gen-changelog"
+    "bump-version": "node bump-version && yarn gen-changelog",
+    "test": "ng test --watch=false --progress=false --browsers=ChromeHeadlessCI",
+    "test:watch": "ng test --watch"
   },
   "dependencies": {
     "electron-settings": "^3.2.0",
@@ -95,6 +97,15 @@
     "webdriver-manager": "^12.1.0",
     "www-authenticate": "^0.6.2",
     "xterm": "^3.8.0",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "@types/jasmine": "^2.8.6",
+    "@types/jasminewd2": "^2.0.3",
+    "jasmine-core": "~2.99.1",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~3.1.1",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~2.0.1",
+    "karma-jasmine": "~1.1.2",
+    "karma-jasmine-html-reporter": "~0.2.2"
   }
 }
