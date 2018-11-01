@@ -21,7 +21,7 @@ Intended to manage containers locally. You can add your private registries and i
    Auto configures from environment, but can be changed to remote server.
 1. Use custom Docker Hub credentials.
 1. Containers actions include: List, create, start/stop, remove, attach, exec.
-1. Image actions include: List, pull.
+1. Image actions include: List, pull, inspect.
 1. Volumes actions include: List, create, remove
 1. Registries: List images and tags.
 
@@ -30,7 +30,7 @@ Intended to manage containers locally. You can add your private registries and i
 If you just want the latest release of Timoneer [click here](https://github.com/leonardochaia/timoneer/releases/latest)
 
 If you want to contribute or run the project in development mode, clone the repo and use `yarn start`
-This is an Electron Application, using Angular 6 and Dockerode as Docker client.
+This is an Electron Application, using Angular 7 and Dockerode as Docker client.
 
 ```bash
 yarn install
@@ -39,7 +39,7 @@ yarn start
 
 ## License
 
-From Timoneer v0.6.2 onwards the code is licensed under the MIT License.
+From Timoneer v0.6 onwards the code is licensed under the MIT License.
 Previous versions are licensed under GNU GPL.
 
 ## Credits
