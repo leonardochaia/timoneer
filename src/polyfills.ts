@@ -43,7 +43,8 @@
 
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-
+// Timoneer needs this for Jobs which require the ReflectiveInjector.
+import 'core-js/es7/reflect';
 
 
 /**
