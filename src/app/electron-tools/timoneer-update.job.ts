@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ProgressInfo } from 'builder-util-runtime';
 import { JobProgress } from '../jobs/jobs.model';
 import { BytesToHumanPipe } from '../shared/bytes-to-human.pipe';
+import { CancellationToken } from 'electron-updater';
 
 export interface TimoneerUpdateJobProgress extends ProgressInfo, JobProgress { }
 
@@ -54,14 +55,12 @@ export class TimoneerUpdateJob extends JobDefinition<string, TimoneerUpdateJobPr
                             }
                         });
 
-                    // TODO: Cancellation is not working properly.
-                    // const cancellationToken = new CancellationToken();
-                    // this.cancelled.subscribe(() => {
-                    //     cancellationToken.cancel();
-                    // });
-                    // this.updater.downloadLatestUpdate(cancellationToken)
+                    const cancellationToken = new CancellationToken();
+                    this.cancelled.subscribe(() => {
+                        cancellationToken.cancel();
+                    });
 
-                    this.updater.downloadLatestUpdate()
+                    this.updater.downloadLatestUpdate(cancellationToken)
                         .then((r) => {
                             this.log(`Timoneer v${this.latestVersion} downloaded`);
                             console.log(r);

@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy, NgZone } from '@angular/core';
-import { UpdateInfo } from 'electron-updater';
+import { UpdateInfo, CancellationToken } from 'electron-updater';
 import { ElectronService } from './electron.service';
 import { NotificationService } from '../shared/notification.service';
-import { ProgressInfo, CancellationToken } from 'builder-util-runtime';
+import { ProgressInfo } from 'builder-util-runtime';
 import { BehaviorSubject } from 'rxjs';
 
 export enum UpdaterStatus {
