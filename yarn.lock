@@ -479,9 +479,10 @@
   version "10.5.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
 
-"@types/node@^10.12.1":
-  version "10.12.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.1.tgz#da61b64a2930a80fa708e57c45cd5441eb379d5b"
+"@types/node@^10.12.13":
+  version "10.12.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.13.tgz#ce355eda06f793b42f75b23cd26d328b12649b70"
+  integrity sha512-zMxYcuQETlp8Lw9trEuKa313Zapm9w3EXZ6pT53q229VsHvo9jWDfWq3rUC8SyFfnPexn7uAuC+q3X+GmnTnDg==
 
 "@types/node@^8.0.24":
   version "8.10.22"
