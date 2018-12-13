@@ -445,9 +445,10 @@
     semver "5.5.1"
     semver-intersect "1.4.0"
 
-"@types/dockerode@^2.5.6":
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-2.5.6.tgz#94965e3ce4610c128dde586cbdb128fc28b49001"
+"@types/dockerode@^2.5.10":
+  version "2.5.10"
+  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-2.5.10.tgz#837379703c8140fdb704460b6cfee4621a5412a3"
+  integrity sha512-Aiy0iYuWudPOHNc69LYHCfvjzvJ0KaRIkM9o6unMQSOh7rp7/KydUVb5KRGRSoRk9V7uWv9IssEi/ahF4yaOkA==
   dependencies:
     "@types/node" "*"
 
