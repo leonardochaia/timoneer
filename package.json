@@ -70,7 +70,7 @@
     "@types/uuid": "^3.4.4",
     "angular-pipes": "^9.0.2",
     "codelyzer": "^4.5.0",
-    "commitlint": "^7.2.1",
+    "commitlint": "^7.3.2",
     "conventional-changelog-cli": "^2.0.11",
     "conventional-recommended-bump": "^4.0.4",
     "core-js": "^2.5.7",
