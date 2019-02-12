@@ -53,7 +53,7 @@
     "@angular/forms": "^7.0.2",
     "@angular/http": "^7.0.2",
     "@angular/language-service": "^7.0.2",
-    "@angular/material": "^7.0.2",
+    "@angular/material": "^7.3.2",
     "@angular/platform-browser": "^7.0.2",
     "@angular/platform-browser-dynamic": "^7.0.2",
     "@angularclass/hmr": "^2.1.3",
