@@ -75,7 +75,7 @@
     "conventional-recommended-bump": "^4.0.4",
     "core-js": "^2.5.7",
     "dockerode": "^2.5.7",
-    "electron": "^3.0.7",
+    "electron": "^4.0.8",
     "electron-builder": "^20.31.2",
     "electron-reload": "^1.2.5",
     "fast-text-encoding": "^1.0.0",
