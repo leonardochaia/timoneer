@@ -4895,9 +4895,10 @@ karma-coverage-istanbul-reporter@~2.0.1:
     istanbul-api "^2.0.5"
     minimatch "^3.0.4"
 
-karma-electron@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/karma-electron/-/karma-electron-6.0.0.tgz#c824dda46f49f7fc744b6b9b60e6413979947362"
+karma-electron@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/karma-electron/-/karma-electron-6.1.0.tgz#59e9068fd4c7ab63b89a091c50a18ab0b73026dc"
+  integrity sha512-qMzZBC4MFUCJq4OI+0VHW8AOMyaS7dT5iLRR1B67chhlR7uBznEFDlocFc+X7rUTaJZ6o2yPw+q6RPCwkAteIg==
   dependencies:
     combine-source-map "~0.8.0"
     commander "~2.9.0"
