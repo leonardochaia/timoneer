@@ -67,7 +67,7 @@
     "@types/mousetrap": "^1.6.0",
     "@types/node": "^10.12.1",
     "@types/url-parse": "^1.4.1",
-    "@types/uuid": "^3.4.4",
+    "@types/uuid": "^3.4.5",
     "angular-pipes": "^9.0.2",
     "codelyzer": "^4.5.0",
     "commitlint": "^7.2.1",
