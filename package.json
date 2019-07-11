@@ -103,7 +103,7 @@
     "typescript": "^3.1.6",
     "url-parse": "^1.4.3",
     "uuid": "^3.3.2",
-    "wait-on": "^3.1.0",
+    "wait-on": "^3.3.0",
     "webdriver-manager": "^12.1.0",
     "www-authenticate": "^0.6.2",
     "xterm": "^3.8.0",
